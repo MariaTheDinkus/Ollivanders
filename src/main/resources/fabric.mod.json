@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "ollivandered",
+  "id": "ollivanders",
   "version": "${version}",
 
-  "name": "Ollivandered",
+  "name": "Ollivanders",
   "description": "Magic",
   "authors": [
     "MariaTheDinkus"
@@ -14,22 +14,22 @@
   },
 
   "license": "MIT",
-  "icon": "assets/ollivandered/icon.png",
+  "icon": "assets/ollivanders/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
-      "to.tinypota.ollivandered.datagen.OllivanderedDataGeneration"
+      "to.tinypota.ollivanders.datagen.OllivandersDataGeneration"
     ],
     "main": [
-      "to.tinypota.ollivandered.Ollivandered"
+      "to.tinypota.ollivanders.Ollivanders"
     ],
     "client": [
-      "to.tinypota.ollivandered.OllivanderedClient"
+      "to.tinypota.ollivanders.OllivandersClient"
     ]
   },
   "mixins": [
-    "ollivandered.mixins.json"
+    "ollivanders.mixins.json"
   ],
 
   "depends": {

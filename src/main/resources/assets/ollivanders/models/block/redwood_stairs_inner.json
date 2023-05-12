@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "ollivanders:block/redwood_planks",
+        "top": "ollivanders:block/redwood_planks",
+        "side": "ollivanders:block/redwood_planks"
+    }
+}

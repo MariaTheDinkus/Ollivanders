@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=bottom": { "model": "ollivanders:block/laurel_slab" },
+        "type=top": { "model": "ollivanders:block/laurel_slab_top" },
+        "type=double": { "model": "ollivanders:block/laurel_planks" }
+    }
+}

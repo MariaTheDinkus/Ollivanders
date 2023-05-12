@@ -1,0 +1,7 @@
+{
+    "parent": "block/door_top_rh",
+    "textures": {
+        "bottom": "ollivanders:block/redwood_door_bottom",
+        "top": "ollivanders:block/redwood_door_top"
+    }
+}

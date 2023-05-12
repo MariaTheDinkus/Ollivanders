@@ -1,0 +1,6 @@
+{
+    "parent": "block/button_pressed",
+    "textures": {
+        "texture": "ollivanders:block/laurel_planks"
+    }
+}
