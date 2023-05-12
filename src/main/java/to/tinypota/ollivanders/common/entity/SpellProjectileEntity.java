@@ -34,14 +34,14 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
     public void tick() {
         super.tick();
 
-        if (!getWorld().isClient() && age < 10 && getOwner() != null && getOwner().isSneaking()) {
-            var owner = getOwner();
-            setVelocity(owner, owner.getPitch(), owner.getYaw(), 0.0F, 1F, 0F);
-            velocityModified = true;
-        }
-
-        if (age > 400) {
-            discard();
+        if (!getWorld().isClient() && ) {
+            if (age < 10 && getOwner() != null && getOwner().isSneaking()) {
+                var owner = getOwner();
+                setVelocity(owner, owner.getPitch(), owner.getYaw(), 0.0F, 1F, 0F);
+                velocityModified = true;
+            } else if (age > 400) {
+                discard();
+            }
         }
     }
 
