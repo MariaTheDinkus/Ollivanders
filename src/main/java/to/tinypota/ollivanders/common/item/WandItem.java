@@ -26,7 +26,7 @@ public class WandItem extends Item {
 
         if (!world.isClient) {
             var spellProjectileEntity = new SpellProjectileEntity(user, world);
-            spellProjectileEntity.setPosition(spellProjectileEntity.getPos().add(0, 0.1 - 4 / 16F, 0));
+            spellProjectileEntity.setPosition(spellProjectileEntity.getPos().add(0, 0.1 - 2 / 16F, 0));
             world.spawnEntity(spellProjectileEntity);
         }
 

@@ -17,12 +17,26 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 
     public SpellProjectileEntity(LivingEntity owner, World world) {
         super(OllivandersEntityTypes.SPELL_PROJECTILE, owner, world);
-        setVelocity(owner, owner.getPitch(), owner.getYaw(), 0.0F, 1.75F, 0F);
+        setVelocity(owner, owner.getPitch(), owner.getYaw(), 0.0F, 1F, 0F);
     }
 
     @Override
     public boolean hasNoGravity() {
         return true;
+    }
+
+    @Override
+    protected float getDragInWater() {
+        return 1;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (age > 400) {
+            discard();
+        }
     }
 
     @Override

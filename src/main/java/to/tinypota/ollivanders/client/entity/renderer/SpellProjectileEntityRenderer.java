@@ -27,6 +27,7 @@ public class SpellProjectileEntityRenderer extends EntityRenderer<SpellProjectil
     public void render(SpellProjectileEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
 
+        matrices.scale(0.5F, 0.5F, 0.5F);
         matrices.translate(0.0F, 0.25F, 0.0F);
 
 //		var scale = entity.age < 10 ? ((entity.age % 10 + tickDelta) / 10.0F) : 1.0F;

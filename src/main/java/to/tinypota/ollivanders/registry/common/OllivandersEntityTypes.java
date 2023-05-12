@@ -12,11 +12,11 @@ public class OllivandersEntityTypes {
     public static final EntityType<SpellProjectileEntity> SPELL_PROJECTILE = register("spell_projectile", FabricEntityTypeBuilder
             .create()
             .<SpellProjectileEntity>entityFactory(SpellProjectileEntity::new)
-            .dimensions(EntityDimensions.changing(0.5F, 0.5F))
+            .dimensions(EntityDimensions.changing(0.25F, 0.25F))
             .fireImmune()
             .spawnableFarFromPlayer()
-            .trackRangeBlocks(32)
-            .trackedUpdateRate(10)
+            .trackRangeChunks(4)
+            .trackedUpdateRate(20)
             .build()
     );
 
