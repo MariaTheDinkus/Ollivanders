@@ -14,15 +14,16 @@ import to.tinypota.ollivanders.Ollivanders;
 
 public class OllivandersBlocks {
     public static final Block TEST_BLOCK = register("test_block", new Block(FabricBlockSettings.copyOf(Blocks.SLIME_BLOCK)), new Item.Settings());
-    public static final WoodType LAUREL_WOOD = WoodType.register(new WoodType("laurel", BlockSetType.register(new BlockSetType("laurel"))));
-    public static final WoodType REDWOOD = WoodType.register(new WoodType("redwood", BlockSetType.register(new BlockSetType("redwood"))));
+    public static final WoodType LAUREL_WOOD = registerWood(createWoodType("laurel"), MapColor.BROWN, MapColor.BROWN);
+    public static final WoodType REDWOOD = registerWood(createWoodType("redwood"), MapColor.DARK_RED, MapColor.DARK_RED);
 
     public static void init() {
-        registerWood("laurel", LAUREL_WOOD, MapColor.BROWN, MapColor.BROWN);
-        registerWood("redwood", REDWOOD, MapColor.BROWN, MapColor.BROWN);
+
     }
 
-    public static void registerWood(String name, WoodType woodType, MapColor color, MapColor topColor) {
+    //TODO: Fix saplings. Make this into a a builder class which returns a class letting you retrieve any of the blocks from it with getters. Additionally data gen creating blockstates, models, crafting recipes, and lang file entries for all of these.
+    public static WoodType registerWood(WoodType woodType, MapColor color, MapColor topColor) {
+        String name = woodType.name();
         //register(name + "_sapling", new SaplingBlock(generator, Block.Settings.copy(Blocks.OAK_SAPLING)), new Item.Settings());
         register(name + "_leaves", new LeavesBlock(Block.Settings.copy(Blocks.OAK_LEAVES)), new Item.Settings());
         register(name + "_log", new PillarBlock(setLogSettings(Block.Settings.copy(Blocks.OAK_LOG), topColor, color)), new Item.Settings());
@@ -32,6 +33,7 @@ public class OllivandersBlocks {
         Block planks = register(name + "_planks", new Block(AbstractBlock.Settings.copy(Blocks.OAK_PLANKS)), new Item.Settings());
         register(name + "_stairs", new StairsBlock(planks.getDefaultState(), Block.Settings.copy(planks)), new Item.Settings());
         register(name  + "_slab", new SlabBlock(Block.Settings.copy(Blocks.OAK_SLAB)), new Item.Settings());
+        //TODO: Data gen tags for fence and fence gate connections.
         register(name + "_fence", new FenceBlock(Block.Settings.copy(Blocks.OAK_FENCE)), new Item.Settings());
         register(name + "_fence_gate", new FenceGateBlock(Block.Settings.copy(Blocks.OAK_FENCE_GATE), woodType), new Item.Settings());
         Block door = register(name + "_door", new DoorBlock(Block.Settings.copy(Blocks.OAK_DOOR), woodType.setType()));
@@ -42,6 +44,12 @@ public class OllivandersBlocks {
 
         register(name + "_trapdoor", new TrapdoorBlock(Block.Settings.copy(Blocks.OAK_TRAPDOOR), woodType.setType()), new Item.Settings());
         register(name + "_pressure_plate", new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, Block.Settings.copy(Blocks.OAK_PRESSURE_PLATE), woodType.setType()), new Item.Settings());
+
+        return woodType;
+    }
+
+    public static WoodType createWoodType(String name) {
+        return WoodType.register(new WoodType(name, BlockSetType.register(new BlockSetType(name))));
     }
 
     private static AbstractBlock.Settings setLogSettings(Block.Settings settings, MapColor topMapColor, MapColor sideMapColor) {

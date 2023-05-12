@@ -1,8 +1,8 @@
 {
-    "itemGroup.ollivanders": "Ollivanders",
-	"itemGroup.ollivanders_dragon_heartstring_wands": "Dragon Heartstring Wands",
-	"itemGroup.ollivanders_phoenix_feather_wands": "Phoenix Feather Wands",
-	"itemGroup.ollivanders_unicorn_tail_hair_wands": "Unicorn Tail Hair Wands",
+    "group.ollivanders": "Ollivanders",
+	"group.ollivanders_dragon_heartstring_wands": "Dragon Heartstring Wands",
+	"group.ollivanders_phoenix_feather_wands": "Phoenix Feather Wands",
+	"group.ollivanders_unicorn_tail_hair_wands": "Unicorn Tail Hair Wands",
 	
 	"block.ollivanders.laurel_button": "Laurel Button",
 	"block.ollivanders.laurel_door": "Laurel Door",
