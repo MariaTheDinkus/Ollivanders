@@ -16,7 +16,7 @@ public class OllivandersItemGroups {
 	public static final ItemGroup OLLIVANDERS = FabricItemGroup.builder().icon(OllivandersBlocks.LAUREL_WOOD.getLog().asItem()::getDefaultStack).displayName(Text.translatable("group.ollivanders")).build();
 	//TODO: Find out why this item group doesn't appear.
 	public static final RegistryKey<ItemGroup> OLLIVANDERS_WANDS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Ollivanders.id("ollivanders_wands"));
-	public static final ItemGroup OLLIVANDERS_WANDS = FabricItemGroup.builder().icon(OllivandersItems.WAND_ITEM::getDefaultStack).displayName(Text.translatable("group.ollivanders.wands")).build();
+	public static final ItemGroup OLLIVANDERS_WANDS = FabricItemGroup.builder().icon(OllivandersItems.OAK_WAND::getDefaultStack).displayName(Text.translatable("group.ollivanders.wands")).build();
 	
 	public static void init() {
 		register(OLLIVANDERS_KEY, OLLIVANDERS);
