@@ -13,9 +13,11 @@ public class Ollivanders implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        OllivandersRegistries.init();
         OllivandersItemGroups.init();
         OllivandersItems.init();
         OllivandersBlocks.init();
+        OllivandersSpells.init();
         OllivandersBlockEntityTypes.init();
         OllivandersEntityTypes.init();
         OllivandersEvents.init();

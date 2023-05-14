@@ -2,3 +2,9 @@ accessWidener v2 named
 
 accessible method net/minecraft/block/BlockSetType register (Lnet/minecraft/block/BlockSetType;)Lnet/minecraft/block/BlockSetType;
 accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
+
+accessible method net/minecraft/registry/Registries create (Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/registry/Registries$Initializer;)Lnet/minecraft/registry/Registry;
+accessible method net/minecraft/registry/Registries create (Lnet/minecraft/registry/RegistryKey;Ljava/lang/String;Lnet/minecraft/registry/Registries$Initializer;)Lnet/minecraft/registry/DefaultedRegistry;
+accessible method net/minecraft/registry/RegistryKeys of (Ljava/lang/String;)Lnet/minecraft/registry/RegistryKey;
+
+accessible class net/minecraft/registry/Registries$Initializer
