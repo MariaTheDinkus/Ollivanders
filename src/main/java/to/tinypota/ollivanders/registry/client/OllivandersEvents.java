@@ -1,7 +1,7 @@
 package to.tinypota.ollivanders.registry.client;
 
 public class OllivandersEvents {
-    public static void init() {
-
-    }
+	public static void init() {
+	
+	}
 }

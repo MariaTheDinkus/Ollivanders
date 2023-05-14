@@ -6,9 +6,9 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class OllivandersTrackedData {
-    public static final TrackedData<String> CURRENT_SPELL = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.STRING);
-
-    public static void init() {
-
-    }
+	public static final TrackedData<String> CURRENT_SPELL = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.STRING);
+	
+	public static void init() {
+	
+	}
 }

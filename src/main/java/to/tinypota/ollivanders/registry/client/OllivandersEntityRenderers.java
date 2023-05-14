@@ -5,7 +5,7 @@ import to.tinypota.ollivanders.client.entity.renderer.SpellProjectileEntityRende
 import to.tinypota.ollivanders.registry.common.OllivandersEntityTypes;
 
 public class OllivandersEntityRenderers {
-    public static void init() {
-        EntityRendererRegistry.register(OllivandersEntityTypes.SPELL_PROJECTILE, SpellProjectileEntityRenderer::new);
-    }
+	public static void init() {
+		EntityRendererRegistry.register(OllivandersEntityTypes.SPELL_PROJECTILE, SpellProjectileEntityRenderer::new);
+	}
 }

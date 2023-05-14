@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class OllivandersDimensions {
-    public static final Map<RegistryKey<DimensionOptions>, Supplier<DimensionOptions>> DIMENSIONS = new HashMap<>();
-
-    public static void init() {
-
-    }
+	public static final Map<RegistryKey<DimensionOptions>, Supplier<DimensionOptions>> DIMENSIONS = new HashMap<>();
+	
+	public static void init() {
+	
+	}
 }

@@ -9,19 +9,19 @@ import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.item.WandItem;
 
 public class OllivandersItems {
-    public static final WandItem WAND_ITEM = register("wand", new WandItem(new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERED_WANDS_KEY);
-
-    public static void init() {
-
-    }
-
-    public static <I extends Item> I register(String name, I item) {
-        return register(name, item, OllivandersItemGroups.OLLIVANDERED_KEY);
-    }
-
-    public static <I extends Item> I register(String name, I item, RegistryKey<ItemGroup> group) {
-        I result = Registry.register(Registries.ITEM, Ollivanders.id(name), item);
-        OllivandersItemGroups.addToItemGroup(group, item);
-        return result;
-    }
+	public static final WandItem WAND_ITEM = register("wand", new WandItem(new Item.Settings().maxCount(1).fireproof()));
+	
+	public static void init() {
+	
+	}
+	
+	public static <I extends Item> I register(String name, I item) {
+		return register(name, item, OllivandersItemGroups.OLLIVANDERED_KEY);
+	}
+	
+	public static <I extends Item> I register(String name, I item, RegistryKey<ItemGroup> group) {
+		I result = Registry.register(Registries.ITEM, Ollivanders.id(name), item);
+		OllivandersItemGroups.addToItemGroup(group, item);
+		return result;
+	}
 }

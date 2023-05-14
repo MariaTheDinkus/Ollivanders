@@ -9,22 +9,22 @@ import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.entity.SpellProjectileEntity;
 
 public class OllivandersEntityTypes {
-    public static final EntityType<SpellProjectileEntity> SPELL_PROJECTILE = register("spell_projectile", FabricEntityTypeBuilder
-            .create()
-            .<SpellProjectileEntity>entityFactory(SpellProjectileEntity::new)
-            .dimensions(EntityDimensions.changing(0.25F, 0.25F))
-            .fireImmune()
-            .spawnableFarFromPlayer()
-            .trackRangeChunks(4)
-            .trackedUpdateRate(20)
-            .build()
-    );
-
-    public static void init() {
-
-    }
-
-    public static <E extends EntityType<?>> E register(String name, E entityType) {
-        return Registry.register(Registries.ENTITY_TYPE, Ollivanders.id(name), entityType);
-    }
+	public static final EntityType<SpellProjectileEntity> SPELL_PROJECTILE = register("spell_projectile", FabricEntityTypeBuilder
+			.create()
+			.<SpellProjectileEntity>entityFactory(SpellProjectileEntity::new)
+			.dimensions(EntityDimensions.changing(0.25F, 0.25F))
+			.fireImmune()
+			.spawnableFarFromPlayer()
+			.trackRangeChunks(4)
+			.trackedUpdateRate(20)
+			.build()
+	);
+	
+	public static void init() {
+	
+	}
+	
+	public static <E extends EntityType<?>> E register(String name, E entityType) {
+		return Registry.register(Registries.ENTITY_TYPE, Ollivanders.id(name), entityType);
+	}
 }

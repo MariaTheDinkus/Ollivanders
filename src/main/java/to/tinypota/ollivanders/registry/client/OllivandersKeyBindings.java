@@ -8,8 +8,8 @@ public class OllivandersKeyBindings {
 //					GLFW.GLFW_KEY_F,
 //					KeyBinding.MISC_CATEGORY
 //			));
-
-    public static void init() {
-
-    }
+	
+	public static void init() {
+	
+	}
 }

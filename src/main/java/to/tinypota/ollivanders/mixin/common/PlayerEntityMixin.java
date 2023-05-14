@@ -16,10 +16,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
 	}
-
+	
 	@Inject(method = "initDataTracker", at = @At("HEAD"))
 	public void initTracker(CallbackInfo ci) {
 		getDataTracker()
-			.startTracking(OllivandersTrackedData.CURRENT_SPELL, Spell.EMPTY.getCastName());
+				.startTracking(OllivandersTrackedData.CURRENT_SPELL, Spell.EMPTY.getCastName());
 	}
 }
