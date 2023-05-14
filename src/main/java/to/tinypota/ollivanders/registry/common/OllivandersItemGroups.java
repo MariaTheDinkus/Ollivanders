@@ -12,15 +12,15 @@ import net.minecraft.text.Text;
 import to.tinypota.ollivanders.Ollivanders;
 
 public class OllivandersItemGroups {
-	public static final RegistryKey<ItemGroup> OLLIVANDERED_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Ollivanders.id("ollivanders"));
-	public static final ItemGroup OLLIVANDERED = FabricItemGroup.builder().icon(OllivandersBlocks.LAUREL_WOOD.getLog().asItem()::getDefaultStack).displayName(Text.translatable("group.ollivanders")).build();
+	public static final RegistryKey<ItemGroup> OLLIVANDERS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Ollivanders.id("ollivanders"));
+	public static final ItemGroup OLLIVANDERS = FabricItemGroup.builder().icon(OllivandersBlocks.LAUREL_WOOD.getLog().asItem()::getDefaultStack).displayName(Text.translatable("group.ollivanders")).build();
 	//TODO: Find out why this item group doesn't appear.
-	public static final RegistryKey<ItemGroup> OLLIVANDERED_WANDS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Ollivanders.id("ollivanders_wands"));
-	public static final ItemGroup OLLIVANDERED_WANDS = FabricItemGroup.builder().icon(OllivandersItems.WAND_ITEM::getDefaultStack).displayName(Text.translatable("group.ollivanders.wands")).build();
+	public static final RegistryKey<ItemGroup> OLLIVANDERS_WANDS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Ollivanders.id("ollivanders_wands"));
+	public static final ItemGroup OLLIVANDERS_WANDS = FabricItemGroup.builder().icon(OllivandersItems.WAND_ITEM::getDefaultStack).displayName(Text.translatable("group.ollivanders.wands")).build();
 	
 	public static void init() {
-		register(OLLIVANDERED_KEY, OLLIVANDERED);
-		register(OLLIVANDERED_WANDS_KEY, OLLIVANDERED_WANDS);
+		register(OLLIVANDERS_KEY, OLLIVANDERS);
+		register(OLLIVANDERS_WANDS_KEY, OLLIVANDERS_WANDS);
 	}
 	
 	public static void addToItemGroup(RegistryKey<ItemGroup> group, Item item) {
@@ -28,7 +28,7 @@ public class OllivandersItemGroups {
 	}
 	
 	public static void addToDefault(Item item) {
-		ItemGroupEvents.modifyEntriesEvent(OLLIVANDERED_KEY).register(entries -> entries.add(item));
+		ItemGroupEvents.modifyEntriesEvent(OLLIVANDERS_KEY).register(entries -> entries.add(item));
 	}
 	
 	public static ItemGroup register(RegistryKey<ItemGroup> key, ItemGroup itemGroup) {

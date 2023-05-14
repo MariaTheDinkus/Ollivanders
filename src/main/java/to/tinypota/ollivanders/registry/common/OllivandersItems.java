@@ -16,7 +16,7 @@ public class OllivandersItems {
 	}
 	
 	public static <I extends Item> I register(String name, I item) {
-		return register(name, item, OllivandersItemGroups.OLLIVANDERED_KEY);
+		return register(name, item, OllivandersItemGroups.OLLIVANDERS_KEY);
 	}
 	
 	public static <I extends Item> I register(String name, I item, RegistryKey<ItemGroup> group) {
