@@ -13,12 +13,12 @@ public class TestRaycastSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onHitBlock(World world, BlockHitResult hitResult) {
+	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return world.setBlockState(hitResult.getBlockPos().offset(hitResult.getSide()), Blocks.FIRE.getDefaultState()) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 	
 	@Override
-	public ActionResult onHitEntity(World world, EntityHitResult hitResult) {
+	public ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		if (hitResult.getEntity() instanceof LivingEntity) {
 			hitResult.getEntity().damage(world.getDamageSources().cactus(), 2);
 			return ActionResult.SUCCESS;

@@ -11,8 +11,10 @@ import net.minecraft.util.hit.EntityHitResult;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.entity.SpellProjectileEntity;
 import to.tinypota.ollivanders.common.item.WandItem;
+import to.tinypota.ollivanders.common.spell.PowerLevel;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.spell.SpellType;
+import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.common.util.RaycastUtil;
 
 public class OllivandersNetworking {
@@ -20,27 +22,29 @@ public class OllivandersNetworking {
 	
 	public static void init() {
 		ServerPlayNetworking.registerGlobalReceiver(SWING_WAND_PACKET_ID, (server, player, handler, buf, responseSender) -> {
-			//var serverState = OllivandersServerState.getServerState(server);
 			var uuid = buf.readUuid();
 			if (player.getUuid().equals(uuid)) {
 				var world = player.getWorld();
 				var stack = player.getMainHandStack();
 				var currentSpell = OllivandersSpells.getCurrentSpell(player);
 				if (WandItem.hasCore(stack) && !currentSpell.isEmpty()) {
+					var serverState = OllivandersServerState.getServerState(server);
+					var wandMatchLevel = WandItem.getWandMatch(stack, player);
+					serverState.addSkillLevel(player, currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
 					player.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
 					if (currentSpell.getType() == SpellType.SELF) {
-						currentSpell.onSelfCast(player);
+						currentSpell.onSelfCast(PowerLevel.NORMAL, player);
 						player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 						OllivandersSpells.emptyCurrentSpell(player);
 					} else if (currentSpell.getType() == SpellType.RAYCAST) {
 						BlockHitResult blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
 						EntityHitResult entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
 						if (entityHitResult != null) {
-							currentSpell.onHitEntity(world, entityHitResult);
+							currentSpell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 							OllivandersSpells.emptyCurrentSpell(player);
 						} else if (blockHitResult != null) {
-							currentSpell.onHitBlock(world, blockHitResult);
+							currentSpell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 							OllivandersSpells.emptyCurrentSpell(player);
 						}

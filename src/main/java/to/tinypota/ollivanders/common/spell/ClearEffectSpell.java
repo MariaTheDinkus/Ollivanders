@@ -16,12 +16,12 @@ public class ClearEffectSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onHitBlock(World world, BlockHitResult hitResult) {
+	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return ActionResult.FAIL;
 	}
 	
 	@Override
-	public ActionResult onHitEntity(World world, EntityHitResult hitResult) {
+	public ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		if (hitResult.getEntity() instanceof LivingEntity) {
 			return ((LivingEntity) hitResult.getEntity()).removeStatusEffect(statusEffect) ? ActionResult.SUCCESS : ActionResult.FAIL;
 		}
@@ -29,7 +29,7 @@ public class ClearEffectSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onSelfCast(LivingEntity entity) {
+	public ActionResult onSelfCast(PowerLevel powerLevel, LivingEntity entity) {
 		return entity.removeStatusEffect(statusEffect) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 }

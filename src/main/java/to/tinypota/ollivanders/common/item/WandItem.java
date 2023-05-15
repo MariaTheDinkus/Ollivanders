@@ -11,23 +11,14 @@ import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.core.Core;
-import to.tinypota.ollivanders.common.entity.SpellProjectileEntity;
-import to.tinypota.ollivanders.common.spell.Spell;
-import to.tinypota.ollivanders.common.spell.SpellType;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
-import to.tinypota.ollivanders.common.util.RaycastUtil;
 import to.tinypota.ollivanders.registry.common.OllivandersCores;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
-import to.tinypota.ollivanders.registry.common.OllivandersSpells;
 
 import java.util.List;
 import java.util.UUID;
@@ -91,6 +82,21 @@ public class WandItem extends Item {
 			var uuid = compound.getUuid("owner");
 			if (server.getPlayerManager().getPlayer(uuid) != null) {
 				return server.getPlayerManager().getPlayer(uuid);
+			}
+		}
+		return null;
+	}
+	
+	public static WandMatchLevel getWandMatch(ItemStack stack, LivingEntity user) {
+		if (hasCore(stack)) {
+			var isSuitableWand = isSuitableWand(user, stack);
+			var hasSuitableCore = hasSuitableCore(user, stack);
+			if (isSuitableWand && hasSuitableCore) {
+				return WandMatchLevel.PERFECT;
+			} else if (isSuitableWand && !hasSuitableCore || !isSuitableWand && hasSuitableCore) {
+				return WandMatchLevel.AVERAGE;
+			} else {
+				return WandMatchLevel.AWFUL;
 			}
 		}
 		return null;
@@ -161,9 +167,8 @@ public class WandItem extends Item {
 		if (!world.isClient()) {
 			if (hasCore(stack)) {
 				if (!hasOwner(stack)) {
-					var isSuitableWand = isSuitableWand(user, stack);
-					var hasSuitableCore = hasSuitableCore(user, stack);
-					if (isSuitableWand && hasSuitableCore) {
+					var wandMatchLevel = getWandMatch(stack, user);
+					if (wandMatchLevel == WandMatchLevel.PERFECT) {
 						world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.NEUTRAL, 1F, 1F);
 						if (user.isSneaking()) {
 							user.sendMessage(Text.literal("This wand now belongs to you. The strength of the bond makes it perform excellently.").formatted(Formatting.GOLD), true);
@@ -171,7 +176,7 @@ public class WandItem extends Item {
 						} else {
 							user.sendMessage(Text.literal("A perfect match. Sneak if you wish to take ownership.").formatted(Formatting.GOLD), true);
 						}
-					} else if (isSuitableWand && !hasSuitableCore || !isSuitableWand && hasSuitableCore) {
+					} else if (wandMatchLevel == WandMatchLevel.AVERAGE) {
 						world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.NEUTRAL, 1F, 1F);
 						if (user.isSneaking()) {
 							user.sendMessage(Text.literal("This wand now belongs to you. The strength of the bond makes it perform averagely.").formatted(Formatting.GOLD), true);
@@ -179,7 +184,7 @@ public class WandItem extends Item {
 						} else {
 							user.sendMessage(Text.literal("I suppose it's usable, in a pinch. Sneak if you wish to take ownership.").formatted(Formatting.GRAY), true);
 						}
-					} else {
+					} else if (wandMatchLevel == WandMatchLevel.AWFUL) {
 						world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.NEUTRAL, 1F, 1F);
 						if (user.isSneaking()) {
 							user.sendMessage(Text.literal("This wand now belongs to you. The strength of the bond makes it nigh unusable.").formatted(Formatting.GOLD), true);
@@ -199,35 +204,6 @@ public class WandItem extends Item {
 				user.sendMessage(Text.literal("Nothing seems to happen...").formatted(Formatting.GRAY), true);
 			}
 		}
-//		if (!currentSpell.isEmpty()) {
-//			user.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
-//			if (currentSpell.getType() == SpellType.SELF) {
-//				currentSpell.onSelfCast(user);
-//				OllivandersSpells.emptyCurrentSpell(user);
-//			} else if (currentSpell.getType() == SpellType.RAYCAST) {
-//				BlockHitResult blockHitResult = RaycastUtil.raycastBlocks(world, user, 100, currentSpell.shouldHitWater());
-//				EntityHitResult entityHitResult = RaycastUtil.raycastEntities(world, user, 100);
-//				if (entityHitResult != null) {
-//					currentSpell.onHitEntity(world, entityHitResult);
-//					OllivandersSpells.emptyCurrentSpell(user);
-//				} else if (blockHitResult != null) {
-//					currentSpell.onHitBlock(world, blockHitResult);
-//					OllivandersSpells.emptyCurrentSpell(user);
-//				}
-//			} else if (currentSpell.getType() == SpellType.PROJECTILE) {
-//				world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
-//
-//				if (!world.isClient) {
-//					var spellProjectileEntity = new SpellProjectileEntity(Spell.EMPTY, user, world);
-//					spellProjectileEntity.setPosition(spellProjectileEntity.getPos().add(0, 0.1 - 2 / 16F, 0));
-//					world.spawnEntity(spellProjectileEntity);
-//				}
-//
-//				user.incrementStat(Stats.USED.getOrCreateStat(this));
-//				OllivandersSpells.emptyCurrentSpell(user);
-//			}
-//			return TypedActionResult.success(stack, world.isClient());
-//		}
 		return TypedActionResult.pass(user.getStackInHand(hand));
 	}
 	

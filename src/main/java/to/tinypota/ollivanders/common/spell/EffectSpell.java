@@ -15,17 +15,27 @@ public class EffectSpell extends Spell {
 		this.statusEffect = statusEffect;
 	}
 	
+	@Override
+	public PowerLevel getMaxPowerLevel() {
+		return PowerLevel.MAXIMUM;
+	}
+	
+	@Override
+	public PowerLevel getAvailablePowerLevel(double skillLevel) {
+		return new PowerLevelSkillGuide(2000, 8000, 16000, 32000).availableForSkill(skillLevel);
+	}
+	
 	public StatusEffectInstance getStatusEffect() {
 		return new StatusEffectInstance(statusEffect);
 	}
 	
 	@Override
-	public ActionResult onHitBlock(World world, BlockHitResult hitResult) {
+	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return ActionResult.FAIL;
 	}
 	
 	@Override
-	public ActionResult onHitEntity(World world, EntityHitResult hitResult) {
+	public ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		if (hitResult.getEntity() instanceof LivingEntity) {
 			return ((LivingEntity) hitResult.getEntity()).addStatusEffect(getStatusEffect()) ? ActionResult.SUCCESS : ActionResult.FAIL;
 		}
@@ -33,7 +43,7 @@ public class EffectSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onSelfCast(LivingEntity entity) {
+	public ActionResult onSelfCast(PowerLevel powerLevel, LivingEntity entity) {
 		return entity.addStatusEffect(getStatusEffect()) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 }
