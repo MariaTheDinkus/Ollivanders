@@ -7,14 +7,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.registry.Registries;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
@@ -31,6 +30,7 @@ import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
 import to.tinypota.ollivanders.registry.common.OllivandersSpells;
 
 import java.util.List;
+import java.util.UUID;
 
 public class WandItem extends Item {
 	private static final String KEY_PLAYER_UUID = "player_uuid";
@@ -48,6 +48,52 @@ public class WandItem extends Item {
 	
 	public Block getWoodPlanks() {
 		return woodPlanks;
+	}
+	
+	public static boolean hasOwner(ItemStack stack) {
+		var compound = stack.getOrCreateNbt();
+		return compound.contains("owner", NbtElement.INT_ARRAY_TYPE) && compound.contains("owner_name", NbtElement.STRING_TYPE);
+	}
+	
+	public static Pair<String, UUID> getOwnerDetails(ItemStack stack) {
+		return new Pair<>(getOwnerName(stack), getOwnerUUID(stack));
+	}
+	
+	public static String getOwnerName(ItemStack stack) {
+		var compound = stack.getOrCreateNbt();
+		if (compound.contains("owner_name", NbtElement.STRING_TYPE)) {
+			return compound.getString("owner_name");
+		}
+		return null;
+	}
+	
+	public static UUID getOwnerUUID(ItemStack stack) {
+		var compound = stack.getOrCreateNbt();
+		if (compound.contains("owner", NbtElement.INT_ARRAY_TYPE)) {
+			return compound.getUuid("owner");
+		}
+		return null;
+	}
+	
+	public static void setOwner(ItemStack stack, String name, UUID uuid) {
+		var compound = stack.getOrCreateNbt();
+		compound.putUuid("owner", uuid);
+		compound.putString("owner_name", name);
+	}
+	
+	public static void setOwner(ItemStack stack, LivingEntity entity) {
+		setOwner(stack, entity.getEntityName(), entity.getUuid());
+	}
+	
+	public static LivingEntity getOwner(ItemStack stack, MinecraftServer server) {
+		var compound = stack.getOrCreateNbt();
+		if (compound.contains("owner", NbtElement.INT_ARRAY_TYPE)) {
+			var uuid = compound.getUuid("owner");
+			if (server.getPlayerManager().getPlayer(uuid) != null) {
+				return server.getPlayerManager().getPlayer(uuid);
+			}
+		}
+		return null;
 	}
 	
 	public static void setCore(ItemStack stack, Identifier identifier) {
@@ -72,6 +118,12 @@ public class WandItem extends Item {
 		return OllivandersCores.EMPTY;
 	}
 	
+	public static boolean isSuitableWand(LivingEntity entity, ItemStack stack) {
+		var suitedWandId = OllivandersServerState.getSuitedWand(entity);
+		
+		return suitedWandId.equals(Registries.ITEM.getId(stack.getItem()).toString());
+	}
+	
 	public static boolean hasSuitableCore(LivingEntity entity, ItemStack stack) {
 		if (hasCore(stack)) {
 			var suitedCoreId = OllivandersServerState.getSuitedCore(entity);
@@ -93,6 +145,13 @@ public class WandItem extends Item {
 		} else {
 			tooltip.add(Text.literal("It seems this wand does not yet have a core.").formatted(Formatting.GRAY));
 		}
+		
+		if (hasOwner(stack)) {
+			var details = getOwnerDetails(stack);
+			tooltip.add(Text.literal("This wand is bound to " + details.getLeft() + ".").formatted(Formatting.GRAY));
+		} else {
+			tooltip.add(Text.literal("You sense this wand is not bound to anyone.").formatted(Formatting.GRAY));
+		}
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 	
@@ -101,14 +160,42 @@ public class WandItem extends Item {
 		var stack = user.getStackInHand(hand);
 		if (!world.isClient()) {
 			if (hasCore(stack)) {
-				if (hasSuitableCore(user, stack)) {
-					world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.NEUTRAL, 1F, 1F);
-					user.sendMessage(Text.literal("This wand suits you well!").formatted(Formatting.GOLD), true);
+				if (!hasOwner(stack)) {
+					var isSuitableWand = isSuitableWand(user, stack);
+					var hasSuitableCore = hasSuitableCore(user, stack);
+					if (isSuitableWand && hasSuitableCore) {
+						world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.NEUTRAL, 1F, 1F);
+						if (user.isSneaking()) {
+							user.sendMessage(Text.literal("This wand now belongs to you. The strength of the bond makes it perform excellently.").formatted(Formatting.GOLD), true);
+							setOwner(stack, user);
+						} else {
+							user.sendMessage(Text.literal("A perfect match. Sneak if you wish to take ownership.").formatted(Formatting.GOLD), true);
+						}
+					} else if (isSuitableWand && !hasSuitableCore || !isSuitableWand && hasSuitableCore) {
+						world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.NEUTRAL, 1F, 1F);
+						if (user.isSneaking()) {
+							user.sendMessage(Text.literal("This wand now belongs to you. The strength of the bond makes it perform averagely.").formatted(Formatting.GOLD), true);
+							setOwner(stack, user);
+						} else {
+							user.sendMessage(Text.literal("I suppose it's usable, in a pinch. Sneak if you wish to take ownership.").formatted(Formatting.GRAY), true);
+						}
+					} else {
+						world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.NEUTRAL, 1F, 1F);
+						if (user.isSneaking()) {
+							user.sendMessage(Text.literal("This wand now belongs to you. The strength of the bond makes it nigh unusable.").formatted(Formatting.GOLD), true);
+							setOwner(stack, user);
+						} else {
+							user.sendMessage(Text.literal("It sure didn't provoke a strong reaction... Sneak if you wish to take ownership.").formatted(Formatting.GRAY), true);
+						}
+					}
+				} else if (!getOwnerUUID(stack).equals(user.getUuid())) {
+					world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.NEUTRAL, 1F, 1F);
+					user.sendMessage(Text.literal("This wand is not yours to use.").formatted(Formatting.GRAY), true);
 				} else {
-					world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.NEUTRAL, 1F, 1F);
-					user.sendMessage(Text.literal("It sure didn't provoke a strong reaction...").formatted(Formatting.GRAY), true);
+					world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.NEUTRAL, 1F, 1F);
+					user.sendMessage(Text.literal("This wand already belongs to you.").formatted(Formatting.GRAY), true);
 				}
-			}else {
+			} else {
 				user.sendMessage(Text.literal("Nothing seems to happen...").formatted(Formatting.GRAY), true);
 			}
 		}

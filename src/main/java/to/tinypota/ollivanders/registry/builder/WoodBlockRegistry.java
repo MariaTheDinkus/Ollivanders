@@ -16,7 +16,7 @@ public class WoodBlockRegistry {
 	public static final ArrayList<WoodBlockStorage> WOOD_BLOCK_STORAGES = new ArrayList<>();
 	
 	//TODO: Fix saplings. Additionally data gen creating blockstates, models, crafting recipes, and lang file entries for all of these.
-	public static WoodBlockStorage registerWood(String name, MapColor color, MapColor topColor) {
+	public static WoodBlockStorage registerWood(String translationName, String name, MapColor color, MapColor topColor) {
 		var woodType = WoodBlockRegistry.createWoodType(name);
 		var log = OllivandersBlocks.register(name + "_log", new PillarBlock(setLogSettings(Block.Settings.copy(Blocks.OAK_LOG), topColor, color)), new Item.Settings());
 		var wood = OllivandersBlocks.register(name + "_wood", new PillarBlock(Block.Settings.copy(Blocks.OAK_WOOD)), new Item.Settings());
@@ -40,7 +40,7 @@ public class WoodBlockRegistry {
 		var sapling = OllivandersBlocks.register(name + "_sapling", new SaplingBlock(new OakSaplingGenerator(), Block.Settings.copy(Blocks.OAK_SAPLING)), new Item.Settings());
 		var leaves = OllivandersBlocks.register(name + "_leaves", new LeavesBlock(Block.Settings.copy(Blocks.OAK_LEAVES)), new Item.Settings());
 		
-		var blockStorage = new WoodBlockStorage(sapling, leaves, log, stripped_log, wood, stripped_wood, planks, stairs, slab, fence, fence_gate, door, door_item, button, trapdoor, pressure_plate);
+		var blockStorage = new WoodBlockStorage(translationName, sapling, leaves, log, stripped_log, wood, stripped_wood, planks, stairs, slab, fence, fence_gate, door, door_item, button, trapdoor, pressure_plate);
 		WOOD_BLOCK_STORAGES.add(blockStorage);
 		return blockStorage;
 	}

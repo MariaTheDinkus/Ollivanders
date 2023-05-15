@@ -2,12 +2,14 @@ package to.tinypota.ollivanders.common.storage;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.registry.common.OllivandersCores;
+import to.tinypota.ollivanders.registry.common.OllivandersItems;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
 
 import java.util.HashMap;
@@ -44,6 +46,26 @@ public class OllivandersServerState extends PersistentState {
 		});
         return serverState;
     }
+	
+	public static String getSuitedWand(LivingEntity player) {
+		OllivandersServerState serverState = getServerState(player.getWorld().getServer());
+		OllivandersPlayerState playerState = getPlayerState(player);
+		var suitedWand = playerState.getSuitedWand();
+		if (suitedWand.isEmpty()) {
+			playerState.setSuitedWand(Registries.ITEM.getId(OllivandersItems.WANDS.getRandom(player)).toString());
+			serverState.markDirty();
+			return playerState.getSuitedWand();
+		} else {
+			return suitedWand;
+		}
+	}
+	
+	public static void setSuitedWand(LivingEntity player, String suitedWand) {
+		OllivandersServerState serverState = getServerState(player.getWorld().getServer());
+		OllivandersPlayerState playerState = getPlayerState(player);
+		playerState.setSuitedWand(suitedWand);
+		serverState.markDirty();
+	}
 	
 	public static String getSuitedCore(LivingEntity player) {
 		OllivandersServerState serverState = getServerState(player.getWorld().getServer());

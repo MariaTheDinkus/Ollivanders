@@ -4,6 +4,7 @@ import net.minecraft.block.*;
 import net.minecraft.item.TallBlockItem;
 
 public class WoodBlockStorage {
+	private final String TRANSLATION_NAME;
 	private final SaplingBlock SAPLING;
 	private final LeavesBlock LEAVES;
 	private final PillarBlock LOG;
@@ -21,7 +22,8 @@ public class WoodBlockStorage {
 	private final TrapdoorBlock TRAPDOOR;
 	private final PressurePlateBlock PRESSURE_PLATE;
 	
-	public WoodBlockStorage(SaplingBlock sapling, LeavesBlock leaves, PillarBlock log, PillarBlock strippedLog, PillarBlock wood, PillarBlock strippedWood, Block planks, StairsBlock stairs, SlabBlock slab, FenceBlock fence, FenceGateBlock fenceGate, DoorBlock door, TallBlockItem doorItem, ButtonBlock button, TrapdoorBlock trapdoor, PressurePlateBlock pressurePlate) {
+	public WoodBlockStorage(String translationName, SaplingBlock sapling, LeavesBlock leaves, PillarBlock log, PillarBlock strippedLog, PillarBlock wood, PillarBlock strippedWood, Block planks, StairsBlock stairs, SlabBlock slab, FenceBlock fence, FenceGateBlock fenceGate, DoorBlock door, TallBlockItem doorItem, ButtonBlock button, TrapdoorBlock trapdoor, PressurePlateBlock pressurePlate) {
+		TRANSLATION_NAME = translationName;
 		SAPLING = sapling;
 		LEAVES = leaves;
 		LOG = log;
@@ -38,6 +40,10 @@ public class WoodBlockStorage {
 		BUTTON = button;
 		TRAPDOOR = trapdoor;
 		PRESSURE_PLATE = pressurePlate;
+	}
+	
+	public String getTranslationName() {
+		return TRANSLATION_NAME;
 	}
 	
 	public SaplingBlock getSapling() {

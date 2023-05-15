@@ -50,5 +50,7 @@ public class OllivandersModelGenerator extends FabricModelProvider {
 		itemModelGenerator.register(OllivandersItems.LAUREL_WAND, Models.HANDHELD_ROD);
 		itemModelGenerator.register(OllivandersItems.REDWOOD_WAND, Models.HANDHELD_ROD);
 		itemModelGenerator.register(OllivandersItems.VINE_WAND, Models.HANDHELD_ROD);
+		itemModelGenerator.register(OllivandersItems.CRIMSON_WAND, Models.HANDHELD_ROD);
+		itemModelGenerator.register(OllivandersItems.WARPED_WAND, Models.HANDHELD_ROD);
 	}
 }

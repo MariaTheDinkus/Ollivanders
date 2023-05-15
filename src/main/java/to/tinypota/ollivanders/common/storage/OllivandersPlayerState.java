@@ -5,8 +5,16 @@ public class OllivandersPlayerState {
 	private String suitedCore = "";
     private String currentSpell = "empty";
 	
+	public String getSuitedWand() {
+		return suitedWand;
+	}
+	
 	String getSuitedCore() {
 		return suitedCore;
+	}
+	
+	public void setSuitedWand(String suitedWand) {
+		this.suitedWand = suitedWand;
 	}
 	
 	void setSuitedCore(String suitedCore) {

@@ -11,8 +11,8 @@ import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
 import to.tinypota.ollivanders.registry.builder.WoodBlockStorage;
 
 public class OllivandersBlocks {
-	public static final WoodBlockStorage LAUREL_WOOD = WoodBlockRegistry.registerWood("laurel", MapColor.BROWN, MapColor.BROWN);
-	public static final WoodBlockStorage REDWOOD = WoodBlockRegistry.registerWood("redwood", MapColor.DARK_RED, MapColor.DARK_RED);
+	public static final WoodBlockStorage LAUREL_WOOD = WoodBlockRegistry.registerWood("Laurel", "laurel", MapColor.BROWN, MapColor.BROWN);
+	public static final WoodBlockStorage REDWOOD = WoodBlockRegistry.registerWood("Redwood", "redwood", MapColor.DARK_RED, MapColor.DARK_RED);
 	
 	public static void init() {
 	

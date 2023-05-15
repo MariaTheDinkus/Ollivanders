@@ -11,6 +11,7 @@ public class OllivandersDatagen implements DataGeneratorEntrypoint {
 		final FabricDataGenerator.Pack pack = dataGenerator.createPack();
 		System.out.println("GOOBA GOOBA GOOBA WAHOO");
 		
+		pack.addProvider(OllivandersLangGenerator::new);
 		pack.addProvider(OllivandersModelGenerator::new);
 	}
 	
