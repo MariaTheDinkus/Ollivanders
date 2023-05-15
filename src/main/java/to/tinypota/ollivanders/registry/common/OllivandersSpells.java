@@ -9,6 +9,7 @@ import to.tinypota.ollivanders.common.spell.ClearEffectSpell;
 import to.tinypota.ollivanders.common.spell.EffectSpell;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.spell.SpellType;
+import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 
 public class OllivandersSpells {
 	public static final Spell LUMOS = register("lumos", new EffectSpell("lumos", new StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 30), new Spell.Settings().type(SpellType.SELF)));
@@ -20,19 +21,19 @@ public class OllivandersSpells {
 	}
 	
 	public static Spell getCurrentSpell(PlayerEntity player) {
-		return OllivandersRegistries.getSpellByName(player.getDataTracker().get(OllivandersTrackedData.CURRENT_SPELL));
+		return OllivandersRegistries.getSpellByName(OllivandersServerState.getCurrentSpell(player));
 	}
 	
 	public static void setCurrentSpell(PlayerEntity player, Spell spell) {
-		player.getDataTracker().set(OllivandersTrackedData.CURRENT_SPELL, spell.getCastName());
+		OllivandersServerState.setCurrentSpell(player, spell.getCastName());
 	}
 	
 	public static void setCurrentSpell(PlayerEntity player, String name) {
-		player.getDataTracker().set(OllivandersTrackedData.CURRENT_SPELL, name);
+		OllivandersServerState.setCurrentSpell(player, name);
 	}
 	
 	public static void emptyCurrentSpell(PlayerEntity player) {
-		player.getDataTracker().set(OllivandersTrackedData.CURRENT_SPELL, Spell.EMPTY.getCastName());
+		OllivandersServerState.setCurrentSpell(player, Spell.EMPTY.getCastName());
 	}
 	
 	public static <S extends Spell> S register(String name, S spell) {

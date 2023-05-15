@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "axis=y":  { "model": "ollivanders:block/stripped_laurel_log" },
-        "axis=z":   { "model": "ollivanders:block/stripped_laurel_log", "x": 90 },
-        "axis=x":   { "model": "ollivanders:block/stripped_laurel_log", "x": 90, "y": 90 }
-    }
-}

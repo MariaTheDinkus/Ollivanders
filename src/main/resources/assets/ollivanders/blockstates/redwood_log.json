@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "axis=y":    { "model": "ollivanders:block/redwood_log" },
-        "axis=z":     { "model": "ollivanders:block/redwood_log", "x": 90 },
-        "axis=x":     { "model": "ollivanders:block/redwood_log", "x": 90, "y": 90 }
-    }
-}

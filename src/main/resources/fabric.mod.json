@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
-      "to.tinypota.ollivanders.datagen.OllivandersDataGeneration"
+      "to.tinypota.ollivanders.datagen.OllivandersDatagen"
     ],
     "main": [
       "to.tinypota.ollivanders.Ollivanders"

@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "ollivanders:block/stripped_laurel_log",
-        "side": "ollivanders:block/stripped_laurel_log"
-    }
-}

@@ -1,6 +1,0 @@
-{
-    "parent": "block/template_trapdoor_open",
-    "textures": {
-        "texture": "ollivanders:block/redwood_trapdoor"
-    }
-}

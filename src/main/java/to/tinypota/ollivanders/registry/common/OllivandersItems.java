@@ -1,5 +1,6 @@
 package to.tinypota.ollivanders.registry.common;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
@@ -10,7 +11,18 @@ import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.item.WandItem;
 
 public class OllivandersItems {
-	public static final WandItem OAK_WAND = register("wand_oak", new WandItem(new Item.Settings().maxCount(1).fireproof()));
+	public static final WandItem OAK_WAND = register("oak_wand", new WandItem(Blocks.OAK_PLANKS, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem SPRUCE_WAND = register("spruce_wand", new WandItem(Blocks.SPRUCE_PLANKS, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem BIRCH_WAND = register("birch_wand", new WandItem(Blocks.BIRCH_PLANKS, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem JUNGLE_WAND = register("jungle_wand", new WandItem(Blocks.JUNGLE_PLANKS, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem ACACIA_WAND = register("acacia_wand", new WandItem(Blocks.ACACIA_PLANKS, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem DARK_OAK_WAND = register("dark_oak_wand", new WandItem(Blocks.DARK_OAK_PLANKS, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem MANGROVE_WAND = register("mangrove_wand", new WandItem(Blocks.MANGROVE_PLANKS, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem CHERRY_WAND = register("cherry_wand", new WandItem(Blocks.CHERRY_PLANKS, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem LAUREL_WAND = register("laurel_wand", new WandItem(OllivandersBlocks.LAUREL_WOOD.getPlanks(), new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem REDWOOD_WAND = register("redwood_wand", new WandItem(OllivandersBlocks.REDWOOD.getPlanks(), new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	public static final WandItem VINE_WAND = register("vine_wand", new WandItem(Blocks.VINE, new Item.Settings().maxCount(1).fireproof()), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
+	
 	public static final Item DRAGON_HEARTSTRING = register("dragon_heartstring", new Item(new Item.Settings().rarity(Rarity.RARE)));
 	public static final Item PHOENIX_FEATHER = register("phoenix_feather", new Item(new Item.Settings().rarity(Rarity.RARE)));
 	public static final Item THESTRAL_TAIL_HAIR = register("thestral_tail_hair", new Item(new Item.Settings().rarity(Rarity.RARE)));
@@ -28,6 +40,9 @@ public class OllivandersItems {
 	public static <I extends Item> I register(String name, I item, RegistryKey<ItemGroup> group) {
 		I result = Registry.register(Registries.ITEM, Ollivanders.id(name), item);
 		OllivandersItemGroups.addToItemGroup(group, item);
+		if (item instanceof WandItem) {
+			OllivandersItemGroups.addWandsToItemGroup(item);
+		}
 		return result;
 	}
 }

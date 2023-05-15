@@ -19,7 +19,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	
 	@Inject(method = "initDataTracker", at = @At("HEAD"))
 	public void initTracker(CallbackInfo ci) {
-		getDataTracker()
-				.startTracking(OllivandersTrackedData.CURRENT_SPELL, Spell.EMPTY.getCastName());
+//		getDataTracker()
+//				.startTracking(OllivandersTrackedData.CURRENT_SPELL, Spell.EMPTY.getCastName());
 	}
 }

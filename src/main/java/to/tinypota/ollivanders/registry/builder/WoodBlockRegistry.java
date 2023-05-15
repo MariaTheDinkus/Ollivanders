@@ -2,6 +2,7 @@ package to.tinypota.ollivanders.registry.builder;
 
 import net.minecraft.block.*;
 import net.minecraft.block.enums.Instrument;
+import net.minecraft.block.sapling.OakSaplingGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.item.TallBlockItem;
 import net.minecraft.sound.BlockSoundGroup;
@@ -36,10 +37,10 @@ public class WoodBlockRegistry {
 		var pressure_plate = OllivandersBlocks.register(name + "_pressure_plate", new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, Block.Settings.copy(Blocks.OAK_PRESSURE_PLATE), woodType.setType()), new Item.Settings());
 		var button = OllivandersBlocks.register(name + "_button", new ButtonBlock(Block.Settings.copy(Blocks.OAK_BUTTON), woodType.setType(), 30, true), new Item.Settings());
 		
-		//var sapling = OllivandersBlocks.register(name + "_sapling", new SaplingBlock(generator, Block.Settings.copy(Blocks.OAK_SAPLING)), new Item.Settings());
+		var sapling = OllivandersBlocks.register(name + "_sapling", new SaplingBlock(new OakSaplingGenerator(), Block.Settings.copy(Blocks.OAK_SAPLING)), new Item.Settings());
 		var leaves = OllivandersBlocks.register(name + "_leaves", new LeavesBlock(Block.Settings.copy(Blocks.OAK_LEAVES)), new Item.Settings());
 		
-		var blockStorage = new WoodBlockStorage(null, leaves, log, stripped_log, wood, stripped_wood, planks, stairs, slab, fence, fence_gate, door, door_item, button, trapdoor, pressure_plate);
+		var blockStorage = new WoodBlockStorage(sapling, leaves, log, stripped_log, wood, stripped_wood, planks, stairs, slab, fence, fence_gate, door, door_item, button, trapdoor, pressure_plate);
 		WOOD_BLOCK_STORAGES.add(blockStorage);
 		return blockStorage;
 	}

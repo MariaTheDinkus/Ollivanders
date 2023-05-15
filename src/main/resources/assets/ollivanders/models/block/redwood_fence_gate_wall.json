@@ -1,6 +1,0 @@
-{
-    "parent": "block/template_fence_gate_wall",
-    "textures": {
-        "texture": "ollivanders:block/redwood_planks"
-    }
-}

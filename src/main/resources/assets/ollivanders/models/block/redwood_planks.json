@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "ollivanders:block/redwood_planks"
-    }
-}

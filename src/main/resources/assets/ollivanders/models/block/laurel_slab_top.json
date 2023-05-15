@@ -1,8 +1,0 @@
-{
-    "parent": "block/slab_top",
-    "textures": {
-        "bottom": "ollivanders:block/laurel_planks",
-        "top": "ollivanders:block/laurel_planks",
-        "side": "ollivanders:block/laurel_planks"
-    }
-}

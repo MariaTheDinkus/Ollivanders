@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "ollivanders:block/laurel_log_top",
+    "side": "ollivanders:block/laurel_log"
+  }
+}

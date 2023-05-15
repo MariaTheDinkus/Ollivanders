@@ -7,8 +7,7 @@ import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
 public class OllivandersBlockRenderLayers {
 	public static void init() {
 		WoodBlockRegistry.WOOD_BLOCK_STORAGES.forEach(woodBlockStorage -> {
-			BlockRenderLayerMap.INSTANCE.putBlock(woodBlockStorage.getDoor(), RenderLayer.getCutout());
-			BlockRenderLayerMap.INSTANCE.putBlock(woodBlockStorage.getTrapdoor(), RenderLayer.getCutout());
+			BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), woodBlockStorage.getDoor(), woodBlockStorage.getTrapdoor(), woodBlockStorage.getSapling());
 		});
 	}
 }
