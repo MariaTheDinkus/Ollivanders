@@ -36,13 +36,13 @@ public abstract class MixinPlayerManager {
 	private void onBroadcastChatMessage(SignedMessage message, Predicate<ServerPlayerEntity> shouldSendFiltered, @Nullable ServerPlayerEntity sender, MessageType.Parameters params, CallbackInfo callbackInfo) {
 		var stringMessage = message.getContent().getString();
 		if (OllivandersRegistries.containsSpellName(stringMessage)) {
-			boolean verified = verify(message);
+			var verified = verify(message);
 			server.logChatMessage(message.getContent(), params, verified ? null : "Not Secure");
-			SentMessage sentMessage = SentMessage.of(message);
-			boolean wasFiltered = false;
+			var sentMessage = SentMessage.of(message);
+			var wasFiltered = false;
 			for (ServerPlayerEntity serverPlayerEntity : players) {
 				if (sender.getUuid() == serverPlayerEntity.getUuid() || serverPlayerEntity.getPos().distanceTo(sender.getPos()) < 100) {
-					boolean shouldFilter = shouldSendFiltered.test(serverPlayerEntity);
+					var shouldFilter = shouldSendFiltered.test(serverPlayerEntity);
 					serverPlayerEntity.sendChatMessage(sentMessage, shouldFilter, params);
 					wasFiltered |= shouldFilter && message.isFullyFiltered();
 				}
@@ -51,7 +51,7 @@ public abstract class MixinPlayerManager {
 				sender.sendMessage(FILTERED_FULL_TEXT);
 			}
 			
-			Spell spell = OllivandersRegistries.getSpellFromMessage(stringMessage);
+			var spell = OllivandersRegistries.getSpellFromMessage(stringMessage);
 			if (spell != Spell.EMPTY) {
 				OllivandersSpells.setCurrentSpell(sender, spell);
 			}

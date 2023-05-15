@@ -25,13 +25,13 @@ public class OllivandersServerState extends PersistentState {
  
     @Override
     public NbtCompound writeNbt(NbtCompound nbt) {
-		NbtCompound playersNbtCompound = new NbtCompound();
+		var playersNbtCompound = new NbtCompound();
 		players.forEach((UUID, playerState) -> {
-			NbtCompound playerStateNbt = new NbtCompound();
+			var playerStateNbt = new NbtCompound();
 			playerStateNbt.putString("suitedWand", playerState.getSuitedWand());
 			playerStateNbt.putString("suitedCore", playerState.getSuitedCore());
 			playerStateNbt.putString("currentSpell", playerState.getCurrentSpell());
-			NbtCompound skillLevels = new NbtCompound();
+			var skillLevels = new NbtCompound();
 			playerState.getSkillLevels().forEach((spell, level) -> {
 				skillLevels.putDouble(OllivandersRegistries.SPELL.getId(spell).toString(), level);
 			});
@@ -43,24 +43,23 @@ public class OllivandersServerState extends PersistentState {
     }
  
     public static OllivandersServerState createFromNbt(NbtCompound tag) {
-        OllivandersServerState serverState = new OllivandersServerState();
-		NbtCompound playersTag = tag.getCompound("players");
+        var serverState = new OllivandersServerState();
+		var playersTag = tag.getCompound("players");
 		playersTag.getKeys().forEach(key -> {
-			NbtCompound playerTag = playersTag.getCompound(key);
-			OllivandersPlayerState playerState = new OllivandersPlayerState();
+			var playerTag = playersTag.getCompound(key);
+			var playerState = new OllivandersPlayerState();
 			playerState.setSuitedWand(playerTag.getString("suitedWand"));
 			playerState.setSuitedCore(playerTag.getString("suitedCore"));
 			playerState.setCurrentSpell(playerTag.getString("currentSpell"));
-			NbtCompound skillLevels = playerTag.getCompound("skillLevels");
+			var skillLevels = playerTag.getCompound("skillLevels");
 			playerState.getSkillLevels().clear();
-			for (String spellId : skillLevels.getKeys()) {
-				Identifier identifier = new Identifier(spellId);
-				System.out.println(identifier);
-				Spell spell = OllivandersRegistries.SPELL.get(identifier);
+			for (var spellId : skillLevels.getKeys()) {
+				var identifier = new Identifier(spellId);
+				var spell = OllivandersRegistries.SPELL.get(identifier);
 				double skillLevel = skillLevels.getDouble(spellId);
 				playerState.getSkillLevels().put(spell, skillLevel);
 			}
-			UUID uuid = UUID.fromString(key);
+			var uuid = UUID.fromString(key);
 			serverState.players.put(uuid, playerState);
 		});
         return serverState;
@@ -69,7 +68,7 @@ public class OllivandersServerState extends PersistentState {
 	public void addSkillLevel(LivingEntity player, Spell spell, double amount) {
 		var playerState = getPlayerState(player);
 		var skillLevels = playerState.getSkillLevels();
-		double currentLevel = skillLevels.getOrDefault(spell, 0.0);
+		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
 		skillLevels.put(spell, currentLevel + amount);
 		markDirty();
 	}
@@ -77,8 +76,8 @@ public class OllivandersServerState extends PersistentState {
 	public void subtractSkillLevel(LivingEntity player, Spell spell, double amount) {
 		var playerState = getPlayerState(player);
 		var skillLevels = playerState.getSkillLevels();
-		double currentLevel = skillLevels.getOrDefault(spell, 0.0);
-		double newLevel = currentLevel - amount;
+		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
+		var newLevel = currentLevel - amount;
 		if (newLevel < 0) {
 			newLevel = 0;
 		}
@@ -93,8 +92,8 @@ public class OllivandersServerState extends PersistentState {
 	}
 	
 	public static String getSuitedWand(LivingEntity player) {
-		OllivandersServerState serverState = getServerState(player.getWorld().getServer());
-		OllivandersPlayerState playerState = getPlayerState(player);
+		var serverState = getServerState(player.getWorld().getServer());
+		var playerState = getPlayerState(player);
 		var suitedWand = playerState.getSuitedWand();
 		if (suitedWand.isEmpty()) {
 			playerState.setSuitedWand(Registries.ITEM.getId(OllivandersItems.WANDS.getRandom(player)).toString());
@@ -106,15 +105,15 @@ public class OllivandersServerState extends PersistentState {
 	}
 	
 	public static void setSuitedWand(LivingEntity player, String suitedWand) {
-		OllivandersServerState serverState = getServerState(player.getWorld().getServer());
-		OllivandersPlayerState playerState = getPlayerState(player);
+		var serverState = getServerState(player.getWorld().getServer());
+		var playerState = getPlayerState(player);
 		playerState.setSuitedWand(suitedWand);
 		serverState.markDirty();
 	}
 	
 	public static String getSuitedCore(LivingEntity player) {
-		OllivandersServerState serverState = getServerState(player.getWorld().getServer());
-		OllivandersPlayerState playerState = getPlayerState(player);
+		var serverState = getServerState(player.getWorld().getServer());
+		var playerState = getPlayerState(player);
 		var suitedCore = playerState.getSuitedCore();
 		if (suitedCore.isEmpty()) {
 			playerState.setSuitedCore(OllivandersRegistries.CORE.getId(OllivandersCores.CORES.getRandom(player)).toString());
@@ -126,33 +125,33 @@ public class OllivandersServerState extends PersistentState {
 	}
 	
 	public static void setSuitedCore(LivingEntity player, String suitedCore) {
-		OllivandersServerState serverState = getServerState(player.getWorld().getServer());
-		OllivandersPlayerState playerState = getPlayerState(player);
+		var serverState = getServerState(player.getWorld().getServer());
+		var playerState = getPlayerState(player);
 		playerState.setSuitedCore(suitedCore);
 		serverState.markDirty();
 	}
 	
 	public static String getCurrentSpell(LivingEntity player) {
-		OllivandersPlayerState playerState = getPlayerState(player);
+		var playerState = getPlayerState(player);
 		return playerState.getCurrentSpell();
 	}
 	
 	public static void setCurrentSpell(LivingEntity player, String currentSpell) {
-		OllivandersServerState serverState = getServerState(player.getWorld().getServer());
-		OllivandersPlayerState playerState = getPlayerState(player);
+		var serverState = getServerState(player.getWorld().getServer());
+		var playerState = getPlayerState(player);
 		playerState.setCurrentSpell(currentSpell);
 		serverState.markDirty();
 	}
 	
 	public static OllivandersServerState getServerState(MinecraftServer server) {
-		PersistentStateManager persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
-		OllivandersServerState serverState = persistentStateManager.getOrCreate(OllivandersServerState::createFromNbt, OllivandersServerState::new, Ollivanders.ID);
+		var persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
+		var serverState = persistentStateManager.getOrCreate(OllivandersServerState::createFromNbt, OllivandersServerState::new, Ollivanders.ID);
 		return serverState;
 	}
 	
 	public static OllivandersPlayerState getPlayerState(LivingEntity player) {
-		OllivandersServerState serverState = getServerState(player.getWorld().getServer());
-		OllivandersPlayerState playerState = serverState.players.computeIfAbsent(player.getUuid(), uuid -> new OllivandersPlayerState());
+		var serverState = getServerState(player.getWorld().getServer());
+		var playerState = serverState.players.computeIfAbsent(player.getUuid(), uuid -> new OllivandersPlayerState());
 		return playerState;
 	}
 }

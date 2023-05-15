@@ -41,7 +41,7 @@ public class Core {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Core core = (Core) o;
+		var core = (Core) o;
 		return Double.compare(core.rarity, rarity) == 0 && Objects.equals(translationKey, core.translationKey) && Objects.equals(item, core.item);
 	}
 	

@@ -72,8 +72,8 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 				hitResult = entityHitResult;
 			}
 			if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
-				Entity hitEntity = ((EntityHitResult) hitResult).getEntity();
-				Entity owner = getOwner();
+				var hitEntity = ((EntityHitResult) hitResult).getEntity();
+				var owner = getOwner();
 				if (hitEntity instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity) owner).shouldDamagePlayer((PlayerEntity) hitEntity)) {
 					hitResult = null;
 					entityHitResult = null;
@@ -105,7 +105,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			ActionResult result = spell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult);
+			var result = spell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult);
 			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 				discard();
 			}
@@ -117,7 +117,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			ActionResult result = spell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult);
+			var result = spell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult);
 			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 				discard();
 			}

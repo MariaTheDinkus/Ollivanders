@@ -18,7 +18,6 @@ import to.tinypota.ollivanders.common.util.WeightedRandomBag;
 public class OllivandersItemGroups {
 	public static final RegistryKey<ItemGroup> OLLIVANDERS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Ollivanders.id("ollivanders_general"));
 	public static final ItemGroup OLLIVANDERS = FabricItemGroup.builder().icon(() -> new ItemStack(OllivandersBlocks.LAUREL_WOOD.getLog())).entries((displayContext, entries) -> {}).displayName(Text.translatable("itemGroup.ollivanders.general")).build();
-	//TODO: Find out why this item group doesn't appear.
 	public static final RegistryKey<ItemGroup> OLLIVANDERS_WANDS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Ollivanders.id("ollivanders_wands"));
 	public static final ItemGroup OLLIVANDERS_WANDS = FabricItemGroup.builder().icon(() -> new ItemStack(OllivandersItems.OAK_WAND)).entries((displayContext, entries) -> {}).displayName(Text.translatable("itemGroup.ollivanders.wands")).build();
 	
@@ -33,7 +32,7 @@ public class OllivandersItemGroups {
 	
 	public static void addWandsToItemGroup(Item item) {
 		ItemGroupEvents.modifyEntriesEvent(OLLIVANDERS_WANDS_KEY).register(entries -> {
-			for (Core core : OllivandersRegistries.CORE) {
+			for (var core : OllivandersRegistries.CORE) {
 				if (core != OllivandersCores.EMPTY) {
 					var stack = new ItemStack(item);
 					WandItem.setCore(stack, OllivandersRegistries.CORE.getId(core));

@@ -26,7 +26,7 @@ public class OllivandersCommands {
 	public static final SuggestionProvider<ServerCommandSource> AVAILABLE_CORES = SuggestionProviders.register(Ollivanders.id("available_cores"), (context, builder) -> CommandSource.suggestIdentifiers(OllivandersRegistries.CORE.getIds(), builder));
 	public static final SuggestionProvider<ServerCommandSource> AVAILABLE_WANDS = SuggestionProviders.register(Ollivanders.id("available_wands"), (context, builder) -> CommandSource.suggestIdentifiers(() -> {
 		ArrayList<Identifier> wandItemIDs = new ArrayList<>();
-		for (WeightedRandomBag<WandItem>.Entry entry : OllivandersItems.WANDS.getEntries()) {
+		for (var entry : OllivandersItems.WANDS.getEntries()) {
 			var item = entry.getObject();
 			wandItemIDs.add(Registries.ITEM.getId(item));
 		}
@@ -38,7 +38,7 @@ public class OllivandersCommands {
 			dispatcher.register(literal("getwand")
 					.then(argument("player", EntityArgumentType.player())
 							.executes(context -> {
-								ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
+								var player = EntityArgumentType.getPlayer(context, "player");
 								context.getSource().sendFeedback(Text.literal("Their current preferred wand wood is " + OllivandersServerState.getSuitedWand(player)), false);
 								return 1;
 							})
@@ -50,10 +50,10 @@ public class OllivandersCommands {
 							.then(argument("wand", IdentifierArgumentType.identifier())
 									.suggests(AVAILABLE_WANDS)
 									.executes(context -> {
-										ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
-										Identifier wandId = IdentifierArgumentType.getIdentifier(context, "wand");
+										var player = EntityArgumentType.getPlayer(context, "player");
+										var wandId = IdentifierArgumentType.getIdentifier(context, "wand");
 										// Ensure the wand exists
-										WandItem wand = (WandItem) Registries.ITEM.get(wandId);
+										var wand = (WandItem) Registries.ITEM.get(wandId);
 										if (wand == null) {
 											context.getSource().sendFeedback(Text.translatable("command.ollivanders.setwand.fail", wandId), false);
 											return 0;
@@ -69,7 +69,7 @@ public class OllivandersCommands {
 			dispatcher.register(literal("getcore")
 					.then(argument("player", EntityArgumentType.player())
 							.executes(context -> {
-								ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
+								var player = EntityArgumentType.getPlayer(context, "player");
 								context.getSource().sendFeedback(Text.literal("Their current preferred core is " + OllivandersServerState.getSuitedCore(player)), false);
 								return 1;
 							})
@@ -81,10 +81,10 @@ public class OllivandersCommands {
 							.then(argument("core", IdentifierArgumentType.identifier())
 									.suggests(AVAILABLE_CORES)
 									.executes(context -> {
-										ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
-										Identifier coreId = IdentifierArgumentType.getIdentifier(context, "core");
+										var player = EntityArgumentType.getPlayer(context, "player");
+										var coreId = IdentifierArgumentType.getIdentifier(context, "core");
 										// Ensure the core exists
-										Core core = OllivandersRegistries.CORE.get(coreId);
+										var core = OllivandersRegistries.CORE.get(coreId);
 										if (core == null) {
 											context.getSource().sendFeedback(Text.translatable("command.ollivanders.setcore.fail", coreId), false);
 											return 0;

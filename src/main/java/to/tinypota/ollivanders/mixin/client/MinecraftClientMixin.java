@@ -21,16 +21,13 @@ import to.tinypota.ollivanders.registry.common.OllivandersNetworking;
 public class MinecraftClientMixin {
     @Inject(method = "doAttack", at = @At("HEAD"))
     private void onAttack(CallbackInfoReturnable<Boolean> ci) {
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-	
-		Ollivanders.LOGGER.info("HEHUIFGHOFAW");
+        var player = MinecraftClient.getInstance().player;
 
         if(player == null) {
             return;
         }
         
-        if(player.getMainHandStack().getItem() instanceof WandItem) { // replace with your item
-			Ollivanders.LOGGER.info("HEHUIFGHOFAW");
+        if(player.getMainHandStack().getItem() instanceof WandItem) {
         	var buf = PacketByteBufs.create();
 			buf.writeUuid(player.getUuid());
             ClientPlayNetworking.send(OllivandersNetworking.SWING_WAND_PACKET_ID, buf);

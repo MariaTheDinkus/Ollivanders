@@ -110,7 +110,7 @@ public class WandItem extends Item {
 	public static boolean hasCore(ItemStack stack) {
 		var compound = stack.getOrCreateNbt();
 		if (compound.contains("core", NbtElement.STRING_TYPE)) {
-			Identifier id = new Identifier(compound.getString("core"));
+			var id = new Identifier(compound.getString("core"));
 			return OllivandersRegistries.CORE.containsId(id);
 		}
 		return false;
@@ -146,7 +146,7 @@ public class WandItem extends Item {
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		var compound = stack.getOrCreateNbt();
 		if (hasCore(stack)) {
-			Core core = getCore(stack);
+			var core = getCore(stack);
 			tooltip.add(Text.literal("The core is ").formatted(Formatting.GRAY).append(Text.translatable(core.getTranslationKey())));
 		} else {
 			tooltip.add(Text.literal("It seems this wand does not yet have a core.").formatted(Formatting.GRAY));

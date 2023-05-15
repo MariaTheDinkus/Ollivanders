@@ -23,7 +23,7 @@ public class OllivandersBlocks {
 	}
 	
 	public static <B extends Block> B register(String name, B block, Item.Settings itemSettings) {
-		BlockItem blockItem = new BlockItem(block, itemSettings);
+		var blockItem = new BlockItem(block, itemSettings);
 		Registry.register(Registries.BLOCK, Ollivanders.id(name), block);
 		Registry.register(Registries.ITEM, Ollivanders.id(name), blockItem);
 		OllivandersItemGroups.addToDefault(blockItem);

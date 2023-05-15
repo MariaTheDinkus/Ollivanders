@@ -93,7 +93,7 @@ public class Spell {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		Spell spell = (Spell) o;
+		var spell = (Spell) o;
 		return hitsBlocks == spell.hitsBlocks && hitsEntities == spell.hitsEntities && hitsWater == spell.hitsWater && Objects.equals(castName, spell.castName) && type == spell.type;
 	}
 	

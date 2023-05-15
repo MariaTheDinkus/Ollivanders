@@ -20,7 +20,7 @@ public class OllivandersModelGenerator extends FabricModelProvider {
  
 	@Override
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-		for (WoodBlockStorage storage : WoodBlockRegistry.WOOD_BLOCK_STORAGES) {
+		for (var storage : WoodBlockRegistry.WOOD_BLOCK_STORAGES) {
 			blockStateModelGenerator.registerLog(storage.getLog()).log(storage.getLog()).wood(storage.getWood());
 			blockStateModelGenerator.registerLog(storage.getStrippedLog()).log(storage.getStrippedLog()).wood(storage.getStrippedWood());
 			blockStateModelGenerator.registerTintableCross(storage.getSapling(), BlockStateModelGenerator.TintType.NOT_TINTED);

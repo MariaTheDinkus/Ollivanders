@@ -37,8 +37,8 @@ public class OllivandersNetworking {
 						player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 						OllivandersSpells.emptyCurrentSpell(player);
 					} else if (currentSpell.getType() == SpellType.RAYCAST) {
-						BlockHitResult blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
-						EntityHitResult entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
+						var blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
+						var entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
 						if (entityHitResult != null) {
 							currentSpell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
@@ -60,9 +60,7 @@ public class OllivandersNetworking {
 						player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 						OllivandersSpells.emptyCurrentSpell(player);
 					}
-					//return TypedActionResult.success(stack, world.isClient());
 				}
-				//return TypedActionResult.pass(stack);
 			}
 		});
 	}

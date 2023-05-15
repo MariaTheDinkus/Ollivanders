@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class WoodBlockRegistry {
 	public static final ArrayList<WoodBlockStorage> WOOD_BLOCK_STORAGES = new ArrayList<>();
 	
-	//TODO: Fix saplings. Additionally data gen creating blockstates, models, crafting recipes, and lang file entries for all of these.
+	//TODO: Fix saplings. Additionally data gen crafting recipes.
 	public static WoodBlockStorage registerWood(String translationName, String name, MapColor color, MapColor topColor) {
 		var woodType = WoodBlockRegistry.createWoodType(name);
 		var log = OllivandersBlocks.register(name + "_log", new PillarBlock(setLogSettings(Block.Settings.copy(Blocks.OAK_LOG), topColor, color)), new Item.Settings());
@@ -29,7 +29,6 @@ public class WoodBlockRegistry {
 		//TODO: Data gen tags for fence and fence gate connections.
 		var fence = OllivandersBlocks.register(name + "_fence", new FenceBlock(Block.Settings.copy(Blocks.OAK_FENCE)), new Item.Settings());
 		var fence_gate = OllivandersBlocks.register(name + "_fence_gate", new FenceGateBlock(Block.Settings.copy(Blocks.OAK_FENCE_GATE), woodType), new Item.Settings());
-		//TODO: Fix door blockstate/model.
 		var door = OllivandersBlocks.register(name + "_door", new DoorBlock(Block.Settings.copy(Blocks.OAK_DOOR), woodType.setType()));
 		var door_item = OllivandersItems.register(name + "_door", new TallBlockItem(door, new Item.Settings()));
 		

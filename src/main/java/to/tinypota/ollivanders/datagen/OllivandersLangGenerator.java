@@ -22,7 +22,7 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 		translationBuilder.add(OllivandersItemGroups.OLLIVANDERS_KEY, "Ollivanders");
 		translationBuilder.add(OllivandersItemGroups.OLLIVANDERS_WANDS_KEY, "Ollivanders Wands");
 		
-		for (WoodBlockStorage storage : WoodBlockRegistry.WOOD_BLOCK_STORAGES) {
+		for (var storage : WoodBlockRegistry.WOOD_BLOCK_STORAGES) {
 			translationBuilder.add(storage.getLog(), storage.getTranslationName() + " Log");
 			translationBuilder.add(storage.getWood(), storage.getTranslationName() + " Wood");
 			translationBuilder.add(storage.getStrippedLog(), storage.getTranslationName() + " Stripped Log");

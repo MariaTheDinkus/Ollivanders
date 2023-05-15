@@ -30,7 +30,7 @@ public class OllivandersRegistries {
 	}
 	
 	public static boolean containsSpellName(String message) {
-		for (String name : SPELL_NAMES) {
+		for (var name : SPELL_NAMES) {
 			if (!name.equals("empty") && message.toLowerCase().startsWith(name)) {
 				return true;
 			}
@@ -39,7 +39,7 @@ public class OllivandersRegistries {
 	}
 	
 	public static Spell getSpellByName(String name) {
-		AtomicReference<Spell> matchedSpell = new AtomicReference<>(Spell.EMPTY);
+		var matchedSpell = new AtomicReference<>(Spell.EMPTY);
 		SPELL.forEach(spell -> {
 			if (spell.getCastName().equals(name)) {
 				matchedSpell.set(spell);
@@ -49,7 +49,7 @@ public class OllivandersRegistries {
 	}
 	
 	public static Spell getSpellFromMessage(String message) {
-		AtomicReference<Spell> matchedSpell = new AtomicReference<>(Spell.EMPTY);
+		var matchedSpell = new AtomicReference<>(Spell.EMPTY);
 		SPELL.forEach(spell -> {
 			if (message.startsWith(spell.getCastName())) {
 				matchedSpell.set(spell);

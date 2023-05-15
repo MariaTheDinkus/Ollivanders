@@ -30,7 +30,7 @@ public class WeightedRandomBag<T> {
 
     public void addEntry(T object, double weight) {
         accumulatedWeight += weight;
-        Entry e = new Entry();
+        var e = new Entry();
         e.object = object;
         e.accumulatedWeight = accumulatedWeight;
         entries.add(e);
@@ -41,9 +41,9 @@ public class WeightedRandomBag<T> {
 	}
 	
 	public T getRandom() {
-        double r = rand.nextDouble() * accumulatedWeight;
+        var r = rand.nextDouble() * accumulatedWeight;
 
-        for (Entry entry: entries) {
+        for (var entry: entries) {
             if (entry.accumulatedWeight >= r) {
                 return entry.object;
             }
@@ -54,9 +54,9 @@ public class WeightedRandomBag<T> {
 	public T getRandom(LivingEntity entity) {
     	var uuid = entity.getUuid();
     	rand.setSeed(uuid.getLeastSignificantBits() ^ uuid.getMostSignificantBits());
-		double r = rand.nextDouble() * accumulatedWeight;
+		var r = rand.nextDouble() * accumulatedWeight;
 		
-		for (Entry entry: entries) {
+		for (var entry: entries) {
 			if (entry.accumulatedWeight >= r) {
 				return entry.object;
 			}

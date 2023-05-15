@@ -19,13 +19,13 @@ public class OllivandersPlayerState {
 	}
 	
 	public void addSkillLevel(Spell spell, double amount) {
-		double currentLevel = skillLevels.getOrDefault(spell, 0.0);
+		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
 		skillLevels.put(spell, currentLevel + amount);
 	}
 	
 	public void subtractSkillLevel(Spell spell, double amount) {
-		double currentLevel = skillLevels.getOrDefault(spell, 0.0);
-		double newLevel = currentLevel - amount;
+		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
+		var newLevel = currentLevel - amount;
 		if (newLevel < 0) {
 			newLevel = 0;
 		}
