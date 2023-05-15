@@ -1,16 +1,12 @@
 package to.tinypota.ollivanders.common.util;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
-
-import java.util.Optional;
 
 public class RaycastUtil {
 	public static BlockHitResult raycastBlocks(World world, LivingEntity entity, double maxDistance, boolean fluidHandling) {

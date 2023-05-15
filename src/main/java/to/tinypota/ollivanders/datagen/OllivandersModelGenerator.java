@@ -2,22 +2,18 @@ package to.tinypota.ollivanders.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.WeightedPressurePlateBlock;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
 import net.minecraft.data.client.TexturedModel;
 import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
-import to.tinypota.ollivanders.registry.builder.WoodBlockStorage;
-import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 import to.tinypota.ollivanders.registry.common.OllivandersItems;
 
 public class OllivandersModelGenerator extends FabricModelProvider {
 	public OllivandersModelGenerator(FabricDataOutput output) {
 		super(output);
 	}
- 
+	
 	@Override
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
 		for (var storage : WoodBlockRegistry.WOOD_BLOCK_STORAGES) {
@@ -30,7 +26,7 @@ public class OllivandersModelGenerator extends FabricModelProvider {
 			blockStateModelGenerator.registerSingleton(storage.getLeaves(), TexturedModel.LEAVES);
 		}
 	}
- 
+	
 	@Override
 	public void generateItemModels(ItemModelGenerator itemModelGenerator) {
 		itemModelGenerator.register(OllivandersItems.DRAGON_HEARTSTRING, Models.GENERATED);

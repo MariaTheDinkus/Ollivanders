@@ -1,7 +1,6 @@
 package to.tinypota.ollivanders.registry.common;
 
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -9,18 +8,16 @@ import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.Ollivanders;
-import to.tinypota.ollivanders.common.core.Core;
 import to.tinypota.ollivanders.common.item.WandItem;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
-import to.tinypota.ollivanders.common.util.WeightedRandomBag;
 
 import java.util.ArrayList;
 
-import static net.minecraft.server.command.CommandManager.*;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
 
 public class OllivandersCommands {
 	public static final SuggestionProvider<ServerCommandSource> AVAILABLE_CORES = SuggestionProviders.register(Ollivanders.id("available_cores"), (context, builder) -> CommandSource.suggestIdentifiers(OllivandersRegistries.CORE.getIds(), builder));

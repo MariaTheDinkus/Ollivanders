@@ -32,15 +32,6 @@ public class WandItem extends Item {
 		this.woodPlanks = woodPlanks;
 	}
 	
-	@Override
-	public String getTranslationKey() {
-		return super.getTranslationKey();
-	}
-	
-	public Block getWoodPlanks() {
-		return woodPlanks;
-	}
-	
 	public static boolean hasOwner(ItemStack stack) {
 		var compound = stack.getOrCreateNbt();
 		return compound.contains("owner", NbtElement.INT_ARRAY_TYPE) && compound.contains("owner_name", NbtElement.STRING_TYPE);
@@ -93,7 +84,7 @@ public class WandItem extends Item {
 			var hasSuitableCore = hasSuitableCore(user, stack);
 			if (isSuitableWand && hasSuitableCore) {
 				return WandMatchLevel.PERFECT;
-			} else if (isSuitableWand && !hasSuitableCore || !isSuitableWand && hasSuitableCore) {
+			} else if (isSuitableWand ? !hasSuitableCore : hasSuitableCore) {
 				return WandMatchLevel.AVERAGE;
 			} else {
 				return WandMatchLevel.AWFUL;
@@ -140,6 +131,15 @@ public class WandItem extends Item {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public String getTranslationKey() {
+		return super.getTranslationKey();
+	}
+	
+	public Block getWoodPlanks() {
+		return woodPlanks;
 	}
 	
 	@Override

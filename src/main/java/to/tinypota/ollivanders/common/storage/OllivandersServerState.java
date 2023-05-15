@@ -2,14 +2,10 @@ package to.tinypota.ollivanders.common.storage;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtDouble;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.PersistentState;
-import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.spell.Spell;
@@ -22,28 +18,9 @@ import java.util.UUID;
 
 public class OllivandersServerState extends PersistentState {
 	private HashMap<UUID, OllivandersPlayerState> players = new HashMap<>();
- 
-    @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
-		var playersNbtCompound = new NbtCompound();
-		players.forEach((UUID, playerState) -> {
-			var playerStateNbt = new NbtCompound();
-			playerStateNbt.putString("suitedWand", playerState.getSuitedWand());
-			playerStateNbt.putString("suitedCore", playerState.getSuitedCore());
-			playerStateNbt.putString("currentSpell", playerState.getCurrentSpell());
-			var skillLevels = new NbtCompound();
-			playerState.getSkillLevels().forEach((spell, level) -> {
-				skillLevels.putDouble(OllivandersRegistries.SPELL.getId(spell).toString(), level);
-			});
-			playerStateNbt.put("skillLevels", skillLevels);
-			playersNbtCompound.put(String.valueOf(UUID), playerStateNbt);
-		});
-		nbt.put("players", playersNbtCompound);
-        return nbt;
-    }
- 
-    public static OllivandersServerState createFromNbt(NbtCompound tag) {
-        var serverState = new OllivandersServerState();
+	
+	public static OllivandersServerState createFromNbt(NbtCompound tag) {
+		var serverState = new OllivandersServerState();
 		var playersTag = tag.getCompound("players");
 		playersTag.getKeys().forEach(key -> {
 			var playerTag = playersTag.getCompound(key);
@@ -62,33 +39,7 @@ public class OllivandersServerState extends PersistentState {
 			var uuid = UUID.fromString(key);
 			serverState.players.put(uuid, playerState);
 		});
-        return serverState;
-    }
-	
-	public void addSkillLevel(LivingEntity player, Spell spell, double amount) {
-		var playerState = getPlayerState(player);
-		var skillLevels = playerState.getSkillLevels();
-		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
-		skillLevels.put(spell, currentLevel + amount);
-		markDirty();
-	}
-	
-	public void subtractSkillLevel(LivingEntity player, Spell spell, double amount) {
-		var playerState = getPlayerState(player);
-		var skillLevels = playerState.getSkillLevels();
-		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
-		var newLevel = currentLevel - amount;
-		if (newLevel < 0) {
-			newLevel = 0;
-		}
-		skillLevels.put(spell, newLevel);
-		markDirty();
-	}
-	
-	public double getSkillLevel(LivingEntity player, Spell spell) {
-		var playerState = getPlayerState(player);
-		var skillLevels = playerState.getSkillLevels();
-		return skillLevels.getOrDefault(spell, 0.0);
+		return serverState;
 	}
 	
 	public static String getSuitedWand(LivingEntity player) {
@@ -153,5 +104,50 @@ public class OllivandersServerState extends PersistentState {
 		var serverState = getServerState(player.getWorld().getServer());
 		var playerState = serverState.players.computeIfAbsent(player.getUuid(), uuid -> new OllivandersPlayerState());
 		return playerState;
+	}
+	
+	@Override
+	public NbtCompound writeNbt(NbtCompound nbt) {
+		var playersNbtCompound = new NbtCompound();
+		players.forEach((UUID, playerState) -> {
+			var playerStateNbt = new NbtCompound();
+			playerStateNbt.putString("suitedWand", playerState.getSuitedWand());
+			playerStateNbt.putString("suitedCore", playerState.getSuitedCore());
+			playerStateNbt.putString("currentSpell", playerState.getCurrentSpell());
+			var skillLevels = new NbtCompound();
+			playerState.getSkillLevels().forEach((spell, level) -> {
+				skillLevels.putDouble(OllivandersRegistries.SPELL.getId(spell).toString(), level);
+			});
+			playerStateNbt.put("skillLevels", skillLevels);
+			playersNbtCompound.put(String.valueOf(UUID), playerStateNbt);
+		});
+		nbt.put("players", playersNbtCompound);
+		return nbt;
+	}
+	
+	public void addSkillLevel(LivingEntity player, Spell spell, double amount) {
+		var playerState = getPlayerState(player);
+		var skillLevels = playerState.getSkillLevels();
+		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
+		skillLevels.put(spell, currentLevel + amount);
+		markDirty();
+	}
+	
+	public void subtractSkillLevel(LivingEntity player, Spell spell, double amount) {
+		var playerState = getPlayerState(player);
+		var skillLevels = playerState.getSkillLevels();
+		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
+		var newLevel = currentLevel - amount;
+		if (newLevel < 0) {
+			newLevel = 0;
+		}
+		skillLevels.put(spell, newLevel);
+		markDirty();
+	}
+	
+	public double getSkillLevel(LivingEntity player, Spell spell) {
+		var playerState = getPlayerState(player);
+		var skillLevels = playerState.getSkillLevels();
+		return skillLevels.getOrDefault(spell, 0.0);
 	}
 }

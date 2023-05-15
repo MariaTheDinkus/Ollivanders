@@ -1,17 +1,9 @@
 package to.tinypota.ollivanders.registry.common;
 
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.core.Core;
-import to.tinypota.ollivanders.common.spell.ClearEffectSpell;
-import to.tinypota.ollivanders.common.spell.EffectSpell;
-import to.tinypota.ollivanders.common.spell.Spell;
-import to.tinypota.ollivanders.common.spell.SpellType;
 import to.tinypota.ollivanders.common.util.WeightedRandomBag;
 
 public class OllivandersCores {

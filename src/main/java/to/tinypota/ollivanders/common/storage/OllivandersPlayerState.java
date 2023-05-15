@@ -7,8 +7,8 @@ import java.util.HashMap;
 public class OllivandersPlayerState {
 	private String suitedWand = "";
 	private String suitedCore = "";
-    private String currentSpell = "empty";
-    private HashMap<Spell, Double> skillLevels = new HashMap<>();
+	private String currentSpell = "empty";
+	private HashMap<Spell, Double> skillLevels = new HashMap<>();
 	
 	public HashMap<Spell, Double> getSkillLevels() {
 		return skillLevels;
@@ -40,12 +40,12 @@ public class OllivandersPlayerState {
 		return suitedWand;
 	}
 	
-	String getSuitedCore() {
-		return suitedCore;
-	}
-	
 	public void setSuitedWand(String suitedWand) {
 		this.suitedWand = suitedWand;
+	}
+	
+	String getSuitedCore() {
+		return suitedCore;
 	}
 	
 	void setSuitedCore(String suitedCore) {

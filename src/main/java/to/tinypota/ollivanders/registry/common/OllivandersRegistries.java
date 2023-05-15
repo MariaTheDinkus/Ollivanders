@@ -2,7 +2,10 @@ package to.tinypota.ollivanders.registry.common;
 
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
-import net.minecraft.registry.*;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleDefaultedRegistry;
+import net.minecraft.registry.SimpleRegistry;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.core.Core;
 import to.tinypota.ollivanders.common.spell.Spell;

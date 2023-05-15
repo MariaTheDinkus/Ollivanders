@@ -8,18 +8,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class Core {
+	private final Item item;
+	private final double rarity;
 	@Nullable
 	private String translationKey;
-    private final Item item;
-    private final double rarity;
-
-    public Core(Item item, double rarity) {
-        this.item = item;
-        this.rarity = rarity;
-    }
+	
+	public Core(Item item, double rarity) {
+		this.item = item;
+		this.rarity = rarity;
+	}
 	
 	public Item getItem() {
-    	return item;
+		return item;
 	}
 	
 	public double getRarity() {
@@ -34,13 +34,17 @@ public class Core {
 	}
 	
 	public String getTranslationKey() {
-		return this.getOrCreateTranslationKey();
+		return getOrCreateTranslationKey();
 	}
 	
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 		var core = (Core) o;
 		return Double.compare(core.rarity, rarity) == 0 && Objects.equals(translationKey, core.translationKey) && Objects.equals(item, core.item);
 	}
