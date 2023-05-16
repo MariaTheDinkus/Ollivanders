@@ -11,7 +11,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import to.tinypota.ollivanders.Ollivanders;
-import to.tinypota.ollivanders.common.item.WandItem;
+import to.tinypota.ollivanders.common.util.WandHelper;
 
 public class OllivandersItemGroups {
 	public static final RegistryKey<ItemGroup> OLLIVANDERS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Ollivanders.id("ollivanders_general"));
@@ -33,7 +33,7 @@ public class OllivandersItemGroups {
 			for (var core : OllivandersRegistries.CORE) {
 				if (core != OllivandersCores.EMPTY) {
 					var stack = new ItemStack(item);
-					WandItem.setCore(stack, OllivandersRegistries.CORE.getId(core));
+					WandHelper.setCore(stack, OllivandersRegistries.CORE.getId(core));
 					entries.add(stack);
 				}
 			}

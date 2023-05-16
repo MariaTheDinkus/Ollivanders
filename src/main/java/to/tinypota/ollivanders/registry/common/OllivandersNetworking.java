@@ -8,12 +8,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.entity.SpellProjectileEntity;
-import to.tinypota.ollivanders.common.item.WandItem;
 import to.tinypota.ollivanders.common.spell.PowerLevel;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.spell.SpellType;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.common.util.RaycastUtil;
+import to.tinypota.ollivanders.common.util.SpellHelper;
+import to.tinypota.ollivanders.common.util.WandHelper;
 
 public class OllivandersNetworking {
 	public static final Identifier SWING_WAND_PACKET_ID = Ollivanders.id("swing_wand");
@@ -24,27 +25,27 @@ public class OllivandersNetworking {
 			if (player.getUuid().equals(uuid)) {
 				var world = player.getWorld();
 				var stack = player.getMainHandStack();
-				var currentSpell = OllivandersSpells.getCurrentSpell(player);
-				if (WandItem.hasCore(stack) && !currentSpell.isEmpty()) {
+				var currentSpell = SpellHelper.getCurrentSpell(player);
+				if (WandHelper.hasCore(stack) && !currentSpell.isEmpty()) {
 					var serverState = OllivandersServerState.getServerState(server);
-					var wandMatchLevel = WandItem.getWandMatch(stack, player);
+					var wandMatchLevel = WandHelper.getWandMatch(stack, player);
 					serverState.addSkillLevel(player, currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
 					player.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
 					if (currentSpell.getType() == SpellType.SELF) {
 						currentSpell.onSelfCast(PowerLevel.NORMAL, player);
 						player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-						OllivandersSpells.emptyCurrentSpell(player);
+						SpellHelper.emptyCurrentSpell(player);
 					} else if (currentSpell.getType() == SpellType.RAYCAST) {
 						var blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
 						var entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
 						if (entityHitResult != null) {
 							currentSpell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-							OllivandersSpells.emptyCurrentSpell(player);
+							SpellHelper.emptyCurrentSpell(player);
 						} else if (blockHitResult != null) {
 							currentSpell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-							OllivandersSpells.emptyCurrentSpell(player);
+							SpellHelper.emptyCurrentSpell(player);
 						}
 					} else if (currentSpell.getType() == SpellType.PROJECTILE) {
 						world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
@@ -56,7 +57,7 @@ public class OllivandersNetworking {
 						}
 						
 						player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-						OllivandersSpells.emptyCurrentSpell(player);
+						SpellHelper.emptyCurrentSpell(player);
 					}
 				}
 			}
