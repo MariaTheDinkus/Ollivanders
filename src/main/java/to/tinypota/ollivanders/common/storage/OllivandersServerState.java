@@ -127,27 +127,18 @@ public class OllivandersServerState extends PersistentState {
 	
 	public void addSkillLevel(LivingEntity player, Spell spell, double amount) {
 		var playerState = getPlayerState(player);
-		var skillLevels = playerState.getSkillLevels();
-		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
-		skillLevels.put(spell, currentLevel + amount);
+		playerState.addSkillLevel(spell, amount);
 		markDirty();
 	}
 	
 	public void subtractSkillLevel(LivingEntity player, Spell spell, double amount) {
 		var playerState = getPlayerState(player);
-		var skillLevels = playerState.getSkillLevels();
-		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
-		var newLevel = currentLevel - amount;
-		if (newLevel < 0) {
-			newLevel = 0;
-		}
-		skillLevels.put(spell, newLevel);
+		playerState.subtractSkillLevel(spell, amount);
 		markDirty();
 	}
 	
 	public double getSkillLevel(LivingEntity player, Spell spell) {
 		var playerState = getPlayerState(player);
-		var skillLevels = playerState.getSkillLevels();
-		return skillLevels.getOrDefault(spell, 0.0);
+		return playerState.getSkillLevel(spell);
 	}
 }
