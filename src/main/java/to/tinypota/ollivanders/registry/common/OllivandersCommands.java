@@ -36,7 +36,7 @@ public class OllivandersCommands {
 					.then(argument("player", EntityArgumentType.player())
 							.executes(context -> {
 								var player = EntityArgumentType.getPlayer(context, "player");
-								context.getSource().sendFeedback(Text.literal("Their current preferred wand wood is " + OllivandersServerState.getSuitedWand(player)), false);
+								context.getSource().sendFeedback(() -> Text.literal("Their current preferred wand wood is " + OllivandersServerState.getSuitedWand(player)), false);
 								return 1;
 							})
 					)
@@ -52,11 +52,11 @@ public class OllivandersCommands {
 										// Ensure the wand exists
 										var wand = (WandItem) Registries.ITEM.get(wandId);
 										if (wand == null) {
-											context.getSource().sendFeedback(Text.translatable("command.ollivanders.setwand.fail", wandId), false);
+											context.getSource().sendFeedback(() -> Text.translatable("command.ollivanders.setwand.fail", wandId), false);
 											return 0;
 										}
 										OllivandersServerState.setSuitedWand(player, wandId.toString());
-										context.getSource().sendFeedback(Text.translatable("command.ollivanders.setwand.success", player.getDisplayName(), Text.translatable(wand.getTranslationKey())), true);
+										context.getSource().sendFeedback(() -> Text.translatable("command.ollivanders.setwand.success", player.getDisplayName(), Text.translatable(wand.getTranslationKey())), true);
 										return 1;
 									})
 							)
@@ -67,7 +67,7 @@ public class OllivandersCommands {
 					.then(argument("player", EntityArgumentType.player())
 							.executes(context -> {
 								var player = EntityArgumentType.getPlayer(context, "player");
-								context.getSource().sendFeedback(Text.literal("Their current preferred core is " + OllivandersServerState.getSuitedCore(player)), false);
+								context.getSource().sendFeedback(() -> Text.literal("Their current preferred core is " + OllivandersServerState.getSuitedCore(player)), false);
 								return 1;
 							})
 					)
@@ -83,11 +83,11 @@ public class OllivandersCommands {
 										// Ensure the core exists
 										var core = OllivandersRegistries.CORE.get(coreId);
 										if (core == null) {
-											context.getSource().sendFeedback(Text.translatable("command.ollivanders.setcore.fail", coreId), false);
+											context.getSource().sendFeedback(() -> Text.translatable("command.ollivanders.setcore.fail", coreId), false);
 											return 0;
 										}
 										OllivandersServerState.setSuitedCore(player, coreId.toString());
-										context.getSource().sendFeedback(Text.translatable("command.ollivanders.setcore.success", player.getDisplayName(), Text.translatable(core.getTranslationKey())), true);
+										context.getSource().sendFeedback(() -> Text.translatable("command.ollivanders.setcore.success", player.getDisplayName(), Text.translatable(core.getTranslationKey())), true);
 										return 1;
 									})
 							)
