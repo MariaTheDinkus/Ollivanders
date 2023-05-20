@@ -6,7 +6,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
-import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
 import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 
@@ -17,7 +16,6 @@ public class IncendioSpell extends Spell {
 	
 	@Override
 	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult, Entity caster) {
-		Ollivanders.LOGGER.info("EHUEH");
 		var state = world.getBlockState(caster.getBlockPos());
 		if (state.getBlock() == OllivandersBlocks.FLOO_FIRE) {
 			if (!state.get(Properties.LIT)) {

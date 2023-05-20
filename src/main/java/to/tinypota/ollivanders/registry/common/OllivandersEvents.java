@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
+import to.tinypota.ollivanders.common.item.WandItem;
 
 public class OllivandersEvents {
 	public static void init() {
@@ -19,6 +20,10 @@ public class OllivandersEvents {
 						return ActionResult.PASS;
 					}
 				}
+			}
+			
+			if (!player.getStackInHand(hand).isEmpty() && player.getStackInHand(hand).getItem() instanceof WandItem) {
+				return ActionResult.FAIL;
 			}
 			return ActionResult.PASS;
 		});

@@ -1,9 +1,11 @@
 package to.tinypota.ollivanders.common.block;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,8 +26,11 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
+import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.block.entity.FlooFireBlockEntity;
+import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.registry.client.OllivandersParticleTypes;
 import to.tinypota.ollivanders.registry.common.OllivandersItems;
 
@@ -47,6 +52,16 @@ public class FlooFireBlock extends BlockWithEntity {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		var stack = player.getStackInHand(hand);
+		if (FabricLoader.getInstance().isDevelopmentEnvironment() && !world.isClient() && player.getStackInHand(hand).isEmpty()) {
+			var serverState = OllivandersServerState.getServerState(world.getServer());
+			
+			serverState.getFlooState().getFlooPositions().entrySet().forEach(entry -> {
+				var name = entry.getKey();
+				var flooPos = entry.getValue();
+				Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + flooPos.getX() + ", " + flooPos.getY() + ", " + flooPos.getZ() + ".");
+			});
+		}
+		
 		if (!state.get(LIT)) {
 			if (!stack.isEmpty() && stack.getItem() == Items.FLINT_AND_STEEL) {
 				world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
@@ -81,8 +96,7 @@ public class FlooFireBlock extends BlockWithEntity {
 	@Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
 		if (!world.isClient() && state.get(LIT)) {
-			if (!state.get(ACTIVE) && entity instanceof ItemEntity) {
-				var itemEntity = (ItemEntity) entity;
+			if (!state.get(ACTIVE) && entity instanceof ItemEntity itemEntity) {
 				var stack = itemEntity.getStack();
 				if (!stack.isEmpty() && stack.getItem() == OllivandersItems.FLOO_POWDER) {
 					if (stack.getCount() > 1) {
@@ -132,6 +146,49 @@ public class FlooFireBlock extends BlockWithEntity {
 			}
 			world.setBlockState(pos, state.with(LIT, false).with(ACTIVE, false));
 		}
+	}
+	
+	@Override
+	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+		if (world.getBlockEntity(pos.up()) instanceof SignBlockEntity) {
+			return super.canPlaceAt(state, world, pos);
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+		if (!world.isClient() && world.getBlockEntity(pos.up()) instanceof SignBlockEntity signEntity) {
+			var serverState = OllivandersServerState.getServerState(world.getServer());
+			var text = signEntity.getFrontText().getMessage(0, false);
+			
+			if (!serverState.getFlooState().getFlooPositions().containsValue(pos)) {
+				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+					Ollivanders.LOGGER.info("Adding fire to floo network under name: " + text.getString() + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
+				}
+				serverState.addFlooPosition(text.getString(), pos);
+			}
+		}
+		super.onBlockAdded(state, world, pos, oldState, notify);
+	}
+	
+	@Override
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		
+		super.onStateReplaced(state, world, pos, newState, moved);
+	}
+	
+	@Override
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		if (!world.isClient()) {
+			var serverState = OllivandersServerState.getServerState(world.getServer());
+			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+				Ollivanders.LOGGER.info("Removing fire from floo network at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
+			}
+			serverState.removeFlooByPos(pos);
+		}
+		super.onBreak(world, pos, state, player);
 	}
 	
 	@Override

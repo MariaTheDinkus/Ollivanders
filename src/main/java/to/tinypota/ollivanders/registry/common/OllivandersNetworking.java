@@ -19,9 +19,10 @@ public class OllivandersNetworking {
 	public static final Identifier SWING_WAND_PACKET_ID = Ollivanders.id("swing_wand");
 	
 	public static void init() {
-		ServerPlayNetworking.registerGlobalReceiver(SWING_WAND_PACKET_ID, (server, player, handler, buf, responseSender) -> {
+		ServerPlayNetworking.registerGlobalReceiver(SWING_WAND_PACKET_ID, (server, sender, handler, buf, responseSender) -> {
 			var uuid = buf.readUuid();
-			if (player.getUuid().equals(uuid)) {
+			var player = server.getPlayerManager().getPlayer(uuid);
+			if (player != null) {
 				var world = player.getWorld();
 				var stack = player.getMainHandStack();
 				var currentSpell = SpellHelper.getCurrentSpell(player);
