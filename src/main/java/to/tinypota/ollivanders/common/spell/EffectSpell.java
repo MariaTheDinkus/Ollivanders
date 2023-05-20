@@ -6,6 +6,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
+import to.tinypota.ollivanders.api.spell.SpellPowerEvaluator;
 
 public class EffectSpell extends Spell {
 	private final StatusEffectInstance statusEffect;
@@ -16,13 +18,13 @@ public class EffectSpell extends Spell {
 	}
 	
 	@Override
-	public PowerLevel getMaxPowerLevel() {
-		return PowerLevel.MAXIMUM;
+	public SpellPowerLevel getMaxPowerLevel() {
+		return SpellPowerLevel.MAXIMUM;
 	}
 	
 	@Override
-	public PowerLevel getAvailablePowerLevel(double skillLevel) {
-		return new PowerLevelSkillGuide(2000, 8000, 16000, 32000).availableForSkill(skillLevel);
+	public SpellPowerLevel getAvailablePowerLevel(double skillLevel) {
+		return new SpellPowerEvaluator(2000, 8000, 16000, 32000).check(skillLevel);
 	}
 	
 	public StatusEffectInstance getStatusEffect() {
@@ -30,12 +32,12 @@ public class EffectSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
+	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return ActionResult.FAIL;
 	}
 	
 	@Override
-	public ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
+	public ActionResult onHitEntity(SpellPowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		if (hitResult.getEntity() instanceof LivingEntity) {
 			return ((LivingEntity) hitResult.getEntity()).addStatusEffect(getStatusEffect()) ? ActionResult.SUCCESS : ActionResult.FAIL;
 		}
@@ -43,7 +45,7 @@ public class EffectSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onSelfCast(PowerLevel powerLevel, LivingEntity entity) {
+	public ActionResult onSelfCast(SpellPowerLevel powerLevel, LivingEntity entity) {
 		return entity.addStatusEffect(getStatusEffect()) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 }

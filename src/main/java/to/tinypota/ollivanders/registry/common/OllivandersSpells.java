@@ -4,6 +4,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.registry.Registry;
 import to.tinypota.ollivanders.Ollivanders;
+import to.tinypota.ollivanders.api.spell.SpellType;
 import to.tinypota.ollivanders.common.spell.*;
 import to.tinypota.ollivanders.common.util.SpellHelper;
 

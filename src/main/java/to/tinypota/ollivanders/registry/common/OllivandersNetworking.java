@@ -8,8 +8,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.entity.SpellProjectileEntity;
-import to.tinypota.ollivanders.common.spell.PowerLevel;
-import to.tinypota.ollivanders.common.spell.SpellType;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
+import to.tinypota.ollivanders.api.spell.SpellType;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.common.util.RaycastUtil;
 import to.tinypota.ollivanders.common.util.SpellHelper;
@@ -32,18 +32,18 @@ public class OllivandersNetworking {
 					serverState.addSkillLevel(player, currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
 					player.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
 					if (currentSpell.getType() == SpellType.SELF) {
-						currentSpell.onSelfCast(PowerLevel.NORMAL, player);
+						currentSpell.onSelfCast(SpellPowerLevel.NORMAL, player);
 						player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 						SpellHelper.emptyCurrentSpell(player);
 					} else if (currentSpell.getType() == SpellType.RAYCAST) {
 						var blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
 						var entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
 						if (entityHitResult != null) {
-							currentSpell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult, player);
+							currentSpell.onHitEntity(SpellPowerLevel.NORMAL, world, entityHitResult, player);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 							SpellHelper.emptyCurrentSpell(player);
 						} else if (blockHitResult != null) {
-							currentSpell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult, player);
+							currentSpell.onHitBlock(SpellPowerLevel.NORMAL, world, blockHitResult, player);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 							SpellHelper.emptyCurrentSpell(player);
 						}

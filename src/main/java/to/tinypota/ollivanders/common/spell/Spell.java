@@ -6,6 +6,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
+import to.tinypota.ollivanders.api.spell.SpellType;
 import to.tinypota.ollivanders.registry.common.OllivandersSpells;
 
 import java.util.Objects;
@@ -30,19 +32,19 @@ public class Spell {
 		return this == EMPTY;
 	}
 	
-	public PowerLevel getMaxPowerLevel() {
-		return PowerLevel.NORMAL;
+	public SpellPowerLevel getMaxPowerLevel() {
+		return SpellPowerLevel.NORMAL;
 	}
 	
-	public PowerLevel getAvailablePowerLevel(double skillLevel) {
-		return PowerLevel.NORMAL;
+	public SpellPowerLevel getAvailablePowerLevel(double skillLevel) {
+		return SpellPowerLevel.NORMAL;
 	}
 	
-	public boolean canUsePowerLevel(PowerLevel powerLevel) {
+	public boolean canUsePowerLevel(SpellPowerLevel powerLevel) {
 		return powerLevel.getNumerical() >= getAvailablePowerLevel(0).getNumerical();
 	}
 	
-	public boolean canUsePowerLevel(PowerLevel powerLevel, double skillLevel) {
+	public boolean canUsePowerLevel(SpellPowerLevel powerLevel, double skillLevel) {
 		return powerLevel.getNumerical() >= getAvailablePowerLevel(skillLevel).getNumerical();
 	}
 	
@@ -50,7 +52,7 @@ public class Spell {
 	 * Called whenever a block is hit by a raycast or projectile entity. May or may not include water, depending on the spell.
 	 * If it is shot with a projectile entity, you may return ActionResult.PASS to have the spell pass through the block.
 	 */
-	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult, Entity caster) {
+	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult, Entity caster) {
 		return onHitBlock(powerLevel, world, hitResult);
 	}
 	
@@ -58,7 +60,7 @@ public class Spell {
 	 * Called whenever a block is hit by a raycast or projectile entity. May or may not include water, depending on the spell.
 	 * If it is shot with a projectile entity, you may return ActionResult.PASS to have the spell pass through the block.
 	 */
-	protected ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
+	protected ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return ActionResult.PASS;
 	}
 	
@@ -66,7 +68,7 @@ public class Spell {
 	 * Called whenever an entity is hit by a raycast or projectile entity.
 	 * If it is shot with a projectile entity, you may return ActionResult.PASS to have the spell pass through the entity.
 	 */
-	public ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult, Entity caster) {
+	public ActionResult onHitEntity(SpellPowerLevel powerLevel, World world, EntityHitResult hitResult, Entity caster) {
 		return onHitEntity(powerLevel, world, hitResult);
 	}
 	
@@ -74,11 +76,11 @@ public class Spell {
 	 * Called whenever an entity is hit by a raycast or projectile entity.
 	 * If it is shot with a projectile entity, you may return ActionResult.PASS to have the spell pass through the entity.
 	 */
-	protected ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
+	protected ActionResult onHitEntity(SpellPowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		return ActionResult.PASS;
 	}
 	
-	public ActionResult onSelfCast(PowerLevel powerLevel, LivingEntity entity) {
+	public ActionResult onSelfCast(SpellPowerLevel powerLevel, LivingEntity entity) {
 		return ActionResult.PASS;
 	}
 	

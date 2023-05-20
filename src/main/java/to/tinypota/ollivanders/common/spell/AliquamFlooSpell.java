@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
-import to.tinypota.ollivanders.Ollivanders;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 
 public class AliquamFlooSpell extends Spell {
@@ -15,7 +15,7 @@ public class AliquamFlooSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult, Entity caster) {
+	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult, Entity caster) {
 		var pos = hitResult.getBlockPos();
 		var state = world.getBlockState(pos);
 		if (state.getBlock() == Blocks.FIRE && world.getBlockState(pos.up()).getBlock() instanceof AbstractSignBlock) {

@@ -1,4 +1,4 @@
-package to.tinypota.ollivanders.common.spell;
+package to.tinypota.ollivanders.api.spell;
 
 import net.minecraft.util.StringIdentifiable;
 

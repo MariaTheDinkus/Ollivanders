@@ -6,6 +6,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 
 public class ClearEffectSpell extends Spell {
 	private final StatusEffect statusEffect;
@@ -16,12 +17,12 @@ public class ClearEffectSpell extends Spell {
 	}
 	
 	@Override
-	protected ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
+	protected ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return ActionResult.FAIL;
 	}
 	
 	@Override
-	protected ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
+	protected ActionResult onHitEntity(SpellPowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		if (hitResult.getEntity() instanceof LivingEntity) {
 			return ((LivingEntity) hitResult.getEntity()).removeStatusEffect(statusEffect) ? ActionResult.SUCCESS : ActionResult.FAIL;
 		}
@@ -29,7 +30,7 @@ public class ClearEffectSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onSelfCast(PowerLevel powerLevel, LivingEntity entity) {
+	public ActionResult onSelfCast(SpellPowerLevel powerLevel, LivingEntity entity) {
 		return entity.removeStatusEffect(statusEffect) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 }

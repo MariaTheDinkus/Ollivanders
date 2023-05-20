@@ -15,7 +15,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
-import to.tinypota.ollivanders.common.spell.PowerLevel;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.registry.common.OllivandersEntityTypes;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
@@ -104,7 +104,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			var result = spell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult, this);
+			var result = spell.onHitBlock(SpellPowerLevel.NORMAL, world, blockHitResult, this);
 			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 				discard();
 			}
@@ -116,7 +116,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			var result = spell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult, this);
+			var result = spell.onHitEntity(SpellPowerLevel.NORMAL, world, entityHitResult, this);
 			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 				discard();
 			}
