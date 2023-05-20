@@ -18,7 +18,6 @@ public class AliquamFlooSpell extends Spell {
 	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult, Entity caster) {
 		var pos = hitResult.getBlockPos();
 		var state = world.getBlockState(pos);
-		Ollivanders.LOGGER.info(state.getBlock().getName().getString());
 		if (state.getBlock() == Blocks.FIRE && world.getBlockState(pos.up()).getBlock() instanceof AbstractSignBlock) {
 			var newState = OllivandersBlocks.FLOO_FIRE.getDefaultState();
 			world.setBlockState(pos, newState);
