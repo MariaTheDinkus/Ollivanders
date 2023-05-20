@@ -1,0 +1,23 @@
+{
+    "multipart": [
+        {   "when": {"lit": false},
+            "apply": [
+                { "model": "ollivanders:block/ash_stain" }
+            ]
+        },
+        {   "when": {"lit": true, "active": false},
+            "apply": [
+				{
+					"model": "ollivanders:block/fire_full"
+				}
+            ]
+        },
+		{   "when": {"lit": true, "active": true},
+            "apply": [
+				{
+					"model": "ollivanders:block/floo_fire_full"
+				}
+            ]
+        }
+    ]
+}

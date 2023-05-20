@@ -9,7 +9,6 @@ import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.entity.SpellProjectileEntity;
 import to.tinypota.ollivanders.common.spell.PowerLevel;
-import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.spell.SpellType;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.common.util.RaycastUtil;
@@ -39,11 +38,11 @@ public class OllivandersNetworking {
 						var blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
 						var entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
 						if (entityHitResult != null) {
-							currentSpell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult);
+							currentSpell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult, player);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 							SpellHelper.emptyCurrentSpell(player);
 						} else if (blockHitResult != null) {
-							currentSpell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult);
+							currentSpell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult, player);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 							SpellHelper.emptyCurrentSpell(player);
 						}
@@ -51,7 +50,7 @@ public class OllivandersNetworking {
 						world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
 						
 						if (!world.isClient) {
-							var spellProjectileEntity = new SpellProjectileEntity(Spell.EMPTY, player, world);
+							var spellProjectileEntity = new SpellProjectileEntity(currentSpell, player, world);
 							spellProjectileEntity.setPosition(spellProjectileEntity.getPos().add(0, 0.1 - 2 / 16F, 0));
 							world.spawnEntity(spellProjectileEntity);
 						}

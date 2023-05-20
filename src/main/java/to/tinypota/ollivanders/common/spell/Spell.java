@@ -1,5 +1,6 @@
 package to.tinypota.ollivanders.common.spell;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
@@ -49,7 +50,15 @@ public class Spell {
 	 * Called whenever a block is hit by a raycast or projectile entity. May or may not include water, depending on the spell.
 	 * If it is shot with a projectile entity, you may return ActionResult.PASS to have the spell pass through the block.
 	 */
-	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
+	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult, Entity caster) {
+		return onHitBlock(powerLevel, world, hitResult);
+	}
+	
+	/*
+	 * Called whenever a block is hit by a raycast or projectile entity. May or may not include water, depending on the spell.
+	 * If it is shot with a projectile entity, you may return ActionResult.PASS to have the spell pass through the block.
+	 */
+	protected ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return ActionResult.PASS;
 	}
 	
@@ -57,7 +66,15 @@ public class Spell {
 	 * Called whenever an entity is hit by a raycast or projectile entity.
 	 * If it is shot with a projectile entity, you may return ActionResult.PASS to have the spell pass through the entity.
 	 */
-	public ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
+	public ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult, Entity caster) {
+		return onHitEntity(powerLevel, world, hitResult);
+	}
+	
+	/*
+	 * Called whenever an entity is hit by a raycast or projectile entity.
+	 * If it is shot with a projectile entity, you may return ActionResult.PASS to have the spell pass through the entity.
+	 */
+	protected ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		return ActionResult.PASS;
 	}
 	

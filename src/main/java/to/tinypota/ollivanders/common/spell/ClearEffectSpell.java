@@ -16,12 +16,12 @@ public class ClearEffectSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
+	protected ActionResult onHitBlock(PowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return ActionResult.FAIL;
 	}
 	
 	@Override
-	public ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
+	protected ActionResult onHitEntity(PowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		if (hitResult.getEntity() instanceof LivingEntity) {
 			return ((LivingEntity) hitResult.getEntity()).removeStatusEffect(statusEffect) ? ActionResult.SUCCESS : ActionResult.FAIL;
 		}

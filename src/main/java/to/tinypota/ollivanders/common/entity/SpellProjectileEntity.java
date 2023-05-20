@@ -104,7 +104,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			var result = spell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult);
+			var result = spell.onHitBlock(PowerLevel.NORMAL, world, blockHitResult, this);
 			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 				discard();
 			}
@@ -116,7 +116,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			var result = spell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult);
+			var result = spell.onHitEntity(PowerLevel.NORMAL, world, entityHitResult, this);
 			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 				discard();
 			}

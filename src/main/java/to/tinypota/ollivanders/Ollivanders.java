@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import to.tinypota.ollivanders.registry.client.OllivandersParticleTypes;
 import to.tinypota.ollivanders.registry.common.*;
 
 public class Ollivanders implements ModInitializer {
@@ -31,5 +32,6 @@ public class Ollivanders implements ModInitializer {
 		OllivandersEntityAttributes.init();
 		OllivandersStatusEffects.init();
 		OllivandersNetworking.init();
+		OllivandersParticleTypes.init();
 	}
 }

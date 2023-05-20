@@ -1,7 +1,0 @@
-{
-    "parent": "ollivanders:block/fire_side",
-    "textures": {
-        "particle": "ollivanders:block/green_fire_0",
-        "fire": "ollivanders:block/green_fire_0"
-    }
-}

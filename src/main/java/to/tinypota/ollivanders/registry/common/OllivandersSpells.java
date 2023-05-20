@@ -10,7 +10,7 @@ import to.tinypota.ollivanders.common.util.SpellHelper;
 public class OllivandersSpells {
 	public static final Spell LUMOS = register("lumos", new EffectSpell("lumos", new StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 30), new Spell.Settings().type(SpellType.SELF)));
 	public static final Spell NOX = register("nox", new ClearEffectSpell("nox", StatusEffects.NIGHT_VISION, new Spell.Settings().type(SpellType.SELF)));
-	public static final Spell RAY = register("ray", new TestRaycastSpell("ray", new Spell.Settings().type(SpellType.RAYCAST)));
+	public static final Spell INCENDIO = register("incendio", new IncendioSpell("incendio", new Spell.Settings().type(SpellType.PROJECTILE)));
 	
 	public static void init() {
 	

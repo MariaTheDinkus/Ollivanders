@@ -1,0 +1,164 @@
+package to.tinypota.ollivanders.common.block;
+
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+import to.tinypota.ollivanders.common.block.entity.FlooFireBlockEntity;
+import to.tinypota.ollivanders.registry.client.OllivandersParticleTypes;
+import to.tinypota.ollivanders.registry.common.OllivandersItems;
+
+public class FlooFireBlock extends BlockWithEntity {
+	public static final BooleanProperty LIT = Properties.LIT;
+	public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
+	private static final VoxelShape BASE_SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
+	
+	public FlooFireBlock(Block.Settings settings) {
+		super(settings);
+		setDefaultState(getDefaultState().with(LIT, true).with(ACTIVE, false));
+	}
+	
+	@Override
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.MODEL;
+	}
+	
+	@Override
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+		var stack = player.getStackInHand(hand);
+		if (!state.get(LIT)) {
+			if (!stack.isEmpty() && stack.getItem() == Items.FLINT_AND_STEEL) {
+				world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
+				if (!world.isClient()) {
+					world.setBlockState(pos, state.with(LIT, true).with(ACTIVE, false));
+					if (!player.isCreative()) {
+						stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
+					}
+				}
+				return ActionResult.SUCCESS;
+			}
+		}
+		
+		if (state.get(LIT) && !state.get(ACTIVE) && !stack.isEmpty() && stack.getItem() == OllivandersItems.FLOO_POWDER) {
+			if (!world.isClient()) {
+				world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f, 0);
+				((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 200, 0.375, 0.375, 0.375, 0);
+				world.setBlockState(pos, state.with(ACTIVE, true));
+				if (!player.isCreative()) {
+					if (stack.getCount() > 1) {
+						stack.decrement(1);
+					} else {
+						player.setStackInHand(hand, ItemStack.EMPTY);
+					}
+				}
+			}
+			return ActionResult.SUCCESS;
+		}
+		return super.onUse(state, world, pos, player, hand, hit);
+	}
+	
+	@Override
+	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+		if (!world.isClient() && state.get(LIT)) {
+			if (!state.get(ACTIVE) && entity instanceof ItemEntity) {
+				var itemEntity = (ItemEntity) entity;
+				var stack = itemEntity.getStack();
+				if (!stack.isEmpty() && stack.getItem() == OllivandersItems.FLOO_POWDER) {
+					if (stack.getCount() > 1) {
+						stack.decrement(1);
+						world.setBlockState(pos, state.with(ACTIVE, true));
+					} else {
+						entity.discard();
+						world.setBlockState(pos, state.with(ACTIVE, true));
+					}
+				}
+			} else {
+				if (!entity.isFireImmune()) {
+					entity.setFireTicks(entity.getFireTicks() + 1);
+					if (entity.getFireTicks() == 0) {
+						entity.setOnFireFor(8);
+					}
+				}
+				
+				entity.damage(world.getDamageSources().inFire(), 1.0F);
+			}
+		}
+		super.onEntityCollision(state, world, pos, entity);
+	}
+	
+	@Nullable
+	@Override
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		return new FlooFireBlockEntity(pos, state);
+	}
+	
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+		return FlooFireBlockEntity::tick;
+	}
+	
+	@Override
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+		return BASE_SHAPE;
+	}
+	
+	@Override
+	public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+		if (state.get(LIT)) {
+			if (!world.isClient()) {
+				world.syncWorldEvent(null, 1009, pos, 0);
+			}
+			world.setBlockState(pos, state.with(LIT, false).with(ACTIVE, false));
+		}
+	}
+	
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		builder.add(LIT, ACTIVE);
+	}
+	
+	@Override
+	protected void spawnBreakParticles(World world, PlayerEntity player, BlockPos pos, BlockState state) {
+	
+	}
+	
+	@Override
+	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+		if (state.get(LIT)) {
+			if (random.nextInt(24) == 0) {
+				world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+			}
+			
+			BlockPos blockPos = pos.down();
+			BlockState blockState = world.getBlockState(blockPos);
+			for (var i = 0; i < 3; ++i) {
+				var d = pos.getX() + random.nextDouble();
+				var e = pos.getY() + random.nextDouble() * 0.5D + 0.5D;
+				var f = pos.getZ() + random.nextDouble();
+				world.addParticle(ParticleTypes.LARGE_SMOKE, d, e, f, 0.0D, 0.0D, 0.0D);
+			}
+		}
+	}
+}
