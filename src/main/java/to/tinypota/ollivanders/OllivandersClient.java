@@ -8,6 +8,7 @@ import to.tinypota.ollivanders.registry.client.*;
 public class OllivandersClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		OllivandersNetworking.init();
 		OllivandersEvents.init();
 		OllivandersKeyBindings.init();
 		OllivandersEntityRenderers.init();

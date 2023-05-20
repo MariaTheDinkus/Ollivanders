@@ -35,18 +35,19 @@ public class FlooFireBlockEntity extends BlockEntity {
 	private void tick() {
 		var serverState = getServerState();
 		if (!world.isClient()) {
-			if (world.getTime() % 20 == 0) {
-				if (world.getBlockEntity(pos.up()) instanceof SignBlockEntity signEntity) {
-					var text = signEntity.getFrontText().getMessage(0, false);
-					
-					if (!serverState.getFlooState().getFlooPositions().containsValue(pos)) {
-						if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-							Ollivanders.LOGGER.info("Adding fire to floo network under name: " + text.getString() + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
-						}
-						serverState.addFlooPosition(text.getString(), pos);
-					}
-				}
-			}
+			// TODO: Determine if this is necessary now.
+//			if (world.getTime() % 20 == 0) {
+//				if (world.getBlockEntity(pos.up()) instanceof SignBlockEntity signEntity) {
+//					var text = signEntity.getFrontText().getMessage(0, false);
+//
+//					if (!serverState.getFlooState().getFlooPositions().containsValue(pos)) {
+//						if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+//							Ollivanders.LOGGER.info("Adding fire to floo network under name: " + text.getString() + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
+//						}
+//						serverState.addFlooPosition(text.getString(), pos);
+//					}
+//				}
+//			}
 			
 			if (getCachedState().get(FlooFireBlock.ACTIVE)) {
 				if (tick < 200) {
