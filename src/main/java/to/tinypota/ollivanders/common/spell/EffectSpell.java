@@ -6,8 +6,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
-import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.api.spell.SpellPowerEvaluator;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 
 public class EffectSpell extends Spell {
 	private final StatusEffectInstance statusEffect;

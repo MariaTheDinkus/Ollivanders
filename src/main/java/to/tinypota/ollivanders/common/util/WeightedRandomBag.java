@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Random;
 
 public class WeightedRandomBag<T> {
-	private Random rand;
+	private final Random rand;
 	private double accumulatedWeight;
-	private List<Entry> entries;
+	private final List<Entry> entries;
+	
 	public WeightedRandomBag() {
 		this(new Random());
 	}

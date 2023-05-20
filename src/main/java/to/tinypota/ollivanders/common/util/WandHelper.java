@@ -7,8 +7,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import to.tinypota.ollivanders.api.wand.WandMatchLevel;
 import to.tinypota.ollivanders.common.core.Core;
-import to.tinypota.ollivanders.common.item.WandMatchLevel;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.registry.common.OllivandersCores;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
@@ -68,7 +68,7 @@ public class WandHelper {
 			var hasSuitableCore = hasSuitableCore(user, stack);
 			if (isSuitableWand && hasSuitableCore) {
 				return WandMatchLevel.PERFECT;
-			} else if (isSuitableWand ? !hasSuitableCore : hasSuitableCore) {
+			} else if (isSuitableWand != hasSuitableCore) {
 				return WandMatchLevel.AVERAGE;
 			} else {
 				return WandMatchLevel.AWFUL;

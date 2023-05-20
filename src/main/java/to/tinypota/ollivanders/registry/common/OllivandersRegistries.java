@@ -10,9 +10,6 @@ import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.core.Core;
 import to.tinypota.ollivanders.common.spell.Spell;
 
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
-
 public class OllivandersRegistries {
 	public static final RegistryKey<Registry<Spell>> SPELL_KEY = RegistryKey.ofRegistry(Ollivanders.id("spell"));
 	public static final SimpleDefaultedRegistry<Spell> SPELL = FabricRegistryBuilder.createDefaulted(SPELL_KEY, Ollivanders.id("empty")).attribute(RegistryAttribute.SYNCED).buildAndRegister();

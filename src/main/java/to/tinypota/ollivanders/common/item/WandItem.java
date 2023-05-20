@@ -8,9 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import to.tinypota.ollivanders.api.wand.WandMatchLevel;
 import to.tinypota.ollivanders.common.util.WandHelper;
 
 import java.util.List;

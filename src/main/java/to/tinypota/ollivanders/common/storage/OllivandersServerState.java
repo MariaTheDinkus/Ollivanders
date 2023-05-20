@@ -24,7 +24,29 @@ public class OllivandersServerState extends PersistentState {
 	private final HashMap<UUID, OllivandersPlayerState> players = new HashMap<>();
 	private final OllivandersFlooState flooState = new OllivandersFlooState();
 	
-	public static OllivandersServerState createFromNbt(NbtCompound tag) {
+	@Override
+	public NbtCompound writeNbt(NbtCompound nbt) {
+		var playersNbtCompound = new NbtCompound();
+		players.forEach((UUID, playerState) -> {
+			var stateNbt = playerState.writeToNbt(new NbtCompound());
+			playersNbtCompound.put(String.valueOf(UUID), stateNbt);
+		});
+		nbt.put("players", playersNbtCompound);
+		
+		var flooPosCompound = new NbtCompound();
+		flooState.getFlooPositions().entrySet().forEach(entry -> {
+			var name = entry.getKey();
+			var pos = entry.getValue();
+			var flooCompound = new NbtCompound();
+			
+			flooCompound.put("pos", NbtHelper.fromBlockPos(pos));
+			flooPosCompound.put(name, flooCompound);
+		});
+		nbt.put("floo", flooPosCompound);
+		return nbt;
+	}
+	
+	public static OllivandersServerState readNbt(NbtCompound tag) {
 		var serverState = new OllivandersServerState();
 		var playersTag = tag.getCompound("players");
 		playersTag.getKeys().forEach(key -> {
@@ -109,7 +131,7 @@ public class OllivandersServerState extends PersistentState {
 	
 	public static OllivandersServerState getServerState(MinecraftServer server) {
 		var persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
-		var serverState = persistentStateManager.getOrCreate(OllivandersServerState::createFromNbt, OllivandersServerState::new, Ollivanders.ID);
+		var serverState = persistentStateManager.getOrCreate(OllivandersServerState::readNbt, OllivandersServerState::new, Ollivanders.ID);
 		return serverState;
 	}
 	
@@ -122,36 +144,6 @@ public class OllivandersServerState extends PersistentState {
 	public static OllivandersFlooState getFlooState(MinecraftServer server) {
 		var serverState = getServerState(server);
 		return serverState.flooState;
-	}
-	
-	@Override
-	public NbtCompound writeNbt(NbtCompound nbt) {
-		var playersNbtCompound = new NbtCompound();
-		players.forEach((UUID, playerState) -> {
-			var playerStateNbt = new NbtCompound();
-			playerStateNbt.putString("suitedWand", playerState.getSuitedWand());
-			playerStateNbt.putString("suitedCore", playerState.getSuitedCore());
-			playerStateNbt.putString("currentSpell", playerState.getCurrentSpell());
-			var skillLevels = new NbtCompound();
-			playerState.getSkillLevels().forEach((spell, level) -> {
-				skillLevels.putDouble(OllivandersRegistries.SPELL.getId(spell).toString(), level);
-			});
-			playerStateNbt.put("skillLevels", skillLevels);
-			playersNbtCompound.put(String.valueOf(UUID), playerStateNbt);
-		});
-		nbt.put("players", playersNbtCompound);
-		
-		var flooPosCompound = new NbtCompound();
-		flooState.getFlooPositions().entrySet().forEach(entry -> {
-			var name = entry.getKey();
-			var pos = entry.getValue();
-			var flooCompound = new NbtCompound();
-			
-			flooCompound.put("pos", NbtHelper.fromBlockPos(pos));
-			flooPosCompound.put(name, flooCompound);
-		});
-		nbt.put("floo", flooPosCompound);
-		return nbt;
 	}
 	
 	public void addFlooPosition(String name, BlockPos pos) {

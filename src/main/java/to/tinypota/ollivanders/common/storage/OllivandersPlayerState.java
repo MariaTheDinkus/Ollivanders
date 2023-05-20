@@ -1,6 +1,8 @@
 package to.tinypota.ollivanders.common.storage;
 
+import net.minecraft.nbt.NbtCompound;
 import to.tinypota.ollivanders.common.spell.Spell;
+import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
 
 import java.util.HashMap;
 
@@ -9,6 +11,22 @@ public class OllivandersPlayerState {
 	private String suitedCore = "";
 	private String currentSpell = "empty";
 	private HashMap<Spell, Double> skillLevels = new HashMap<>();
+	
+	/*
+	 * Writes this OllivandersPlayerState to NBT.
+	 */
+	public NbtCompound writeToNbt(NbtCompound nbt) {
+		nbt.putString("suitedWand", suitedWand);
+		nbt.putString("suitedCore", suitedCore);
+		nbt.putString("currentSpell", currentSpell);
+		var skillLevels = new NbtCompound();
+		getSkillLevels().forEach((spell, level) -> {
+			skillLevels.putDouble(OllivandersRegistries.SPELL.getId(spell).toString(), level);
+		});
+		nbt.put("skillLevels", skillLevels);
+		
+		return nbt;
+	}
 	
 	public HashMap<Spell, Double> getSkillLevels() {
 		return skillLevels;
