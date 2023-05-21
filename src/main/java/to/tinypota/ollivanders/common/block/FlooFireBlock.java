@@ -5,7 +5,6 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,6 +21,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
@@ -150,33 +150,7 @@ public class FlooFireBlock extends BlockWithEntity {
 	
 	@Override
 	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-		if (world.getBlockEntity(pos.up()) instanceof SignBlockEntity) {
-			return super.canPlaceAt(state, world, pos);
-		} else {
-			return false;
-		}
-	}
-	
-	@Override
-	public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-		if (!world.isClient() && world.getBlockEntity(pos.up()) instanceof SignBlockEntity signEntity) {
-			var serverState = OllivandersServerState.getServerState(world.getServer());
-			var text = signEntity.getFrontText().getMessage(0, false);
-			
-			if (!serverState.getFlooState().getFlooPositions().containsValue(pos)) {
-				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-					Ollivanders.LOGGER.info("Adding fire to floo network under name: " + text.getString() + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
-				}
-				serverState.addFlooPosition(text.getString(), pos);
-			}
-		}
-		super.onBlockAdded(state, world, pos, oldState, notify);
-	}
-	
-	@Override
-	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-		
-		super.onStateReplaced(state, world, pos, newState, moved);
+		return world.getBlockState(pos.down()).isSideSolidFullSquare(world, pos.down(), Direction.UP) && super.canPlaceAt(state, world, pos);
 	}
 	
 	@Override

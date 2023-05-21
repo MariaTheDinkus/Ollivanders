@@ -20,9 +20,7 @@ public class OllivandersPlayerState {
 		nbt.putString("suitedCore", suitedCore);
 		nbt.putString("currentSpell", currentSpell);
 		var skillLevels = new NbtCompound();
-		getSkillLevels().forEach((spell, level) -> {
-			skillLevels.putDouble(OllivandersRegistries.SPELL.getId(spell).toString(), level);
-		});
+		this.skillLevels.forEach((spell, level) -> skillLevels.putDouble(OllivandersRegistries.SPELL.getId(spell).toString(), level));
 		nbt.put("skillLevels", skillLevels);
 		
 		return nbt;

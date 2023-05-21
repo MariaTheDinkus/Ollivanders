@@ -27,16 +27,14 @@ public class OllivandersServerState extends PersistentState {
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		var playersNbtCompound = new NbtCompound();
-		players.forEach((UUID, playerState) -> {
+		players.forEach((uuid, playerState) -> {
 			var stateNbt = playerState.writeToNbt(new NbtCompound());
-			playersNbtCompound.put(String.valueOf(UUID), stateNbt);
+			playersNbtCompound.put(String.valueOf(uuid), stateNbt);
 		});
 		nbt.put("players", playersNbtCompound);
 		
 		var flooPosCompound = new NbtCompound();
-		flooState.getFlooPositions().entrySet().forEach(entry -> {
-			var name = entry.getKey();
-			var pos = entry.getValue();
+		flooState.getFlooPositions().forEach((name, pos) -> {
 			var flooCompound = new NbtCompound();
 			
 			flooCompound.put("pos", NbtHelper.fromBlockPos(pos));
@@ -131,14 +129,12 @@ public class OllivandersServerState extends PersistentState {
 	
 	public static OllivandersServerState getServerState(MinecraftServer server) {
 		var persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
-		var serverState = persistentStateManager.getOrCreate(OllivandersServerState::readNbt, OllivandersServerState::new, Ollivanders.ID);
-		return serverState;
+		return persistentStateManager.getOrCreate(OllivandersServerState::readNbt, OllivandersServerState::new, Ollivanders.ID);
 	}
 	
 	public static OllivandersPlayerState getPlayerState(LivingEntity player) {
 		var serverState = getServerState(player.getWorld().getServer());
-		var playerState = serverState.players.computeIfAbsent(player.getUuid(), uuid -> new OllivandersPlayerState());
-		return playerState;
+		return serverState.players.computeIfAbsent(player.getUuid(), uuid -> new OllivandersPlayerState());
 	}
 	
 	public static OllivandersFlooState getFlooState(MinecraftServer server) {
@@ -169,6 +165,10 @@ public class OllivandersServerState extends PersistentState {
 		return flooState.getFlooPosByName(name);
 	}
 	
+	public @Nullable String getFlooNameByPos(BlockPos pos) {
+		return flooState.getFlooNameByPos(pos);
+	}
+	
 	public Optional<BlockPos> getRandomFlooPos() {
 		return flooState.getRandomFlooPos();
 	}
@@ -189,7 +189,7 @@ public class OllivandersServerState extends PersistentState {
 		markDirty();
 	}
 	
-	public double getSkillLevel(LivingEntity player, Spell spell) {
+	public static double getSkillLevel(LivingEntity player, Spell spell) {
 		var playerState = getPlayerState(player);
 		return playerState.getSkillLevel(spell);
 	}

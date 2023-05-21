@@ -1,6 +1,7 @@
 package to.tinypota.ollivanders.registry.common;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
@@ -16,9 +17,24 @@ import to.tinypota.ollivanders.common.util.SpellHelper;
 import to.tinypota.ollivanders.common.util.WandHelper;
 
 public class OllivandersNetworking {
+	public static final Identifier SET_FLOO_FIRE_NAME = Ollivanders.id("set_floor_fire_name");
 	public static final Identifier SWING_WAND_PACKET_ID = Ollivanders.id("swing_wand");
 	
+	public static final Identifier OPEN_FLOO_FIRE_NAME_SCREEN = Ollivanders.id("open_floo_fire_name_screen");
+	
 	public static void init() {
+		ServerPlayNetworking.registerGlobalReceiver(SET_FLOO_FIRE_NAME, (server, player, handler, buf, responseSender) -> {
+			var name = buf.readString();
+			var pos = buf.readBlockPos();
+			server.execute(() -> {
+				var serverState = OllivandersServerState.getServerState(server);
+				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+					Ollivanders.LOGGER.info("Adding fire to floo network under name: " + name + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
+				}
+				serverState.addFlooPosition(name, pos);
+			});
+		});
+		
 		ServerPlayNetworking.registerGlobalReceiver(SWING_WAND_PACKET_ID, (server, sender, handler, buf, responseSender) -> {
 			var uuid = buf.readUuid();
 			server.execute(() -> {
