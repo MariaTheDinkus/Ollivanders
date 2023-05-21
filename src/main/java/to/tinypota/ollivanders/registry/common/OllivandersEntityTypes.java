@@ -12,7 +12,7 @@ public class OllivandersEntityTypes {
 	public static final EntityType<SpellProjectileEntity> SPELL_PROJECTILE = register("spell_projectile", FabricEntityTypeBuilder
 			.create()
 			.<SpellProjectileEntity>entityFactory(SpellProjectileEntity::new)
-			.dimensions(EntityDimensions.changing(0.25F, 0.25F))
+			.dimensions(EntityDimensions.changing(0.1F, 0.1F))
 			.fireImmune()
 			.spawnableFarFromPlayer()
 			.trackRangeChunks(4)

@@ -2,9 +2,12 @@ package to.tinypota.ollivanders.common.spell;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
@@ -27,5 +30,13 @@ public class IncendioSpell extends Spell {
 		} else {
 			return world.setBlockState(hitResult.getBlockPos().offset(hitResult.getSide()), Blocks.FIRE.getDefaultState()) ? ActionResult.SUCCESS : ActionResult.FAIL;
 		}
+	}
+	
+	@Override
+	protected ActionResult onHitEntity(SpellPowerLevel powerLevel, World world, EntityHitResult hitResult) {
+		var entity = hitResult.getEntity();
+		entity.damage(world.getDamageSources().onFire(), 4F);
+		entity.setOnFireFor(6);
+		return ActionResult.SUCCESS;
 	}
 }
