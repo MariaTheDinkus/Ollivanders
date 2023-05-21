@@ -33,6 +33,7 @@ public class AliquamFlooSpell extends Spell {
 				var buf = PacketByteBufs.create();
 				buf.writeString("");
 				buf.writeBlockPos(pos);
+				buf.writeInt(caster.getHorizontalFacing().getOpposite().getId());
 				ServerPlayNetworking.send((ServerPlayerEntity) caster, OllivandersNetworking.OPEN_FLOO_FIRE_NAME_SCREEN, buf);
 				return ActionResult.SUCCESS;
 			}
@@ -40,9 +41,10 @@ public class AliquamFlooSpell extends Spell {
 			if (state.getBlock() instanceof FlooFireBlock) {
 				var serverState = OllivandersServerState.getServerState(caster.getServer());
 				var buf = PacketByteBufs.create();
-				Ollivanders.LOGGER.info(serverState.getFlooNameByPos(pos));
-				buf.writeString(serverState.getFlooNameByPos(pos) != null ? serverState.getFlooNameByPos(pos) : "");
+				var name = serverState.getFlooNameByPos(pos);
+				buf.writeString(name != null ? name : "");
 				buf.writeBlockPos(pos);
+				buf.writeInt(serverState.getFlooPosByName(name).getRight().getId());
 				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 					Ollivanders.LOGGER.info("Removing fire from floo network at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
 				}

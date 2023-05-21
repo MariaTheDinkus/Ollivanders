@@ -1,26 +1,27 @@
 package to.tinypota.ollivanders.common.storage;
 
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
-import to.tinypota.ollivanders.Ollivanders;
 
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class OllivandersFlooState {
-	private HashMap<String, BlockPos> flooPositions = new HashMap<>();
+	private HashMap<String, Pair<BlockPos, Direction>> flooPositions = new HashMap<>();
 	
-	public HashMap<String, BlockPos> getFlooPositions() {
+	public HashMap<String, Pair<BlockPos, Direction>> getFlooPositions() {
 		return flooPositions;
 	}
 	
-	public void setFlooPositions(HashMap<String, BlockPos> flooPositions) {
+	public void setFlooPositions(HashMap<String, Pair<BlockPos, Direction>> flooPositions) {
 		this.flooPositions = flooPositions;
 	}
 	
-	public void addFlooPosition(String name, BlockPos pos) {
-		flooPositions.put(name, pos);
+	public void addFlooPosition(String name, BlockPos pos, Direction direction) {
+		flooPositions.put(name, new Pair<>(pos, direction));
 	}
 	
 	public void removeFlooPosition(String name) {
@@ -31,7 +32,7 @@ public class OllivandersFlooState {
 		var atomicName = new AtomicReference<String>();
 		
 		flooPositions.forEach((key, value) -> {
-			if (value.equals(pos)) {
+			if (value.getLeft().equals(pos)) {
 				atomicName.set(key);
 			}
 		});
@@ -42,7 +43,7 @@ public class OllivandersFlooState {
 	}
 	
 	@Nullable
-	public BlockPos getFlooByNameOrRandom(String name) {
+	public Pair<BlockPos, Direction> getFlooByNameOrRandom(String name) {
 		var flooPosByName = getFlooPosByName(name);
 		
 		if (flooPosByName != null) {
@@ -55,12 +56,12 @@ public class OllivandersFlooState {
 	}
 	
 	@Nullable
-	public BlockPos getFlooPosByName(String name) {
-		var returnPos = new AtomicReference<BlockPos>();
-		flooPositions.forEach((flooName, flooBlockPos) -> {
+	public Pair<BlockPos, Direction> getFlooPosByName(String name) {
+		var returnPos = new AtomicReference<Pair<BlockPos, Direction>>();
+		flooPositions.forEach((flooName, pair) -> {
 			
 			if (flooName.equals(name)) {
-				returnPos.set(flooBlockPos);
+				returnPos.set(pair);
 			}
 		});
 		
@@ -69,8 +70,8 @@ public class OllivandersFlooState {
 	
 	public String getFlooNameByPos(BlockPos pos) {
 		var returnPos = new AtomicReference<String>();
-		flooPositions.forEach((flooName, flooBlockPos) -> {
-			if (flooBlockPos.equals(pos)) {
+		flooPositions.forEach((flooName, pair) -> {
+			if (pair.getLeft().equals(pos)) {
 				returnPos.set(flooName);
 			}
 		});
@@ -78,7 +79,7 @@ public class OllivandersFlooState {
 		return returnPos.get();
 	}
 	
-	public Optional<BlockPos> getRandomFlooPos() {
+	public Optional<Pair<BlockPos, Direction>> getRandomFlooPos() {
 		var values = flooPositions.values();
 		return values.stream().skip((int) (values.size() * Math.random())).findFirst();
 	}

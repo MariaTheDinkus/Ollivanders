@@ -6,6 +6,7 @@ import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -65,9 +66,9 @@ public abstract class MixinPlayerManager {
 			} else if (world.getBlockState(pos).getBlock() instanceof FlooFireBlock) {
 				var state = world.getBlockState(pos);
 				if (state.get(FlooFireBlock.ACTIVE)) {
-					var telPos = serverState.getFlooByNameOrRandom(stringMessage);
+					var pair = serverState.getFlooByNameOrRandom(stringMessage);
 					
-					sender.teleport(telPos.getX() + 0.5, telPos.getY(), telPos.getZ() + 0.5);
+					sender.teleport((ServerWorld) world, pair.getLeft().getX() + 0.5, pair.getLeft().getY(), pair.getLeft().getZ() + 0.5, pair.getRight().asRotation(), sender.getPitch());
 					world.setBlockState(pos, state.with(FlooFireBlock.ACTIVE, false));
 				}
 			}

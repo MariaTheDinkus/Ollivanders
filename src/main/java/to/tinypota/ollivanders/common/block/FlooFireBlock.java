@@ -57,8 +57,8 @@ public class FlooFireBlock extends BlockWithEntity {
 			
 			serverState.getFlooState().getFlooPositions().entrySet().forEach(entry -> {
 				var name = entry.getKey();
-				var flooPos = entry.getValue();
-				Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + flooPos.getX() + ", " + flooPos.getY() + ", " + flooPos.getZ() + ".");
+				var pair = entry.getValue();
+				Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + pair.getLeft().getX() + ", " + pair.getLeft().getY() + ", " + pair.getLeft().getZ() + "." + " The facing direction is: " + pair.getRight().getName());
 			});
 		}
 		
@@ -99,6 +99,8 @@ public class FlooFireBlock extends BlockWithEntity {
 			if (!state.get(ACTIVE) && entity instanceof ItemEntity itemEntity) {
 				var stack = itemEntity.getStack();
 				if (!stack.isEmpty() && stack.getItem() == OllivandersItems.FLOO_POWDER) {
+					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f, 0);
+					((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 200, 0.375, 0.375, 0.375, 0);
 					if (stack.getCount() > 1) {
 						stack.decrement(1);
 						world.setBlockState(pos, state.with(ACTIVE, true));

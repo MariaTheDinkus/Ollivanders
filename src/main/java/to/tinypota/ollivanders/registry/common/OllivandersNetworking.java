@@ -7,6 +7,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.api.spell.SpellType;
@@ -26,12 +27,13 @@ public class OllivandersNetworking {
 		ServerPlayNetworking.registerGlobalReceiver(SET_FLOO_FIRE_NAME, (server, player, handler, buf, responseSender) -> {
 			var name = buf.readString();
 			var pos = buf.readBlockPos();
+			var direction = buf.readInt();
 			server.execute(() -> {
 				var serverState = OllivandersServerState.getServerState(server);
 				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-					Ollivanders.LOGGER.info("Adding fire to floo network under name: " + name + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
+					Ollivanders.LOGGER.info("Adding fire to floo network under name: " + name + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "." + " The facing direction is: " + Direction.byId(direction).getName());
 				}
-				serverState.addFlooPosition(name, pos);
+				serverState.addFlooPosition(name, pos, Direction.byId(direction));
 			});
 		});
 		
