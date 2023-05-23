@@ -1,8 +1,10 @@
 package to.tinypota.ollivanders.common.util;
 
 import net.minecraft.entity.LivingEntity;
+import to.tinypota.ollivanders.Ollivanders;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -46,11 +48,18 @@ public class WeightedRandomBag<T> {
 	
 	public T getRandom(LivingEntity entity) {
 		var uuid = entity.getUuid();
-		rand.setSeed(uuid.getLeastSignificantBits() ^ uuid.getMostSignificantBits());
+		long seed = uuid.getLeastSignificantBits() ^ uuid.getMostSignificantBits();
+		var rand = new Random(seed);
+		Ollivanders.LOGGER.info("UUID: " + uuid.toString());
+		Ollivanders.LOGGER.info("RAND SEED: " + seed);
 		var r = rand.nextDouble() * accumulatedWeight;
 		
-		for (var entry : entries) {
+		List<Entry> shuffledEntries = new ArrayList<>(entries);
+		Collections.shuffle(shuffledEntries, rand);
+		
+		for (var entry : shuffledEntries) {
 			if (entry.accumulatedWeight >= r) {
+				Ollivanders.LOGGER.info("RETURN OBJECT: " + entry.object);
 				return entry.object;
 			}
 		}
