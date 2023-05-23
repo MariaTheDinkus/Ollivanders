@@ -16,15 +16,11 @@ public class Spell {
 	public static final Spell EMPTY = OllivandersSpells.register("empty", new Spell("empty", new Spell.Settings().type(SpellType.SELF)));
 	private final String castName;
 	private final SpellType type;
-	private final boolean hitsBlocks;
-	private final boolean hitsEntities;
 	private final boolean hitsWater;
 	
 	public Spell(String castName, Settings settings) {
 		this.castName = castName;
 		type = settings.type;
-		hitsBlocks = settings.hitsBlocks;
-		hitsEntities = settings.hitsEntities;
 		hitsWater = settings.hitsWater;
 	}
 	
@@ -104,53 +100,29 @@ public class Spell {
 		return type;
 	}
 	
-	public boolean shouldHitBlocks() {
-		return hitsBlocks;
-	}
-	
-	public boolean shouldHitEntities() {
-		return hitsEntities;
-	}
-	
 	public boolean shouldHitWater() {
 		return hitsWater;
 	}
 	
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		var spell = (Spell) o;
-		return hitsBlocks == spell.hitsBlocks && hitsEntities == spell.hitsEntities && hitsWater == spell.hitsWater && Objects.equals(castName, spell.castName) && type == spell.type;
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Spell spell = (Spell) o;
+		return hitsWater == spell.hitsWater && Objects.equals(castName, spell.castName) && type == spell.type;
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(castName, type, hitsBlocks, hitsEntities, hitsWater);
+		return Objects.hash(castName, type, hitsWater);
 	}
 	
 	public static class Settings {
 		SpellType type;
-		boolean hitsBlocks = true;
-		boolean hitsEntities = true;
 		boolean hitsWater = false;
 		
 		public Spell.Settings type(SpellType type) {
 			this.type = type;
-			return this;
-		}
-		
-		public Spell.Settings hitsBlocks(boolean hits) {
-			hitsBlocks = hits;
-			return this;
-		}
-		
-		public Spell.Settings hitsEntities(boolean hits) {
-			hitsEntities = hits;
 			return this;
 		}
 		
@@ -165,8 +137,7 @@ public class Spell {
 		}
 		
 		public Spell.Settings of(Settings settings) {
-			hitsBlocks = settings.hitsBlocks;
-			hitsEntities = settings.hitsEntities;
+			type = settings.type;
 			hitsWater = settings.hitsWater;
 			return this;
 		}

@@ -13,6 +13,7 @@ public class OllivandersSpells {
 	public static final Spell NOX = register("nox", new ClearEffectSpell("nox", StatusEffects.NIGHT_VISION, new Spell.Settings().type(SpellType.SELF)));
 	public static final Spell INCENDIO = register("incendio", new IncendioSpell("incendio", new Spell.Settings().type(SpellType.PROJECTILE)));
 	public static final Spell ALIQUAM_FLOO = register("aliquam_floo", new AliquamFlooSpell("aliquam floo", new Spell.Settings().type(SpellType.PROJECTILE)));
+	public static final Spell APPARATE = register("apparate", new ApparateSpell("apparate", new Spell.Settings().type(SpellType.RAYCAST)));
 	
 	public static void init() {
 	
