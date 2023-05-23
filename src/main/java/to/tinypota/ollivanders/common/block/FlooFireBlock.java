@@ -16,6 +16,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -31,6 +32,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 import to.tinypota.ollivanders.Ollivanders;
+import to.tinypota.ollivanders.api.floo.FlooActivation;
 import to.tinypota.ollivanders.common.block.entity.FlooFireBlockEntity;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.registry.client.OllivandersParticleTypes;
@@ -38,12 +40,12 @@ import to.tinypota.ollivanders.registry.common.OllivandersItems;
 
 public class FlooFireBlock extends BlockWithEntity {
 	public static final BooleanProperty LIT = Properties.LIT;
-	public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
+	public static final EnumProperty<FlooActivation> ACTIVATION = EnumProperty.of("activation", FlooActivation.class);
 	private static final VoxelShape BASE_SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
 	
 	public FlooFireBlock(Block.Settings settings) {
 		super(settings);
-		setDefaultState(getDefaultState().with(LIT, true).with(ACTIVE, false));
+		setDefaultState(getDefaultState().with(LIT, true).with(ACTIVATION, FlooActivation.OFF));
 	}
 	
 	@Override
@@ -74,7 +76,7 @@ public class FlooFireBlock extends BlockWithEntity {
 			if (!stack.isEmpty() && stack.getItem() == Items.FLINT_AND_STEEL) {
 				world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
 				if (!world.isClient()) {
-					world.setBlockState(pos, state.with(LIT, true).with(ACTIVE, false));
+					world.setBlockState(pos, state.with(LIT, true).with(ACTIVATION, FlooActivation.OFF));
 					if (!player.isCreative()) {
 						stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
 					}
@@ -83,11 +85,11 @@ public class FlooFireBlock extends BlockWithEntity {
 			}
 		}
 		
-		if (state.get(LIT) && !state.get(ACTIVE) && !stack.isEmpty() && stack.getItem() == OllivandersItems.FLOO_POWDER) {
+		if (state.get(LIT) && state.get(ACTIVATION) == FlooActivation.OFF && !stack.isEmpty() && stack.getItem() == OllivandersItems.FLOO_POWDER) {
 			if (!world.isClient()) {
 				world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f, 0);
 				((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 200, 0.375, 0.375, 0.375, 0);
-				world.setBlockState(pos, state.with(ACTIVE, true));
+				world.setBlockState(pos, state.with(ACTIVATION, FlooActivation.ACTIVE));
 				if (!player.isCreative()) {
 					if (stack.getCount() > 1) {
 						stack.decrement(1);
@@ -104,20 +106,19 @@ public class FlooFireBlock extends BlockWithEntity {
 	@Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
 		if (!world.isClient() && state.get(LIT)) {
-			if (!state.get(ACTIVE) && entity instanceof ItemEntity itemEntity) {
+			if (state.get(ACTIVATION) == FlooActivation.OFF && entity instanceof ItemEntity itemEntity) {
 				var stack = itemEntity.getStack();
 				if (!stack.isEmpty() && stack.getItem() == OllivandersItems.FLOO_POWDER) {
 					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f, 0);
 					((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 200, 0.375, 0.375, 0.375, 0);
 					if (stack.getCount() > 1) {
 						stack.decrement(1);
-						world.setBlockState(pos, state.with(ACTIVE, true));
 					} else {
 						entity.discard();
-						world.setBlockState(pos, state.with(ACTIVE, true));
 					}
+					world.setBlockState(pos, state.with(ACTIVATION, FlooActivation.ACTIVE));
 				}
-			} else {
+			} else if (state.get(ACTIVATION) == FlooActivation.OFF) {
 				if (!entity.isFireImmune()) {
 					entity.setFireTicks(entity.getFireTicks() + 1);
 					if (entity.getFireTicks() == 0) {
@@ -154,7 +155,7 @@ public class FlooFireBlock extends BlockWithEntity {
 			if (!world.isClient()) {
 				world.syncWorldEvent(null, 1009, pos, 0);
 			}
-			world.setBlockState(pos, state.with(LIT, false).with(ACTIVE, false));
+			world.setBlockState(pos, state.with(LIT, false).with(ACTIVATION, FlooActivation.OFF));
 		}
 	}
 	
@@ -192,7 +193,7 @@ public class FlooFireBlock extends BlockWithEntity {
 	
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(LIT, ACTIVE);
+		builder.add(LIT, ACTIVATION);
 	}
 	
 	@Override

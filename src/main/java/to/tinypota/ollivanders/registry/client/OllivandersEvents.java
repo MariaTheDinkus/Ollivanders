@@ -22,10 +22,6 @@ public class OllivandersEvents {
 				if (currentSpellPowerLevel == null || powerLevel == null) {
 					ClientPlayNetworking.send(OllivandersNetworking.SYNC_POWER_LEVELS, PacketByteBufs.create());
 				} else {
-					if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-						//Ollivanders.LOGGER.info("Current power level is: " + powerLevel.getName() + ". Maximum power level is: " + currentSpellPowerLevel.getName() + ".");
-					}
-					
 					if (OllivandersKeyBindings.DECREASE_POWER_LEVEL.wasPressed() && client.player != null) {
 						ClientPlayNetworking.send(OllivandersNetworking.DECREASE_POWER_LEVEL, PacketByteBufs.create());
 					}
@@ -54,9 +50,7 @@ public class OllivandersEvents {
 						var x = (scaledWidth - textureWidth) / 2;
 						var y = (scaledHeight - textureHeight) / 2 + 5;
 
-//					drawContext.setShaderColor(1, 1, 1, 0.7F);
 						drawContext.drawTexture(Ollivanders.id("textures/gui/power_bar.png"), x, y, u + (textureWidth * (4 - currentSpellPowerLevel.getId())), v + (textureHeight * powerLevel.getId()), textureWidth, textureHeight);
-//					drawContext.setShaderColor(1, 1, 1, 0.7F);
 					}
 				}
 			}

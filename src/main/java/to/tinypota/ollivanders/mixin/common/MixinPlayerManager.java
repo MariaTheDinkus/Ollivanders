@@ -1,5 +1,7 @@
 package to.tinypota.ollivanders.mixin.common;
 
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SentMessage;
 import net.minecraft.network.message.SignedMessage;
@@ -15,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import to.tinypota.ollivanders.Ollivanders;
+import to.tinypota.ollivanders.api.floo.FlooActivation;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
@@ -62,17 +65,18 @@ public abstract class MixinPlayerManager {
 				var spell = SpellHelper.getSpellFromMessage(stringMessage);
 				if (spell != Spell.EMPTY) {
 					SpellHelper.setCurrentSpell(sender, spell);
-					Ollivanders.LOGGER.info("THIS IS MIXIN: " + spell.getAvailablePowerLevel(OllivandersServerState.getSkillLevel(sender, spell)));
 					serverState.setCurrentSpellPowerLevel(sender, spell.getAvailablePowerLevel(OllivandersServerState.getSkillLevel(sender, spell)));
 				}
 				callbackInfo.cancel();
 			} else if (world.getBlockState(pos).getBlock() instanceof FlooFireBlock) {
 				var state = world.getBlockState(pos);
-				if (state.get(FlooFireBlock.ACTIVE)) {
+				if (state.get(FlooFireBlock.ACTIVATION) == FlooActivation.ACTIVE) {
 					var pair = serverState.getFlooByNameOrRandom(stringMessage);
 					
 					sender.teleport((ServerWorld) world, pair.getLeft().getX() + 0.5, pair.getLeft().getY(), pair.getLeft().getZ() + 0.5, pair.getRight().asRotation(), sender.getPitch());
-					world.setBlockState(pos, state.with(FlooFireBlock.ACTIVE, false));
+					sender.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 15, 0, false, false));
+					world.setBlockState(pos, state.with(FlooFireBlock.ACTIVATION, FlooActivation.LEFT));
+					world.setBlockState(pair.getLeft(), state.with(FlooFireBlock.ACTIVATION, FlooActivation.ARRIVED));
 				}
 			}
 		}

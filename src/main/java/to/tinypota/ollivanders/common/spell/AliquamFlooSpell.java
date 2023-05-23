@@ -32,7 +32,6 @@ public class AliquamFlooSpell extends Spell {
 	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult, PlayerEntity playerEntity, SpellProjectileEntity spellProjectileEntity) {
 		var pos = spellProjectileEntity.getBlockPos();
 		var state = world.getBlockState(pos);
-		Ollivanders.LOGGER.info(state.getBlock().getName().toString());
 		if (playerEntity instanceof ServerPlayerEntity) {
 			if (state.getBlock() == Blocks.FIRE) {
 				var newState = OllivandersBlocks.FLOO_FIRE.getDefaultState();

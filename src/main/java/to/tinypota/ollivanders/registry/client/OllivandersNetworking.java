@@ -15,7 +15,6 @@ public class OllivandersNetworking {
 			var currentSpellPowerLevel = SpellPowerLevel.byId(buf.readInt());
 			var powerLevel = SpellPowerLevel.byId(buf.readInt());
 			client.execute(() -> {
-				Ollivanders.LOGGER.info(currentSpellPowerLevel.getName());
 				OllivandersEvents.currentSpellPowerLevel = currentSpellPowerLevel;
 				OllivandersEvents.powerLevel = powerLevel;
 			});

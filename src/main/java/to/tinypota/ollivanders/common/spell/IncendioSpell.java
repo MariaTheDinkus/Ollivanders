@@ -1,7 +1,6 @@
 package to.tinypota.ollivanders.common.spell;
 
 import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
@@ -10,6 +9,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import to.tinypota.ollivanders.api.floo.FlooActivation;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
 import to.tinypota.ollivanders.common.entity.SpellProjectileEntity;
@@ -31,7 +31,7 @@ public class IncendioSpell extends Spell {
 		var state = world.getBlockState(pos);
 		if (state.getBlock() == OllivandersBlocks.FLOO_FIRE) {
 			if (!state.get(Properties.LIT)) {
-				world.setBlockState(pos, state.with(Properties.LIT, true).with(FlooFireBlock.ACTIVE, false));
+				world.setBlockState(pos, state.with(Properties.LIT, true).with(FlooFireBlock.ACTIVATION, FlooActivation.OFF));
 				return ActionResult.SUCCESS;
 			}
 			return ActionResult.FAIL;

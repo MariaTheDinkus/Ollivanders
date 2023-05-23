@@ -2,14 +2,19 @@ package to.tinypota.ollivanders.common.block.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import to.tinypota.ollivanders.api.floo.FlooActivation;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
+import to.tinypota.ollivanders.registry.client.OllivandersParticleTypes;
 import to.tinypota.ollivanders.registry.common.OllivandersBlockEntityTypes;
 
 public class FlooFireBlockEntity extends BlockEntity {
-	private int tick = 0;
+	private int activeTick = 0;
+	private int leftTick = 0;
+	private int arrivedTick = 0;
 	private OllivandersServerState serverState;
 	
 	public FlooFireBlockEntity(BlockPos pos, BlockState state) {
@@ -31,18 +36,40 @@ public class FlooFireBlockEntity extends BlockEntity {
 	
 	private void tick() {
 		var serverState = getServerState();
-		if (!world.isClient()) {if (getCachedState().get(FlooFireBlock.ACTIVE)) {
-				if (tick < 200) {
-					tick++;
+		if (!world.isClient()) {
+			if (getCachedState().get(FlooFireBlock.ACTIVATION) == FlooActivation.ACTIVE) {
+				if (activeTick < 200) {
+					activeTick++;
 				} else {
-					tick = 0;
-					world.setBlockState(pos, getCachedState().with(FlooFireBlock.ACTIVE, false));
+					activeTick = 0;
+					world.setBlockState(pos, getCachedState().with(FlooFireBlock.ACTIVATION, FlooActivation.OFF));
+				}
+			} else if (getCachedState().get(FlooFireBlock.ACTIVATION) == FlooActivation.LEFT) {
+				if (leftTick == 0) {
+					((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 2000, 0.375, 0.375 + 0.5, 0.375, 0);
+					leftTick++;
+				} else if (leftTick < 60) {
+					leftTick++;
+				} else {
+					leftTick = 0;
+					world.setBlockState(pos, getCachedState().with(FlooFireBlock.ACTIVATION, FlooActivation.OFF));
+				}
+			} else if (getCachedState().get(FlooFireBlock.ACTIVATION) == FlooActivation.ARRIVED) {
+				if (arrivedTick < 60) {
+					arrivedTick++;
+				} else {
+					arrivedTick = 0;
+					world.setBlockState(pos, getCachedState().with(FlooFireBlock.ACTIVATION, FlooActivation.OFF));
 				}
 			} else {
-				tick = 0;
+				activeTick = 0;
+				leftTick = 0;
+				arrivedTick = 0;
 			}
 		} else {
-			tick = 0;
+			activeTick = 0;
+			leftTick = 0;
+			arrivedTick = 0;
 		}
 	}
 }

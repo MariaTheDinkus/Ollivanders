@@ -3,6 +3,7 @@ package to.tinypota.ollivanders.registry.common;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
+import to.tinypota.ollivanders.api.floo.FlooActivation;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
 import to.tinypota.ollivanders.common.item.WandItem;
 
@@ -14,7 +15,7 @@ public class OllivandersEvents {
 				if (!world.isClient()) {
 					if (state.get(Properties.LIT)) {
 						world.syncWorldEvent(null, 1009, pos, 0);
-						world.setBlockState(pos, state.with(Properties.LIT, false).with(FlooFireBlock.ACTIVE, false));
+						world.setBlockState(pos, state.with(Properties.LIT, false).with(FlooFireBlock.ACTIVATION, FlooActivation.OFF));
 						return ActionResult.FAIL;
 					} else {
 						return ActionResult.PASS;

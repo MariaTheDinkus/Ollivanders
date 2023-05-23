@@ -5,14 +5,28 @@
                 { "model": "ollivanders:block/ash_stain" }
             ]
         },
-        {   "when": {"lit": true, "active": false},
+        {   "when": {"lit": true, "activation": "off"},
             "apply": [
 				{
 					"model": "ollivanders:block/fire_full"
 				}
             ]
         },
-		{   "when": {"lit": true, "active": true},
+		{   "when": {"lit": true, "activation": "active"},
+            "apply": [
+				{
+					"model": "ollivanders:block/floo_fire_full"
+				}
+            ]
+        },
+        {   "when": {"lit": true, "activation": "left"},
+            "apply": [
+				{
+					"model": "ollivanders:block/floo_fire_full"
+				}
+            ]
+        },
+        {   "when": {"lit": true, "activation": "arrived"},
             "apply": [
 				{
 					"model": "ollivanders:block/floo_fire_full"
