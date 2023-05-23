@@ -17,6 +17,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -26,6 +27,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 import to.tinypota.ollivanders.Ollivanders;
@@ -52,14 +54,20 @@ public class FlooFireBlock extends BlockWithEntity {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		var stack = player.getStackInHand(hand);
-		if (FabricLoader.getInstance().isDevelopmentEnvironment() && !world.isClient() && player.getStackInHand(hand).isEmpty()) {
+		if (!world.isClient() && hand == Hand.MAIN_HAND && player.getStackInHand(hand).isEmpty()) {
 			var serverState = OllivandersServerState.getServerState(world.getServer());
 			
-			serverState.getFlooState().getFlooPositions().entrySet().forEach(entry -> {
-				var name = entry.getKey();
-				var pair = entry.getValue();
-				Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + pair.getLeft().getX() + ", " + pair.getLeft().getY() + ", " + pair.getLeft().getZ() + "." + " The facing direction is: " + pair.getRight().getName());
-			});
+			if (serverState.getFlooNameByPos(pos) != null) {
+				player.sendMessage(Text.literal("This floo fire is called: " + serverState.getFlooNameByPos(pos)), true);
+			}
+			
+			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+				serverState.getFlooState().getFlooPositions().entrySet().forEach(entry -> {
+					var name = entry.getKey();
+					var pair = entry.getValue();
+					Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + pair.getLeft().getX() + ", " + pair.getLeft().getY() + ", " + pair.getLeft().getZ() + "." + " The facing direction is: " + pair.getRight().getName());
+				});
+			}
 		}
 		
 		if (!state.get(LIT)) {
@@ -148,6 +156,21 @@ public class FlooFireBlock extends BlockWithEntity {
 			}
 			world.setBlockState(pos, state.with(LIT, false).with(ACTIVE, false));
 		}
+	}
+	
+	@Override
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+		if (direction == Direction.DOWN && !canPlaceAt(state, world, pos)) {
+			if (!world.isClient()) {
+				var serverState = OllivandersServerState.getServerState(world.getServer());
+				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+					Ollivanders.LOGGER.info("Removing fire from floo network at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
+				}
+				serverState.removeFlooByPos(pos);
+			}
+			return Blocks.AIR.getDefaultState();
+		}
+		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 	
 	@Override

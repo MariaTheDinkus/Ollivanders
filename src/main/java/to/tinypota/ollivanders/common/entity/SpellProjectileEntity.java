@@ -1,7 +1,6 @@
 package to.tinypota.ollivanders.common.entity;
 
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -17,6 +16,7 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.common.spell.Spell;
+import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.registry.common.OllivandersEntityTypes;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
 
@@ -27,7 +27,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		super(entityType, world);
 	}
 	
-	public SpellProjectileEntity(Spell spell, LivingEntity owner, World world) {
+	public SpellProjectileEntity(Spell spell, PlayerEntity owner, World world) {
 		super(OllivandersEntityTypes.SPELL_PROJECTILE, owner, world);
 		this.spell = spell;
 		setVelocity(owner, owner.getPitch(), owner.getYaw(), 0.0F, 1F, 0F);
@@ -104,7 +104,8 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			var result = spell.onHitBlock(SpellPowerLevel.NORMAL, world, blockHitResult, this);
+			var powerLevel = OllivandersServerState.getServerState(world.getServer()).getPowerLevel((PlayerEntity) getOwner());
+			var result = spell.onHitBlock(powerLevel, world, blockHitResult, (PlayerEntity) getOwner(), this);
 			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 				discard();
 			}
@@ -116,7 +117,8 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			var result = spell.onHitEntity(SpellPowerLevel.NORMAL, world, entityHitResult, this);
+			var powerLevel = OllivandersServerState.getServerState(world.getServer()).getPowerLevel((PlayerEntity) getOwner());
+			var result = spell.onHitEntity(powerLevel, world, entityHitResult, (PlayerEntity) getOwner(), this);
 			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 				discard();
 			}

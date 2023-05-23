@@ -1,6 +1,6 @@
 package to.tinypota.ollivanders.common.util;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
@@ -47,11 +47,11 @@ public class WandHelper {
 		compound.putString("owner_name", name);
 	}
 	
-	public static void setOwner(ItemStack stack, LivingEntity entity) {
+	public static void setOwner(ItemStack stack, PlayerEntity entity) {
 		setOwner(stack, entity.getEntityName(), entity.getUuid());
 	}
 	
-	public static LivingEntity getOwner(ItemStack stack, MinecraftServer server) {
+	public static PlayerEntity getOwner(ItemStack stack, MinecraftServer server) {
 		var compound = stack.getOrCreateNbt();
 		if (compound.contains("owner", NbtElement.INT_ARRAY_TYPE)) {
 			var uuid = compound.getUuid("owner");
@@ -62,7 +62,7 @@ public class WandHelper {
 		return null;
 	}
 	
-	public static WandMatchLevel getWandMatch(ItemStack stack, LivingEntity user) {
+	public static WandMatchLevel getWandMatch(ItemStack stack, PlayerEntity user) {
 		if (hasCore(stack)) {
 			var isSuitableWand = isSuitableWand(user, stack);
 			var hasSuitableCore = hasSuitableCore(user, stack);
@@ -99,13 +99,13 @@ public class WandHelper {
 		return OllivandersCores.EMPTY;
 	}
 	
-	public static boolean isSuitableWand(LivingEntity entity, ItemStack stack) {
+	public static boolean isSuitableWand(PlayerEntity entity, ItemStack stack) {
 		var suitedWandId = OllivandersServerState.getSuitedWand(entity);
 		
 		return suitedWandId.equals(Registries.ITEM.getId(stack.getItem()).toString());
 	}
 	
-	public static boolean hasSuitableCore(LivingEntity entity, ItemStack stack) {
+	public static boolean hasSuitableCore(PlayerEntity entity, ItemStack stack) {
 		if (hasCore(stack)) {
 			var suitedCoreId = OllivandersServerState.getSuitedCore(entity);
 			var suitedCore = OllivandersRegistries.CORE.get(new Identifier(suitedCoreId));

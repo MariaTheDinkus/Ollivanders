@@ -1,34 +1,34 @@
 package to.tinypota.ollivanders.common.spell;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import to.tinypota.ollivanders.api.spell.SpellPowerEvaluator;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
+import to.tinypota.ollivanders.api.spell.SpellPowerStorage;
 
 public class EffectSpell extends Spell {
-	private final StatusEffectInstance statusEffect;
+	private final StatusEffect statusEffect;
+	private final SpellPowerStorage<Integer> durations;
 	
-	public EffectSpell(String castName, StatusEffectInstance statusEffect, Settings settings) {
+	public EffectSpell(String castName, StatusEffect statusEffect, SpellPowerStorage<Integer> durations, Settings settings) {
 		super(castName, settings);
 		this.statusEffect = statusEffect;
-	}
-	
-	@Override
-	public SpellPowerLevel getMaxPowerLevel() {
-		return SpellPowerLevel.MAXIMUM;
+		this.durations = durations;
 	}
 	
 	@Override
 	public SpellPowerLevel getAvailablePowerLevel(double skillLevel) {
-		return new SpellPowerEvaluator(2000, 8000, 16000, 32000).check(skillLevel);
+		return SpellPowerLevel.MAXIMUM;
 	}
 	
-	public StatusEffectInstance getStatusEffect() {
-		return new StatusEffectInstance(statusEffect);
+	public StatusEffectInstance getStatusEffect(SpellPowerLevel powerLevel) {
+		return new StatusEffectInstance(statusEffect, durations.getValue(powerLevel));
 	}
 	
 	@Override
@@ -39,13 +39,13 @@ public class EffectSpell extends Spell {
 	@Override
 	public ActionResult onHitEntity(SpellPowerLevel powerLevel, World world, EntityHitResult hitResult) {
 		if (hitResult.getEntity() instanceof LivingEntity) {
-			return ((LivingEntity) hitResult.getEntity()).addStatusEffect(getStatusEffect()) ? ActionResult.SUCCESS : ActionResult.FAIL;
+			return ((LivingEntity) hitResult.getEntity()).addStatusEffect(getStatusEffect(powerLevel)) ? ActionResult.SUCCESS : ActionResult.FAIL;
 		}
 		return ActionResult.FAIL;
 	}
 	
 	@Override
-	public ActionResult onSelfCast(SpellPowerLevel powerLevel, LivingEntity entity) {
-		return entity.addStatusEffect(getStatusEffect()) ? ActionResult.SUCCESS : ActionResult.FAIL;
+	public ActionResult onSelfCast(SpellPowerLevel powerLevel, PlayerEntity playerEntity) {
+		return playerEntity.addStatusEffect(getStatusEffect(powerLevel)) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 }

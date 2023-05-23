@@ -1,5 +1,6 @@
 package to.tinypota.ollivanders.registry.common;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandSource;
@@ -7,14 +8,21 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.item.WandItem;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -32,6 +40,34 @@ public class OllivandersCommands {
 	
 	public static void init() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			dispatcher.register(CommandManager.literal("getfloo").executes(context -> {
+				var serverState = OllivandersServerState.getServerState(context.getSource().getServer());
+				var flooFires = serverState.getFlooState().getFlooPositions();
+				
+				// Prepare the chat message.
+				StringBuilder messageBuilder = new StringBuilder();
+				messageBuilder.append("§2Name§r\n");  // Header line
+				messageBuilder.append("==============================\n");
+				
+				// Loop through every entry in every map.
+				for (Map.Entry<String, Pair<BlockPos, Direction>> entry : flooFires.entrySet()) {
+					// Append each entry to the message.
+					String line = String.format("§2%s§7 (%d, %d, %d)§r\n",
+							entry.getKey(),
+							entry.getValue().getLeft().getX(),
+							entry.getValue().getLeft().getY(),
+							entry.getValue().getLeft().getZ()
+					);
+					messageBuilder.append(line);
+				}
+				
+				// Send the message to the chat.
+				context.getSource().sendFeedback(() -> Text.literal(messageBuilder.toString()), false);
+				
+				return Command.SINGLE_SUCCESS;
+			}));
+			
+			
 			dispatcher.register(literal("getwand")
 					.then(argument("player", EntityArgumentType.player())
 							.executes(context -> {

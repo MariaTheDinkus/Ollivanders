@@ -2,6 +2,7 @@ package to.tinypota.ollivanders.common.spell;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -30,7 +31,7 @@ public class ClearEffectSpell extends Spell {
 	}
 	
 	@Override
-	public ActionResult onSelfCast(SpellPowerLevel powerLevel, LivingEntity entity) {
-		return entity.removeStatusEffect(statusEffect) ? ActionResult.SUCCESS : ActionResult.FAIL;
+	public ActionResult onSelfCast(SpellPowerLevel powerLevel, PlayerEntity playerEntity) {
+		return playerEntity.removeStatusEffect(statusEffect) ? ActionResult.SUCCESS : ActionResult.FAIL;
 	}
 }

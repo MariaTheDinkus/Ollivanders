@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
@@ -61,6 +62,8 @@ public abstract class MixinPlayerManager {
 				var spell = SpellHelper.getSpellFromMessage(stringMessage);
 				if (spell != Spell.EMPTY) {
 					SpellHelper.setCurrentSpell(sender, spell);
+					Ollivanders.LOGGER.info("THIS IS MIXIN: " + spell.getAvailablePowerLevel(OllivandersServerState.getSkillLevel(sender, spell)));
+					serverState.setCurrentSpellPowerLevel(sender, spell.getAvailablePowerLevel(OllivandersServerState.getSkillLevel(sender, spell)));
 				}
 				callbackInfo.cancel();
 			} else if (world.getBlockState(pos).getBlock() instanceof FlooFireBlock) {

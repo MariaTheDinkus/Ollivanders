@@ -1,6 +1,7 @@
 package to.tinypota.ollivanders.common.storage;
 
 import net.minecraft.nbt.NbtCompound;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
 
@@ -10,7 +11,9 @@ public class OllivandersPlayerState {
 	private String suitedWand = "";
 	private String suitedCore = "";
 	private String currentSpell = "empty";
+	private SpellPowerLevel currentSpellPowerLevel = SpellPowerLevel.MAXIMUM;
 	private HashMap<Spell, Double> skillLevels = new HashMap<>();
+	private SpellPowerLevel powerLevel = SpellPowerLevel.NORMAL;
 	
 	/*
 	 * Writes this OllivandersPlayerState to NBT.
@@ -19,11 +22,70 @@ public class OllivandersPlayerState {
 		nbt.putString("suitedWand", suitedWand);
 		nbt.putString("suitedCore", suitedCore);
 		nbt.putString("currentSpell", currentSpell);
+		nbt.putInt("currentSpellPowerLevel", currentSpellPowerLevel.getId());
 		var skillLevels = new NbtCompound();
 		this.skillLevels.forEach((spell, level) -> skillLevels.putDouble(OllivandersRegistries.SPELL.getId(spell).toString(), level));
 		nbt.put("skillLevels", skillLevels);
+		nbt.putInt("powerLevel", powerLevel.getId());
 		
 		return nbt;
+	}
+	
+	public SpellPowerLevel getCurrentSpellPowerLevel() {
+		return currentSpellPowerLevel;
+	}
+	
+	public void setCurrentSpellPowerLevel(SpellPowerLevel currentSpellPowerLevel) {
+		this.currentSpellPowerLevel = currentSpellPowerLevel;
+		if (powerLevel.getNumerical() > currentSpellPowerLevel.getNumerical()) {
+			powerLevel = currentSpellPowerLevel;
+		}
+	}
+	
+	public SpellPowerLevel getPowerLevel() {
+		return powerLevel;
+	}
+	
+	public void setPowerLevel(SpellPowerLevel powerLevel) {
+		this.powerLevel = powerLevel;
+	}
+	
+	/**
+	 * Increases the current power level of the spell.
+	 *
+	 * This method will increment the power level by one step (e.g., from NORMAL to MEDIUM),
+	 * provided that the resulting power level does not exceed the currentSpellPowerLevel.
+	 * This is to ensure that the power level of the spell does not go beyond what is currently allowed.
+	 *
+	 * The method uses the numerical value of the power level for comparison, where each power level
+	 * is assigned a numerical value (NORMAL = 1, MEDIUM = 2, etc.).
+	 *
+	 * @return boolean - Returns true if the power level was successfully increased;
+	 *                   returns false if the power level could not be increased because
+	 *                   it would exceed the currentSpellPowerLevel.
+	 */
+	public boolean increasePowerLevel() {
+		if (powerLevel.getNumerical() < currentSpellPowerLevel.getNumerical()) {
+			powerLevel = SpellPowerLevel.values()[powerLevel.ordinal() + 1];
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Decreases the current power level of the spell.
+	 *
+	 * This method will decrement the power level by one step (e.g., from MEDIUM to NORMAL),
+	 * provided that the resulting power level does not fall below NORMAL. This is to ensure
+	 * that the power level of the spell does not go below the minimum allowed value.
+	 *
+	 * The method uses the numerical value of the power level for comparison, where each power level
+	 * is assigned a numerical value (NORMAL = 1, MEDIUM = 2, etc.).
+	 */
+	public void decreasePowerLevel() {
+		if (powerLevel.getNumerical() > 1) {
+			powerLevel = SpellPowerLevel.values()[powerLevel.ordinal() - 1];
+		}
 	}
 	
 	public HashMap<Spell, Double> getSkillLevels() {

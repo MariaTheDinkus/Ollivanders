@@ -18,12 +18,37 @@ import to.tinypota.ollivanders.common.util.SpellHelper;
 import to.tinypota.ollivanders.common.util.WandHelper;
 
 public class OllivandersNetworking {
+	public static final Identifier DECREASE_POWER_LEVEL = Ollivanders.id("decrease_power_level");
+	public static final Identifier INCREASE_POWER_LEVEL = Ollivanders.id("increase_power_level");
+	
 	public static final Identifier SET_FLOO_FIRE_NAME = Ollivanders.id("set_floor_fire_name");
 	public static final Identifier SWING_WAND_PACKET_ID = Ollivanders.id("swing_wand");
 	
 	public static final Identifier OPEN_FLOO_FIRE_NAME_SCREEN = Ollivanders.id("open_floo_fire_name_screen");
+	public static final Identifier SYNC_POWER_LEVELS = Ollivanders.id("sync_power_levels");
 	
 	public static void init() {
+		ServerPlayNetworking.registerGlobalReceiver(SYNC_POWER_LEVELS, (server, player, handler, buf, responseSender) -> {
+			server.execute(() -> {
+				var serverState = OllivandersServerState.getServerState(server);
+				serverState.syncPowerLevels(player);
+			});
+		});
+		
+		ServerPlayNetworking.registerGlobalReceiver(DECREASE_POWER_LEVEL, (server, player, handler, buf, responseSender) -> {
+			server.execute(() -> {
+				var serverState = OllivandersServerState.getServerState(server);
+				serverState.decreasePowerLevel(player);
+			});
+		});
+		
+		ServerPlayNetworking.registerGlobalReceiver(INCREASE_POWER_LEVEL, (server, player, handler, buf, responseSender) -> {
+			server.execute(() -> {
+				var serverState = OllivandersServerState.getServerState(server);
+				serverState.increasePowerLevel(player);
+			});
+		});
+		
 		ServerPlayNetworking.registerGlobalReceiver(SET_FLOO_FIRE_NAME, (server, player, handler, buf, responseSender) -> {
 			var name = buf.readString();
 			var pos = buf.readBlockPos();
@@ -48,21 +73,22 @@ public class OllivandersNetworking {
 					if (WandHelper.hasCore(stack) && !currentSpell.isEmpty()) {
 						var serverState = OllivandersServerState.getServerState(server);
 						var wandMatchLevel = WandHelper.getWandMatch(stack, player);
+						var powerLevel = serverState.getPowerLevel(player);
 						serverState.addSkillLevel(player, currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
 						player.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
 						if (currentSpell.getType() == SpellType.SELF) {
-							currentSpell.onSelfCast(SpellPowerLevel.NORMAL, player);
+							currentSpell.onSelfCast(powerLevel, player);
 							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 							SpellHelper.emptyCurrentSpell(player);
 						} else if (currentSpell.getType() == SpellType.RAYCAST) {
 							var blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
 							var entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
 							if (entityHitResult != null) {
-								currentSpell.onHitEntity(SpellPowerLevel.NORMAL, world, entityHitResult, player);
+								currentSpell.onHitEntity(powerLevel, world, entityHitResult, player);
 								player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 								SpellHelper.emptyCurrentSpell(player);
 							} else if (blockHitResult != null) {
-								currentSpell.onHitBlock(SpellPowerLevel.NORMAL, world, blockHitResult, player);
+								currentSpell.onHitBlock(powerLevel, world, blockHitResult, player);
 								player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
 								SpellHelper.emptyCurrentSpell(player);
 							}
