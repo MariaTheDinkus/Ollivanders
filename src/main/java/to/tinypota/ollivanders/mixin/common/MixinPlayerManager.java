@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +26,7 @@ import to.tinypota.ollivanders.common.block.FlooFireBlock;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.common.util.SpellHelper;
+import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -71,18 +73,29 @@ public abstract class MixinPlayerManager {
 					serverState.setCurrentSpellPowerLevel(sender, spell.getAvailablePowerLevel(OllivandersServerState.getSkillLevel(sender, spell)));
 				}
 				callbackInfo.cancel();
-			} else if (world.getBlockState(pos).getBlock() instanceof FlooFireBlock) {
+			} else {
 				var state = world.getBlockState(pos);
-				if (state.get(FlooFireBlock.ACTIVATION) == FlooActivation.ACTIVE) {
-					var storage = serverState.getFlooByNameOrRandom(stringMessage);
-					var server = world.getServer();
-					var telKey = RegistryKey.of(RegistryKeys.WORLD, storage.getDimension());
-					var telWorld = server.getWorld(telKey);
-					
-					sender.teleport(telWorld, storage.getPos().getX() + 0.5, storage.getPos().getY(), storage.getPos().getZ() + 0.5, storage.getDirection().asRotation(), sender.getPitch());
-					sender.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 15, 0, false, false));
-					world.setBlockState(pos, state.with(FlooFireBlock.ACTIVATION, FlooActivation.LEFT));
-					telWorld.setBlockState(storage.getPos(), state.with(FlooFireBlock.ACTIVATION, FlooActivation.ARRIVED));
+				if (state.isOf(OllivandersBlocks.CHILD_FLOO_FIRE)) {
+					var newPos = pos.offset(state.get(Properties.HORIZONTAL_FACING));
+					var newState = world.getBlockState(newPos);
+					if (newState.isOf(OllivandersBlocks.FLOO_FIRE)) {
+						pos = newPos;
+						state = newState;
+					}
+				}
+				
+				if (world.getBlockState(pos).getBlock() instanceof FlooFireBlock) {
+					if (state.get(FlooFireBlock.ACTIVATION) == FlooActivation.ACTIVE) {
+						var storage = serverState.getFlooByNameOrRandom(stringMessage);
+						var server = world.getServer();
+						var telKey = RegistryKey.of(RegistryKeys.WORLD, storage.getDimension());
+						var telWorld = server.getWorld(telKey);
+						
+						sender.teleport(telWorld, storage.getPos().getX() + 0.5, storage.getPos().getY(), storage.getPos().getZ() + 0.5, storage.getDirection().asRotation(), sender.getPitch());
+						sender.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 15, 0, false, false));
+						world.setBlockState(pos, state.with(FlooFireBlock.ACTIVATION, FlooActivation.LEFT));
+						telWorld.setBlockState(storage.getPos(), state.with(FlooFireBlock.ACTIVATION, FlooActivation.ARRIVED));
+					}
 				}
 			}
 		}

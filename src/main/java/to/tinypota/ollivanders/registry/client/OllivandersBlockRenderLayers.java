@@ -7,7 +7,7 @@ import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 
 public class OllivandersBlockRenderLayers {
 	public static void init() {
-		BlockRenderLayerMap.INSTANCE.putBlock(OllivandersBlocks.FLOO_FIRE, RenderLayer.getCutout());
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), OllivandersBlocks.FLOO_FIRE, OllivandersBlocks.CHILD_FLOO_FIRE);
 		WoodBlockRegistry.WOOD_BLOCK_STORAGES.forEach(woodBlockStorage -> {
 			BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), woodBlockStorage.getDoor(), woodBlockStorage.getTrapdoor(), woodBlockStorage.getSapling());
 		});

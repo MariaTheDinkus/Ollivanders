@@ -36,6 +36,7 @@ import to.tinypota.ollivanders.api.floo.FlooActivation;
 import to.tinypota.ollivanders.common.block.entity.FlooFireBlockEntity;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.registry.client.OllivandersParticleTypes;
+import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 import to.tinypota.ollivanders.registry.common.OllivandersItems;
 
 public class FlooFireBlock extends BlockWithEntity {
@@ -89,6 +90,15 @@ public class FlooFireBlock extends BlockWithEntity {
 			if (!world.isClient()) {
 				world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f, 0);
 				((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 200, 0.375, 0.375, 0.375, 0);
+				Direction[] directions = new Direction[] { Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
+				for (Direction dir : directions) {
+					BlockPos newPos = pos.offset(dir);
+					BlockState newState = world.getBlockState(newPos);
+					
+					if (newState.isOf(OllivandersBlocks.CHILD_FLOO_FIRE)) {
+						((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, newPos.getX() + 0.5, newPos.getY() + 0.5, newPos.getZ() + 0.5, 200, 0.375, 0.375, 0.375, 0);
+					}
+				}
 				world.setBlockState(pos, state.with(ACTIVATION, FlooActivation.ACTIVE));
 				if (!player.isCreative()) {
 					if (stack.getCount() > 1) {
@@ -172,6 +182,25 @@ public class FlooFireBlock extends BlockWithEntity {
 			return Blocks.AIR.getDefaultState();
 		}
 		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+	}
+	
+	@Override
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (state.isOf(newState.getBlock())) {
+			Direction[] directions = new Direction[] { Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
+			for (Direction dir : directions) {
+				BlockPos newPos = pos.offset(dir);
+				BlockState newOffState = world.getBlockState(newPos);
+				
+				if (newOffState.isOf(OllivandersBlocks.CHILD_FLOO_FIRE)) {
+					world.setBlockState(newPos, OllivandersBlocks.CHILD_FLOO_FIRE.getDefaultState()
+																				 .with(ChildFlooFireBlock.LIT, newState.get(FlooFireBlock.LIT))
+																				 .with(ChildFlooFireBlock.ACTIVATION, newState.get(FlooFireBlock.ACTIVATION))
+																				 .with(ChildFlooFireBlock.FACING, dir.getOpposite()));
+				}
+			}
+		}
+		super.onStateReplaced(state, world, pos, newState, moved);
 	}
 	
 	@Override
