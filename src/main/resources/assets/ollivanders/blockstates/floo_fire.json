@@ -22,7 +22,7 @@
         {   "when": {"lit": true, "activation": "left"},
             "apply": [
 				{
-					"model": "ollivanders:block/floo_fire_full"
+					"model": "ollivanders:block/floo_fire_full_tall"
 				}
             ]
         },

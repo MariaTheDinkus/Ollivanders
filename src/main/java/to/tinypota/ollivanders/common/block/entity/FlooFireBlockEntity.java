@@ -2,6 +2,7 @@ package to.tinypota.ollivanders.common.block.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -46,19 +47,24 @@ public class FlooFireBlockEntity extends BlockEntity {
 				}
 			} else if (getCachedState().get(FlooFireBlock.ACTIVATION) == FlooActivation.LEFT) {
 				if (leftTick == 0) {
-					((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 2000, 0.375, 0.375 + 0.5, 0.375, 0);
+					((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 500, 0.375, 0.375 + 0.5, 0.375, 0);
 					leftTick++;
 				} else if (leftTick < 60) {
 					leftTick++;
 				} else {
 					leftTick = 0;
+					((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 200, 0.375, 0.375 + 0.5, 0.375, 0);
 					world.setBlockState(pos, getCachedState().with(FlooFireBlock.ACTIVATION, FlooActivation.OFF));
 				}
 			} else if (getCachedState().get(FlooFireBlock.ACTIVATION) == FlooActivation.ARRIVED) {
-				if (arrivedTick < 60) {
+				if (arrivedTick == 0) {
+					((ServerWorld) world).spawnParticles(OllivandersParticleTypes.FLOO_FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 200, 0.375, 0.375, 0.375, 0);
+					arrivedTick++;
+				} else if (arrivedTick < 60) {
 					arrivedTick++;
 				} else {
 					arrivedTick = 0;
+					((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 200, 0.375, 0.375 + 0.5, 0.375, 0);
 					world.setBlockState(pos, getCachedState().with(FlooFireBlock.ACTIVATION, FlooActivation.OFF));
 				}
 			} else {
