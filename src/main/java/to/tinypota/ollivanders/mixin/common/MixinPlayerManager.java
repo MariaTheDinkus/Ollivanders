@@ -5,11 +5,14 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SentMessage;
 import net.minecraft.network.message.SignedMessage;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -71,12 +74,15 @@ public abstract class MixinPlayerManager {
 			} else if (world.getBlockState(pos).getBlock() instanceof FlooFireBlock) {
 				var state = world.getBlockState(pos);
 				if (state.get(FlooFireBlock.ACTIVATION) == FlooActivation.ACTIVE) {
-					var pair = serverState.getFlooByNameOrRandom(stringMessage);
+					var storage = serverState.getFlooByNameOrRandom(stringMessage);
+					var server = world.getServer();
+					var telKey = RegistryKey.of(RegistryKeys.WORLD, storage.getDimension());
+					var telWorld = server.getWorld(telKey);
 					
-					sender.teleport((ServerWorld) world, pair.getLeft().getX() + 0.5, pair.getLeft().getY(), pair.getLeft().getZ() + 0.5, pair.getRight().asRotation(), sender.getPitch());
+					sender.teleport(telWorld, storage.getPos().getX() + 0.5, storage.getPos().getY(), storage.getPos().getZ() + 0.5, storage.getDirection().asRotation(), sender.getPitch());
 					sender.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 15, 0, false, false));
 					world.setBlockState(pos, state.with(FlooFireBlock.ACTIVATION, FlooActivation.LEFT));
-					world.setBlockState(pair.getLeft(), state.with(FlooFireBlock.ACTIVATION, FlooActivation.ARRIVED));
+					telWorld.setBlockState(storage.getPos(), state.with(FlooFireBlock.ACTIVATION, FlooActivation.ARRIVED));
 				}
 			}
 		}

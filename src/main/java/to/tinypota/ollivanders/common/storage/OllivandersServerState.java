@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionTypes;
 import org.jetbrains.annotations.Nullable;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
@@ -46,8 +47,10 @@ public class OllivandersServerState extends PersistentState {
 		flooState.getFlooPositions().forEach((name, pair) -> {
 			var flooCompound = new NbtCompound();
 			
-			flooCompound.put("pos", NbtHelper.fromBlockPos(pair.getLeft()));
-			flooCompound.putInt("direction", pair.getRight().getId());
+			flooCompound.put("pos", NbtHelper.fromBlockPos(pair.getPos()));
+			flooCompound.putInt("direction", pair.getDirection().getId());
+			Ollivanders.LOGGER.info(pair.getDimension().toString());
+			flooCompound.putString("dimension", pair.getDimension().toString());
 			flooPosCompound.put(name, flooCompound);
 		});
 		nbt.put("floo", flooPosCompound);
@@ -83,7 +86,12 @@ public class OllivandersServerState extends PersistentState {
 			var flooCompound = flooPosCompound.getCompound(name);
 			var blockPos = NbtHelper.toBlockPos(flooCompound.getCompound("pos"));
 			var direction = Direction.byId(flooCompound.getInt("direction")) != null ? Direction.byId(flooCompound.getInt("direction")) : Direction.NORTH;
-			serverState.flooState.getFlooPositions().put(name, new Pair<>(blockPos, direction));
+			var dimensionString = flooCompound.getString("dimension");
+			var dimension = DimensionTypes.OVERWORLD_ID;
+			if (dimensionString != null && !dimensionString.equals("minecraft:")) {
+				dimension = new Identifier(flooCompound.getString("dimension"));
+			}
+			serverState.flooState.getFlooPositions().put(name, new FlooPosStorage(blockPos, direction, dimension));
 		}
 		return serverState;
 	}
@@ -202,8 +210,8 @@ public class OllivandersServerState extends PersistentState {
 		return serverState.flooState;
 	}
 	
-	public void addFlooPosition(String name, BlockPos pos, Direction direction) {
-		flooState.addFlooPosition(name, pos, direction);
+	public void addFlooPosition(String name, BlockPos pos, Direction direction, Identifier dimension) {
+		flooState.addFlooPosition(name, pos, direction, dimension);
 		markDirty();
 	}
 	
@@ -217,11 +225,11 @@ public class OllivandersServerState extends PersistentState {
 		markDirty();
 	}
 	
-	public @Nullable Pair<BlockPos, Direction> getFlooByNameOrRandom(String name) {
+	public @Nullable FlooPosStorage getFlooByNameOrRandom(String name) {
 		return flooState.getFlooByNameOrRandom(name);
 	}
 	
-	public @Nullable Pair<BlockPos, Direction> getFlooPosByName(String name) {
+	public @Nullable FlooPosStorage getFlooPosByName(String name) {
 		return flooState.getFlooPosByName(name);
 	}
 	
@@ -229,7 +237,7 @@ public class OllivandersServerState extends PersistentState {
 		return flooState.getFlooNameByPos(pos);
 	}
 	
-	public Optional<Pair<BlockPos, Direction>> getRandomFlooPos() {
+	public Optional<FlooPosStorage> getRandomFlooPos() {
 		return flooState.getRandomFlooPos();
 	}
 	

@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.item.WandItem;
+import to.tinypota.ollivanders.common.storage.FlooPosStorage;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 
 import java.awt.*;
@@ -50,13 +51,13 @@ public class OllivandersCommands {
 				messageBuilder.append("==============================\n");
 				
 				// Loop through every entry in every map.
-				for (Map.Entry<String, Pair<BlockPos, Direction>> entry : flooFires.entrySet()) {
+				for (Map.Entry<String, FlooPosStorage> entry : flooFires.entrySet()) {
 					// Append each entry to the message.
 					String line = String.format("§2%s§7 (%d, %d, %d)§r\n",
 							entry.getKey(),
-							entry.getValue().getLeft().getX(),
-							entry.getValue().getLeft().getY(),
-							entry.getValue().getLeft().getZ()
+							entry.getValue().getPos().getX(),
+							entry.getValue().getPos().getY(),
+							entry.getValue().getPos().getZ()
 					);
 					messageBuilder.append(line);
 				}

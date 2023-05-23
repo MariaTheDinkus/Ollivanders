@@ -55,10 +55,11 @@ public class OllivandersNetworking {
 			var direction = buf.readInt();
 			server.execute(() -> {
 				var serverState = OllivandersServerState.getServerState(server);
+				var world = player.getWorld();
 				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 					Ollivanders.LOGGER.info("Adding fire to floo network under name: " + name + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "." + " The facing direction is: " + Direction.byId(direction).getName());
 				}
-				serverState.addFlooPosition(name, pos, Direction.byId(direction));
+				serverState.addFlooPosition(name, pos, Direction.byId(direction), world.getRegistryKey().getValue());
 			});
 		});
 		

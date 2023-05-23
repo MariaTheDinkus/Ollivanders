@@ -51,7 +51,7 @@ public class AliquamFlooSpell extends Spell {
 				var name = serverState.getFlooNameByPos(pos);
 				buf.writeString(name != null ? name : "");
 				buf.writeBlockPos(pos);
-				buf.writeInt(serverState.getFlooPosByName(name).getRight().getId());
+				buf.writeInt(serverState.getFlooPosByName(name).getDirection().getId());
 				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 					Ollivanders.LOGGER.info("Removing fire from floo network at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
 				}

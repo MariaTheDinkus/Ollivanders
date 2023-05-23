@@ -66,8 +66,8 @@ public class FlooFireBlock extends BlockWithEntity {
 			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 				serverState.getFlooState().getFlooPositions().entrySet().forEach(entry -> {
 					var name = entry.getKey();
-					var pair = entry.getValue();
-					Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + pair.getLeft().getX() + ", " + pair.getLeft().getY() + ", " + pair.getLeft().getZ() + "." + " The facing direction is: " + pair.getRight().getName());
+					var storage = entry.getValue();
+					Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + storage.getPos().getX() + ", " + storage.getPos().getY() + ", " + storage.getPos().getZ() + "." + " The facing direction is: " + storage.getDirection().getName());
 				});
 			}
 		}
