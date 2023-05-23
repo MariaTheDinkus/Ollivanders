@@ -44,14 +44,8 @@ public class OllivandersServerState extends PersistentState {
 		nbt.put("players", playersNbtCompound);
 		
 		var flooPosCompound = new NbtCompound();
-		flooState.getFlooPositions().forEach((name, pair) -> {
-			var flooCompound = new NbtCompound();
-			
-			flooCompound.put("pos", NbtHelper.fromBlockPos(pair.getPos()));
-			flooCompound.putInt("direction", pair.getDirection().getId());
-			Ollivanders.LOGGER.info(pair.getDimension().toString());
-			flooCompound.putString("dimension", pair.getDimension().toString());
-			flooPosCompound.put(name, flooCompound);
+		flooState.getFlooPositions().forEach((name, storage) -> {
+			flooPosCompound.put(name, FlooPosStorage.writeToNbt(storage, new NbtCompound()));
 		});
 		nbt.put("floo", flooPosCompound);
 		return nbt;
@@ -84,14 +78,8 @@ public class OllivandersServerState extends PersistentState {
 		serverState.flooState.getFlooPositions().clear();
 		for (var name : flooPosCompound.getKeys()) {
 			var flooCompound = flooPosCompound.getCompound(name);
-			var blockPos = NbtHelper.toBlockPos(flooCompound.getCompound("pos"));
-			var direction = Direction.byId(flooCompound.getInt("direction")) != null ? Direction.byId(flooCompound.getInt("direction")) : Direction.NORTH;
-			var dimensionString = flooCompound.getString("dimension");
-			var dimension = DimensionTypes.OVERWORLD_ID;
-			if (dimensionString != null && !dimensionString.equals("minecraft:")) {
-				dimension = new Identifier(flooCompound.getString("dimension"));
-			}
-			serverState.flooState.getFlooPositions().put(name, new FlooPosStorage(blockPos, direction, dimension));
+			var storage = FlooPosStorage.fromNbt(flooCompound);
+			serverState.flooState.getFlooPositions().put(name, storage);
 		}
 		return serverState;
 	}
@@ -210,8 +198,8 @@ public class OllivandersServerState extends PersistentState {
 		return serverState.flooState;
 	}
 	
-	public void addFlooPosition(String name, BlockPos pos, Direction direction, Identifier dimension) {
-		flooState.addFlooPosition(name, pos, direction, dimension);
+	public void addFlooPosition(String name, BlockPos pos, Direction direction, Identifier dimension, boolean chosenRandomly) {
+		flooState.addFlooPosition(name, pos, direction, dimension, chosenRandomly);
 		markDirty();
 	}
 	

@@ -24,7 +24,8 @@ public class OllivandersNetworking {
 			var name = buf.readString();
 			var pos = buf.readBlockPos();
 			var direction = buf.readInt();
-			client.execute(() -> client.setScreen(new FlooFireNameScreen(name, pos, Direction.byId(direction))));
+			var chosenRandomly = buf.readBoolean();
+			client.execute(() -> client.setScreen(new FlooFireNameScreen(name, pos, Direction.byId(direction), chosenRandomly)));
 		});
 	}
 }

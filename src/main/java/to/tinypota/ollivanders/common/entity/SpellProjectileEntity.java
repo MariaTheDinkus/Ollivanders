@@ -104,9 +104,13 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			var powerLevel = OllivandersServerState.getServerState(world.getServer()).getPowerLevel((PlayerEntity) getOwner());
-			var result = spell.onHitBlock(powerLevel, world, blockHitResult, (PlayerEntity) getOwner(), this);
-			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
+			if (getOwner() != null) {
+				var powerLevel = OllivandersServerState.getServerState(world.getServer()).getPowerLevel((PlayerEntity) getOwner());
+				var result = spell.onHitBlock(powerLevel, world, blockHitResult, (PlayerEntity) getOwner(), this);
+				if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
+					discard();
+				}
+			} else {
 				discard();
 			}
 		}
@@ -117,9 +121,13 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		var world = getWorld();
 		
 		if (!world.isClient()) {
-			var powerLevel = OllivandersServerState.getServerState(world.getServer()).getPowerLevel((PlayerEntity) getOwner());
-			var result = spell.onHitEntity(powerLevel, world, entityHitResult, (PlayerEntity) getOwner(), this);
-			if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
+			if (getOwner() != null) {
+				var powerLevel = OllivandersServerState.getServerState(world.getServer()).getPowerLevel((PlayerEntity) getOwner());
+				var result = spell.onHitEntity(powerLevel, world, entityHitResult, (PlayerEntity) getOwner(), this);
+				if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
+					discard();
+				}
+			} else {
 				discard();
 			}
 		}

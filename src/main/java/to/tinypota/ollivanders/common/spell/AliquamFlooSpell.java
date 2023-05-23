@@ -32,6 +32,14 @@ public class AliquamFlooSpell extends Spell {
 	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult, PlayerEntity playerEntity, SpellProjectileEntity spellProjectileEntity) {
 		var pos = spellProjectileEntity.getBlockPos();
 		var state = world.getBlockState(pos);
+		if (state.getBlock() != Blocks.FIRE || state.getBlock() != OllivandersBlocks.FLOO_FIRE) {
+			var sideState = world.getBlockState(hitResult.getBlockPos().offset(hitResult.getSide()));
+			if (sideState.getBlock() == Blocks.FIRE || sideState.getBlock() == OllivandersBlocks.FLOO_FIRE) {
+				pos = hitResult.getBlockPos().offset(hitResult.getSide());
+				state = sideState;
+			}
+		}
+		
 		if (playerEntity instanceof ServerPlayerEntity) {
 			if (state.getBlock() == Blocks.FIRE) {
 				var newState = OllivandersBlocks.FLOO_FIRE.getDefaultState();
@@ -41,6 +49,7 @@ public class AliquamFlooSpell extends Spell {
 				buf.writeString("");
 				buf.writeBlockPos(pos);
 				buf.writeInt(playerEntity.getHorizontalFacing().getOpposite().getId());
+				buf.writeBoolean(true);
 				ServerPlayNetworking.send((ServerPlayerEntity) playerEntity, OllivandersNetworking.OPEN_FLOO_FIRE_NAME_SCREEN, buf);
 				return ActionResult.SUCCESS;
 			}
@@ -51,7 +60,10 @@ public class AliquamFlooSpell extends Spell {
 				var name = serverState.getFlooNameByPos(pos);
 				buf.writeString(name != null ? name : "");
 				buf.writeBlockPos(pos);
-				buf.writeInt(serverState.getFlooPosByName(name).getDirection().getId());
+				var storage = serverState.getFlooPosByName(name);
+				buf.writeInt(storage != null ? storage.getDirection().getId() : playerEntity.getHorizontalFacing().getOpposite().getId());
+				buf.writeBoolean(storage == null || storage.isChosenRandomly());
+				Ollivanders.LOGGER.info(String.valueOf(storage == null));
 				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 					Ollivanders.LOGGER.info("Removing fire from floo network at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
 				}

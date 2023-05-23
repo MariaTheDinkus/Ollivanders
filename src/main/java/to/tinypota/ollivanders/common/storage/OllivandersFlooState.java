@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class OllivandersFlooState {
 	private HashMap<String, FlooPosStorage> flooPositions = new HashMap<>();
@@ -21,8 +22,8 @@ public class OllivandersFlooState {
 		this.flooPositions = flooPositions;
 	}
 	
-	public void addFlooPosition(String name, BlockPos pos, Direction direction, Identifier dimension) {
-		flooPositions.put(name, new FlooPosStorage(pos, direction, dimension));
+	public void addFlooPosition(String name, BlockPos pos, Direction direction, Identifier dimension, boolean chosenRandomly) {
+		flooPositions.put(name, new FlooPosStorage(pos, direction, dimension, chosenRandomly));
 	}
 	
 	public void removeFlooPosition(String name) {
@@ -82,6 +83,7 @@ public class OllivandersFlooState {
 	
 	public Optional<FlooPosStorage> getRandomFlooPos() {
 		var values = flooPositions.values();
-		return values.stream().skip((int) (values.size() * Math.random())).findFirst();
+		var filteredValues = values.stream().filter(flooPosStorage -> flooPosStorage.isChosenRandomly()).collect(Collectors.toList());
+		return filteredValues.isEmpty() ? Optional.empty() : Optional.of(filteredValues.get((int) (filteredValues.size() * Math.random())));
 	}
 }
