@@ -11,6 +11,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
@@ -94,7 +96,9 @@ public abstract class MixinPlayerManager {
 						sender.teleport(telWorld, storage.getPos().getX() + 0.5, storage.getPos().getY(), storage.getPos().getZ() + 0.5, storage.getDirection().asRotation(), sender.getPitch());
 						sender.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 15, 0, false, false));
 						world.setBlockState(pos, state.with(FlooFireBlock.ACTIVATION, FlooActivation.LEFT));
+						world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f, 0);
 						telWorld.setBlockState(storage.getPos(), state.with(FlooFireBlock.ACTIVATION, FlooActivation.ARRIVED));
+						telWorld.playSound(null, storage.getPos().getX() + 0.5, storage.getPos().getY() + 0.5, storage.getPos().getZ() + 0.5, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f, 0);
 					}
 				}
 			}
