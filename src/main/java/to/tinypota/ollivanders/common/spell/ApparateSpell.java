@@ -25,11 +25,20 @@ public class ApparateSpell extends Spell {
 	}
 	
 	@Override
+	public SpellPowerLevel getMaximumPowerLevel() {
+		return SpellPowerLevel.MEDIUM;
+	}
+	
+	@Override
+	public double getCustomCastPercents(SpellPowerLevel powerLevel) {
+		return powerLevel == SpellPowerLevel.NORMAL ? 0.30 : 0.50;
+	}
+	
+	@Override
 	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult, PlayerEntity playerEntity) {
 		var pos = hitResult.getBlockPos().offset(hitResult.getSide());
 		var state = world.getBlockState(hitResult.getBlockPos());
 		if (state.getCollisionShape(world, hitResult.getBlockPos()).equals(VoxelShapes.empty())) {
-			Ollivanders.LOGGER.info("HEY BUDDY YOU NOT SOLID");
 			pos = hitResult.getBlockPos();
 		}
 		((ServerPlayerEntity) playerEntity).teleport((ServerWorld) world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, playerEntity.getYaw(), playerEntity.getPitch());

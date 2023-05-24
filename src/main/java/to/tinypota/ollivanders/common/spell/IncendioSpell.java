@@ -21,6 +21,16 @@ public class IncendioSpell extends Spell {
 	}
 	
 	@Override
+	public SpellPowerLevel getMaximumPowerLevel() {
+		return SpellPowerLevel.NORMAL;
+	}
+	
+	@Override
+	public double getCustomCastPercents(SpellPowerLevel powerLevel) {
+		return 0.20;
+	}
+	
+	@Override
 	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult, PlayerEntity playerEntity, SpellProjectileEntity spellProjectileEntity) {
 		var pos = spellProjectileEntity.getBlockPos();
 		var state = world.getBlockState(pos);

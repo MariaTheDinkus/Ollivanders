@@ -18,6 +18,11 @@ public class ClearEffectSpell extends Spell {
 	}
 	
 	@Override
+	public SpellPowerLevel getMaximumPowerLevel() {
+		return SpellPowerLevel.NORMAL;
+	}
+	
+	@Override
 	protected ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult) {
 		return ActionResult.FAIL;
 	}
