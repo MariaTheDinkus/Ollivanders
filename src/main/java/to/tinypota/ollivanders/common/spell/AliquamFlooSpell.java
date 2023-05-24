@@ -24,8 +24,13 @@ public class AliquamFlooSpell extends Spell {
 	}
 	
 	@Override
-	public SpellPowerLevel getAvailablePowerLevel(double skillLevel) {
+	public SpellPowerLevel getMaximumPowerLevel() {
 		return SpellPowerLevel.NORMAL;
+	}
+	
+	@Override
+	public double getCustomCastPercents(SpellPowerLevel powerLevel) {
+		return 0.20;
 	}
 	
 	@Override

@@ -25,11 +25,6 @@ public class ApparateSpell extends Spell {
 	}
 	
 	@Override
-	public SpellPowerLevel getAvailablePowerLevel(double skillLevel) {
-		return SpellPowerLevel.NORMAL;
-	}
-	
-	@Override
 	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult, PlayerEntity playerEntity) {
 		var pos = hitResult.getBlockPos().offset(hitResult.getSide());
 		var state = world.getBlockState(hitResult.getBlockPos());

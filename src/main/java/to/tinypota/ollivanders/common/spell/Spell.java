@@ -7,7 +7,9 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.api.spell.SpellType;
+import to.tinypota.ollivanders.api.wand.WandMatchLevel;
 import to.tinypota.ollivanders.common.entity.SpellProjectileEntity;
+import to.tinypota.ollivanders.common.util.SpellHelper;
 import to.tinypota.ollivanders.registry.common.OllivandersSpells;
 
 import java.util.Objects;
@@ -17,27 +19,43 @@ public class Spell {
 	private final String castName;
 	private final SpellType type;
 	private final boolean hitsWater;
+	private final boolean customCastPercents;
 	
 	public Spell(String castName, Settings settings) {
 		this.castName = castName;
 		type = settings.type;
 		hitsWater = settings.hitsWater;
+		customCastPercents = settings.customCastPercents;
+	}
+	
+	public boolean hasCustomCastPercents() {
+		return customCastPercents;
+	}
+	
+	/*
+	 * A method which you can override in order to give custom cast subtraction percentages for each power level. Useful for spells with less than the 5 power levels available.
+	 */
+	public double getCustomCastPercents(SpellPowerLevel powerLevel) {
+		return 1;
 	}
 	
 	public boolean isEmpty() {
 		return this == EMPTY;
 	}
 	
-	public SpellPowerLevel getAvailablePowerLevel(double skillLevel) {
-		return SpellPowerLevel.NORMAL;
+	public SpellPowerLevel getMaximumPowerLevel() {
+		return SpellPowerLevel.MAXIMUM;
 	}
 	
-	public boolean canUsePowerLevel(SpellPowerLevel powerLevel) {
-		return powerLevel.getId() >= getAvailablePowerLevel(0).getId();
-	}
-	
-	public boolean canUsePowerLevel(SpellPowerLevel powerLevel, double skillLevel) {
-		return powerLevel.getId() >= getAvailablePowerLevel(skillLevel).getId();
+	public SpellPowerLevel getAvailablePowerLevel(WandMatchLevel wandMatchLevel, double skillLevel) {
+		SpellPowerLevel level = SpellPowerLevel.NORMAL;
+		for (SpellPowerLevel powerLevel : SpellPowerLevel.values()) {
+			if (powerLevel.getNumerical() <= getMaximumPowerLevel().getNumerical() && (SpellHelper.getCastPercentage(this, wandMatchLevel, powerLevel) + (skillLevel / 100 / 10)) > 0) {
+				level = powerLevel;
+			}
+		}
+		
+		return level;
 	}
 	
 	/*
@@ -120,6 +138,7 @@ public class Spell {
 	public static class Settings {
 		SpellType type;
 		boolean hitsWater = false;
+		boolean customCastPercents = false;
 		
 		public Spell.Settings type(SpellType type) {
 			this.type = type;
@@ -131,14 +150,25 @@ public class Spell {
 			return this;
 		}
 		
-		public Spell.Settings hitsWater(boolean hits) {
-			hitsWater = hits;
+		public Spell.Settings hitsWater(boolean hitsWater) {
+			this.hitsWater = hitsWater;
+			return this;
+		}
+		
+		public Spell.Settings customCastPercents() {
+			customCastPercents = true;
+			return this;
+		}
+		
+		public Spell.Settings customCastPercents(boolean customCastPercents) {
+			this.customCastPercents = customCastPercents;
 			return this;
 		}
 		
 		public Spell.Settings of(Settings settings) {
 			type = settings.type;
 			hitsWater = settings.hitsWater;
+			customCastPercents = settings.customCastPercents;
 			return this;
 		}
 	}

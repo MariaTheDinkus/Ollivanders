@@ -14,9 +14,11 @@ public class OllivandersNetworking {
 		ClientPlayNetworking.registerGlobalReceiver(SYNC_POWER_LEVELS, (client, handler, buf, responseSender) -> {
 			var currentSpellPowerLevel = SpellPowerLevel.byId(buf.readInt());
 			var powerLevel = SpellPowerLevel.byId(buf.readInt());
+			var castPercentage = buf.readDouble();
 			client.execute(() -> {
 				OllivandersEvents.currentSpellPowerLevel = currentSpellPowerLevel;
 				OllivandersEvents.powerLevel = powerLevel;
+				OllivandersEvents.castPercentage = castPercentage;
 			});
 		});
 		

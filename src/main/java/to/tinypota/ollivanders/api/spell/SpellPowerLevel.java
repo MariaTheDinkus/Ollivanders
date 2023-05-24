@@ -1,22 +1,23 @@
 package to.tinypota.ollivanders.api.spell;
 
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.MathHelper;
 
 public enum SpellPowerLevel implements StringIdentifiable {
-	NORMAL("normal", 0),
-	MEDIUM("medium", 1),
-	HIGH("high", 2),
-	HIGHER("higher", 3),
-	MAXIMUM("maximum", 4);
+	NORMAL("normal", 0, 0),
+	MEDIUM("medium", 1, 0.12),
+	HIGH("high", 2, 0.27),
+	HIGHER("higher", 3, 0.48),
+	MAXIMUM("maximum", 4, 0.75);
 	
 	String name;
 	int id;
+	double castPercentageSubtractor;
 	private static final SpellPowerLevel[] VALUES;
 	
-	SpellPowerLevel(String name, int id) {
+	SpellPowerLevel(String name, int id, double castPercentageSubtractor) {
 		this.name = name;
 		this.id = id;
+		this.castPercentageSubtractor = castPercentageSubtractor;
 	}
 	
 	public int getId() {
@@ -25,6 +26,10 @@ public enum SpellPowerLevel implements StringIdentifiable {
 	
 	public int getNumerical() {
 		return id + 1;
+	}
+	
+	public double getCastPercentageSubtractor() {
+		return castPercentageSubtractor;
 	}
 	
 	public static SpellPowerLevel byId(int id) {

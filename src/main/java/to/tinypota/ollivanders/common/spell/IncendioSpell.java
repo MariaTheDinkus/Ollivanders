@@ -21,11 +21,6 @@ public class IncendioSpell extends Spell {
 	}
 	
 	@Override
-	public SpellPowerLevel getAvailablePowerLevel(double skillLevel) {
-		return SpellPowerLevel.NORMAL;
-	}
-	
-	@Override
 	public ActionResult onHitBlock(SpellPowerLevel powerLevel, World world, BlockHitResult hitResult, PlayerEntity playerEntity, SpellProjectileEntity spellProjectileEntity) {
 		var pos = spellProjectileEntity.getBlockPos();
 		var state = world.getBlockState(pos);

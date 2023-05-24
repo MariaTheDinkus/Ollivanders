@@ -19,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.common.spell.Spell;
+import to.tinypota.ollivanders.common.util.SpellHelper;
+import to.tinypota.ollivanders.common.util.WandHelper;
 import to.tinypota.ollivanders.registry.common.OllivandersCores;
 import to.tinypota.ollivanders.registry.common.OllivandersItems;
 import to.tinypota.ollivanders.registry.common.OllivandersNetworking;
@@ -177,9 +179,14 @@ public class OllivandersServerState extends PersistentState {
 	public void syncPowerLevels(PlayerEntity player) {
 		var currentSpellPowerLevel = getCurrentSpellPowerLevel(player);
 		var powerLevel = getPowerLevel(player);
+		var castPercentage = SpellHelper.getCastPercentage((ServerPlayerEntity) player);
+		if (getCurrentSpell(player).equals(Spell.EMPTY.getCastName())) {
+			castPercentage = -1;
+		}
 		var buf = PacketByteBufs.create();
 		buf.writeInt(currentSpellPowerLevel.getId());
 		buf.writeInt(powerLevel.getId());
+		buf.writeDouble(castPercentage);
 		ServerPlayNetworking.send((ServerPlayerEntity) player, OllivandersNetworking.SYNC_POWER_LEVELS, buf);
 	}
 	
@@ -245,7 +252,7 @@ public class OllivandersServerState extends PersistentState {
 		markDirty();
 	}
 	
-	public static double getSkillLevel(PlayerEntity player, Spell spell) {
+	public double getSkillLevel(PlayerEntity player, Spell spell) {
 		var playerState = getPlayerState(player);
 		return playerState.getSkillLevel(spell);
 	}

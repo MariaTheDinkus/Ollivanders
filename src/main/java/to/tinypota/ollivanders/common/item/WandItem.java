@@ -2,9 +2,11 @@ package to.tinypota.ollivanders.common.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -13,7 +15,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.api.wand.WandMatchLevel;
+import to.tinypota.ollivanders.common.spell.Spell;
+import to.tinypota.ollivanders.common.storage.OllivandersServerState;
+import to.tinypota.ollivanders.common.util.SpellHelper;
 import to.tinypota.ollivanders.common.util.WandHelper;
 
 import java.util.List;
@@ -101,5 +107,21 @@ public class WandItem extends Item {
 		return TypedActionResult.pass(user.getStackInHand(hand));
 	}
 	
-	
+	@Override
+	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+		if (!world.isClient() && entity instanceof PlayerEntity && selected && world.getTime() % 10 == 0) {
+			var player = (PlayerEntity) entity;
+			var serverState = OllivandersServerState.getServerState(player.getServer());
+			var spell = SpellHelper.getCurrentSpell(player);
+			if (spell != Spell.EMPTY) {
+				var wandMatchLevel = WandHelper.getWandMatch(stack, player);
+				var powerLevel = spell.getAvailablePowerLevel(wandMatchLevel, serverState.getSkillLevel(player, spell));
+				serverState.setCurrentSpellPowerLevel(player, powerLevel);
+			} else {
+				serverState.setCurrentSpellPowerLevel(player, SpellPowerLevel.MAXIMUM);
+			}
+			serverState.syncPowerLevels((PlayerEntity) entity);
+		}
+		super.inventoryTick(stack, world, entity, slot, selected);
+	}
 }

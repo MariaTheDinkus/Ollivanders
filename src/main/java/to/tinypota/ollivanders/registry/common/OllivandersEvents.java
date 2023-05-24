@@ -1,5 +1,6 @@
 package to.tinypota.ollivanders.registry.common;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;

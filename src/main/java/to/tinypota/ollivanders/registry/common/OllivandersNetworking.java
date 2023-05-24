@@ -17,6 +17,8 @@ import to.tinypota.ollivanders.common.util.RaycastUtil;
 import to.tinypota.ollivanders.common.util.SpellHelper;
 import to.tinypota.ollivanders.common.util.WandHelper;
 
+import java.util.Random;
+
 public class OllivandersNetworking {
 	public static final Identifier DECREASE_POWER_LEVEL = Ollivanders.id("decrease_power_level");
 	public static final Identifier INCREASE_POWER_LEVEL = Ollivanders.id("increase_power_level");
@@ -71,40 +73,51 @@ public class OllivandersNetworking {
 				if (player != null) {
 					var world = player.getWorld();
 					var stack = player.getMainHandStack();
-					var currentSpell = SpellHelper.getCurrentSpell(player);
-					if (WandHelper.hasCore(stack) && !currentSpell.isEmpty()) {
-						var serverState = OllivandersServerState.getServerState(server);
-						var wandMatchLevel = WandHelper.getWandMatch(stack, player);
-						var powerLevel = serverState.getPowerLevel(player);
-						serverState.addSkillLevel(player, currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
-						player.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
-						if (currentSpell.getType() == SpellType.SELF) {
-							currentSpell.onSelfCast(powerLevel, player);
-							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-							SpellHelper.emptyCurrentSpell(player);
-						} else if (currentSpell.getType() == SpellType.RAYCAST) {
-							var blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
-							var entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
-							if (entityHitResult != null) {
-								currentSpell.onHitEntity(powerLevel, world, entityHitResult, player);
-								player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-								SpellHelper.emptyCurrentSpell(player);
-							} else if (blockHitResult != null) {
-								currentSpell.onHitBlock(powerLevel, world, blockHitResult, player);
-								player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-								SpellHelper.emptyCurrentSpell(player);
+					var cooldownManager = player.getItemCooldownManager();
+					if (!cooldownManager.isCoolingDown(stack.getItem())) {
+						var currentSpell = SpellHelper.getCurrentSpell(player);
+						if (WandHelper.hasCore(stack) && !currentSpell.isEmpty()) {
+							var serverState = OllivandersServerState.getServerState(server);
+							var wandMatchLevel = WandHelper.getWandMatch(stack, player);
+							var powerLevel = serverState.getPowerLevel(player);
+							var castPercentage = SpellHelper.getCastPercentage(player);
+							Random rand = new Random();
+							double randomValue = rand.nextDouble();
+							cooldownManager.set(stack.getItem(), 15);
+							if (randomValue <= castPercentage) {
+								player.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
+								serverState.addSkillLevel(player, currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
+								if (currentSpell.getType() == SpellType.SELF) {
+									currentSpell.onSelfCast(powerLevel, player);
+									player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+									SpellHelper.emptyCurrentSpell(player);
+								} else if (currentSpell.getType() == SpellType.RAYCAST) {
+									var blockHitResult = RaycastUtil.raycastBlocks(world, player, 100, currentSpell.shouldHitWater());
+									var entityHitResult = RaycastUtil.raycastEntities(world, player, 100);
+									if (entityHitResult != null) {
+										currentSpell.onHitEntity(powerLevel, world, entityHitResult, player);
+										player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+										SpellHelper.emptyCurrentSpell(player);
+									} else if (blockHitResult != null) {
+										currentSpell.onHitBlock(powerLevel, world, blockHitResult, player);
+										player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+										SpellHelper.emptyCurrentSpell(player);
+									}
+								} else if (currentSpell.getType() == SpellType.PROJECTILE) {
+									world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
+									
+									if (!world.isClient) {
+										var spellProjectileEntity = new SpellProjectileEntity(currentSpell, player, world);
+										spellProjectileEntity.setPosition(spellProjectileEntity.getPos().add(0, 0.1 - 2 / 16F, 0));
+										world.spawnEntity(spellProjectileEntity);
+									}
+									
+									player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
+									SpellHelper.emptyCurrentSpell(player);
+								}
+							} else {
+								player.sendMessage(Text.literal("Your wand doesn't seem to obey you..."), true);
 							}
-						} else if (currentSpell.getType() == SpellType.PROJECTILE) {
-							world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
-							
-							if (!world.isClient) {
-								var spellProjectileEntity = new SpellProjectileEntity(currentSpell, player, world);
-								spellProjectileEntity.setPosition(spellProjectileEntity.getPos().add(0, 0.1 - 2 / 16F, 0));
-								world.spawnEntity(spellProjectileEntity);
-							}
-							
-							player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-							SpellHelper.emptyCurrentSpell(player);
 						}
 					}
 				}

@@ -22,11 +22,6 @@ public class EffectSpell extends Spell {
 		this.durations = durations;
 	}
 	
-	@Override
-	public SpellPowerLevel getAvailablePowerLevel(double skillLevel) {
-		return SpellPowerLevel.MAXIMUM;
-	}
-	
 	public StatusEffectInstance getStatusEffect(SpellPowerLevel powerLevel) {
 		return new StatusEffectInstance(statusEffect, durations.getValue(powerLevel));
 	}

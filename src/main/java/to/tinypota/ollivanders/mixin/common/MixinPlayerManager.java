@@ -15,6 +15,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,9 +26,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.api.floo.FlooActivation;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
+import to.tinypota.ollivanders.common.item.WandItem;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.common.util.SpellHelper;
+import to.tinypota.ollivanders.common.util.WandHelper;
 import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 
 import java.util.List;
@@ -49,10 +52,12 @@ public abstract class MixinPlayerManager {
 	private void onBroadcastChatMessage(SignedMessage message, Predicate<ServerPlayerEntity> shouldSendFiltered, @Nullable ServerPlayerEntity sender, MessageType.Parameters params, CallbackInfo callbackInfo) {
 		var stringMessage = message.getContent().getString();
 		
-		if (sender != null) {
+		if (sender != null && !sender.getStackInHand(Hand.MAIN_HAND).isEmpty() && sender.getStackInHand(Hand.MAIN_HAND).getItem() instanceof WandItem) {
+			var stack = sender.getStackInHand(Hand.MAIN_HAND);
 			var world = sender.getWorld();
 			var pos = sender.getBlockPos();
 			var serverState = OllivandersServerState.getServerState(sender.getServer());
+			var wandMatchLevel = WandHelper.getWandMatch(stack, sender);
 			if (SpellHelper.containsSpellName(stringMessage)) {
 				var verified = verify(message);
 				server.logChatMessage(message.getContent(), params, verified ? null : "Not Secure");
@@ -72,7 +77,13 @@ public abstract class MixinPlayerManager {
 				var spell = SpellHelper.getSpellFromMessage(stringMessage);
 				if (spell != Spell.EMPTY) {
 					SpellHelper.setCurrentSpell(sender, spell);
-					serverState.setCurrentSpellPowerLevel(sender, spell.getAvailablePowerLevel(OllivandersServerState.getSkillLevel(sender, spell)));
+					var powerLevel = spell.getAvailablePowerLevel(wandMatchLevel, serverState.getSkillLevel(sender, spell));
+					var castPercentage = SpellHelper.getCastPercentage(spell, wandMatchLevel, powerLevel);
+					var curPowerLevel = serverState.getPowerLevel(sender);
+					var curCastPercentage = SpellHelper.getCastPercentage(spell, wandMatchLevel, curPowerLevel);
+					serverState.setCurrentSpellPowerLevel(sender, powerLevel);
+//					sender.sendMessage(Text.literal("Set spell " + spell.getCastName() + " with a cast percentage of " + castPercentage + " for the max power level of " + powerLevel.getName() + "."));
+//					sender.sendMessage(Text.literal("The players current chosen power level " + curPowerLevel.getName() + " has a cast percentage of " + curCastPercentage + "."));
 				}
 				callbackInfo.cancel();
 			} else {
