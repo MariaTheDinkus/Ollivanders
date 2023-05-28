@@ -3,12 +3,15 @@ package to.tinypota.ollivanders.registry.common;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Rarity;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.item.WandItem;
+import to.tinypota.ollivanders.common.util.WandCraftHelper;
+import to.tinypota.ollivanders.common.util.WandHelper;
 import to.tinypota.ollivanders.common.util.WeightedRandomBag;
 
 public class OllivandersItems {
@@ -35,6 +38,21 @@ public class OllivandersItems {
 	public static final Item FLOO_POWDER = register("floo_powder", new Item(new Item.Settings().rarity(Rarity.UNCOMMON)));
 	
 	public static void init() {
+		//TODO: Make all of these actual JSON recipes.
+		WandCraftHelper.putCraft(Items.OAK_PLANKS, OAK_WAND);
+		WandCraftHelper.putCraft(Items.SPRUCE_PLANKS, SPRUCE_WAND);
+		WandCraftHelper.putCraft(Items.BIRCH_PLANKS, BIRCH_WAND);
+		WandCraftHelper.putCraft(Items.JUNGLE_PLANKS, JUNGLE_WAND);
+		WandCraftHelper.putCraft(Items.ACACIA_PLANKS, ACACIA_WAND);
+		WandCraftHelper.putCraft(Items.DARK_OAK_PLANKS, DARK_OAK_WAND);
+		WandCraftHelper.putCraft(Items.MANGROVE_PLANKS, MANGROVE_WAND);
+		WandCraftHelper.putCraft(Items.CHERRY_PLANKS, CHERRY_WAND);
+		WandCraftHelper.putCraft(OllivandersBlocks.LAUREL_WOOD.getPlanks().asItem(), LAUREL_WAND);
+		WandCraftHelper.putCraft(OllivandersBlocks.REDWOOD.getPlanks().asItem(), REDWOOD_WAND);
+		WandCraftHelper.putCraft(Items.CRIMSON_PLANKS, CRIMSON_WAND);
+		WandCraftHelper.putCraft(Items.WARPED_PLANKS, WARPED_WAND);
+		WandCraftHelper.putCraft(Items.VINE, VINE_WAND);
+		
 		WANDS.addEntry(OAK_WAND, 80);
 		WANDS.addEntry(SPRUCE_WAND, 80);
 		WANDS.addEntry(BIRCH_WAND, 80);

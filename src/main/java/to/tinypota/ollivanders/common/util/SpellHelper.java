@@ -79,7 +79,7 @@ public class SpellHelper {
 	public static double getCastPercentage(ServerPlayerEntity player) {
 		var serverState = OllivandersServerState.getServerState(player.getServer());
 		var currentSpell = SpellHelper.getCurrentSpell(player);
-		if (!player.getMainHandStack().isEmpty() && player.getMainHandStack().getItem() instanceof WandItem) {
+		if (!player.getMainHandStack().isEmpty() && player.getMainHandStack().getItem() instanceof WandItem && WandHelper.hasCore(player.getMainHandStack())) {
 			var wandMatchLevel = WandHelper.getWandMatch(player.getMainHandStack(), player);
 			var powerLevel = serverState.getPowerLevel(player);
 			var skillLevel = serverState.getSkillLevel(player, currentSpell);

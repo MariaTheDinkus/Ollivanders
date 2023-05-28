@@ -9,12 +9,14 @@ import net.minecraft.registry.Registry;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.block.entity.CoreBlockEntity;
 import to.tinypota.ollivanders.common.block.entity.FlooFireBlockEntity;
+import to.tinypota.ollivanders.common.block.entity.LatheBlockEntity;
 import to.tinypota.ollivanders.common.block.entity.OllivandersHangingSignBlockEntity;
 import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
 
 public class OllivandersBlockEntityTypes {
 	public static final BlockEntityType<FlooFireBlockEntity> FLOO_FIRE = register("floo_fire", FabricBlockEntityTypeBuilder.create(FlooFireBlockEntity::new, OllivandersBlocks.FLOO_FIRE).build());
 	public static final BlockEntityType<CoreBlockEntity> CORE = register("core", FabricBlockEntityTypeBuilder.create(CoreBlockEntity::new, OllivandersBlocks.PHOENIX_FEATHER_BLOCK, OllivandersBlocks.THESTRAL_TAIL_HAIR_BLOCK, OllivandersBlocks.UNICORN_TAIL_HAIR_BLOCK).build());
+	public static final BlockEntityType<LatheBlockEntity> LATHE = register("lathe", FabricBlockEntityTypeBuilder.create(LatheBlockEntity::new, OllivandersBlocks.LATHE).build());
 	public static BlockEntityType<SignBlockEntity> SIGN;
 	public static BlockEntityType<OllivandersHangingSignBlockEntity> HANGING_SIGN;
 	
