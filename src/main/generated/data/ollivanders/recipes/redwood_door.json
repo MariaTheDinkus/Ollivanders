@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "ollivanders:redwood_planks"
+    }
+  },
+  "pattern": [
+    "pp",
+    "pp",
+    "pp"
+  ],
+  "result": {
+    "count": 3,
+    "item": "ollivanders:redwood_door"
+  },
+  "show_notification": true
+}

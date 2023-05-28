@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "ollivanders:laurel_planks"
+    }
+  },
+  "pattern": [
+    "pp"
+  ],
+  "result": {
+    "item": "ollivanders:laurel_pressure_plate"
+  },
+  "show_notification": true
+}

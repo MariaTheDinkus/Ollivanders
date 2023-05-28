@@ -12,6 +12,11 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven { url = 'https://maven.minecraftforge.net/' }
+	maven {
+		name = 'TerraformersMC'
+		url = 'https://maven.terraformersmc.com/'
+	}
 }
 
 dependencies {
@@ -23,10 +28,13 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// Uncomment the following line to enable the deprecated Fabric API modules. 
-	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
+	modImplementation ("com.terraformersmc:biolith:1.0.0-alpha.2") {
+		exclude group: 'com.github.glitchfiend', module: 'TerraBlender-fabric'
+	}
 
-	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+//	modRuntimeOnly files("$projectDir/mods/architectury-9.0.5-fabric.jar")
+//	modRuntimeOnly files("$projectDir/mods/cloth-config-11.0.98-fabric.jar")
+//	modRuntimeOnly files("$projectDir/mods/RoughlyEnoughItems-12.0.9999.jar")
 }
 
 base {

@@ -12,15 +12,22 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.property.Properties;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.block.ChildFlooFireBlock;
+import to.tinypota.ollivanders.common.block.CoreBlock;
 import to.tinypota.ollivanders.common.block.FlooFireBlock;
+import to.tinypota.ollivanders.common.block.sapling.LaurelSaplingGenerator;
+import to.tinypota.ollivanders.common.block.sapling.RedwoodSaplingGenerator;
 import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
 import to.tinypota.ollivanders.registry.builder.WoodBlockStorage;
 
 public class OllivandersBlocks {
-	public static final WoodBlockStorage LAUREL_WOOD = WoodBlockRegistry.registerWood("Laurel", "laurel", MapColor.BROWN, MapColor.BROWN);
-	public static final WoodBlockStorage REDWOOD = WoodBlockRegistry.registerWood("Redwood", "redwood", MapColor.DARK_RED, MapColor.DARK_RED);
+	public static final WoodBlockStorage LAUREL_WOOD = WoodBlockRegistry.registerWood("Laurel", "laurel", new LaurelSaplingGenerator(), MapColor.BROWN, MapColor.BROWN);
+	public static final WoodBlockStorage REDWOOD = WoodBlockRegistry.registerWood("Redwood", "redwood", new RedwoodSaplingGenerator(), MapColor.DARK_RED, MapColor.DARK_RED);
 	public static final FlooFireBlock FLOO_FIRE = register("floo_fire", new FlooFireBlock(FabricBlockSettings.create().mapColor(MapColor.EMERALD_GREEN).noCollision().strength(0.2f).luminance(state -> state.get(Properties.LIT) ? 15 : 0).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.BLOCK)));
 	public static final ChildFlooFireBlock CHILD_FLOO_FIRE = register("child_floo_fire", new ChildFlooFireBlock(FabricBlockSettings.create().mapColor(MapColor.EMERALD_GREEN).noCollision().strength(0.2f).luminance(state -> state.get(Properties.LIT) ? 15 : 0).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.BLOCK)));
+	
+	public static final CoreBlock PHOENIX_FEATHER_BLOCK = register("phoenix_feather", new CoreBlock(Ollivanders.id("phoenix_feather"), FabricBlockSettings.create().luminance(7).noBlockBreakParticles().noCollision().breakInstantly()));
+	public static final CoreBlock THESTRAL_TAIL_HAIR_BLOCK = register("thestral_tail_hair", new CoreBlock(Ollivanders.id("thestral_tail_hair"), FabricBlockSettings.create().luminance(7).noBlockBreakParticles().noCollision().breakInstantly()));
+	public static final CoreBlock UNICORN_TAIL_HAIR_BLOCK = register("unicorn_tail_hair", new CoreBlock(Ollivanders.id("unicorn_tail_hair"), FabricBlockSettings.create().luminance(7).noBlockBreakParticles().noCollision().breakInstantly()));
 	
 	public static void init() {
 	

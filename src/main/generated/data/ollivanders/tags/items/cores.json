@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:ender_pearl",
+    "minecraft:blaze_powder",
+    "minecraft:ender_eye",
+    "minecraft:heart_of_the_sea",
+    "ollivanders:dragon_heartstring",
+    "ollivanders:unicorn_tail_hair",
+    "ollivanders:phoenix_feather",
+    "ollivanders:thestral_tail_hair"
+  ]
+}

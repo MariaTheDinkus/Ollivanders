@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "ollivanders:laurel_log",
+    "ollivanders:laurel_wood",
+    "ollivanders:stripped_laurel_log",
+    "ollivanders:stripped_laurel_wood"
+  ]
+}

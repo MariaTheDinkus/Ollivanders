@@ -1,7 +1,11 @@
 package to.tinypota.ollivanders.registry.common;
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import to.tinypota.ollivanders.api.floo.FlooActivation;
@@ -11,6 +15,13 @@ import to.tinypota.ollivanders.common.item.WandItem;
 
 public class OllivandersEvents {
 	public static void init() {
+		ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
+			if (entity instanceof EnderDragonEntity) {
+				var itemEntity = new ItemEntity(entity.getWorld(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(OllivandersItems.DRAGON_HEARTSTRING, 3));
+				entity.getWorld().spawnEntity(itemEntity);
+			}
+		});
+		
 		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
 			var state = world.getBlockState(pos);
 			if (player.isCreative() && state.getBlock() instanceof FlooFireBlock) {

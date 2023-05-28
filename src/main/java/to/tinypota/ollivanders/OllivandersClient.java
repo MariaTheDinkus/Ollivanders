@@ -12,6 +12,7 @@ public class OllivandersClient implements ClientModInitializer {
 		OllivandersEvents.init();
 		OllivandersKeyBindings.init();
 		OllivandersEntityRenderers.init();
+		OllivandersBlockEntityRenderers.init();
 		OllivandersBlockRenderLayers.init();
 		OllivandersModels.init();
 		

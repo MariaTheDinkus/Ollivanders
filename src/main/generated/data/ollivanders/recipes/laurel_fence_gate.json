@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "ollivanders:laurel_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "sps",
+    "sps"
+  ],
+  "result": {
+    "item": "ollivanders:laurel_fence_gate"
+  },
+  "show_notification": true
+}

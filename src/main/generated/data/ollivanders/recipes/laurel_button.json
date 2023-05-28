@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ollivanders:laurel_planks"
+    }
+  ],
+  "result": {
+    "item": "ollivanders:laurel_button"
+  }
+}

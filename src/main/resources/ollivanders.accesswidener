@@ -4,3 +4,5 @@ accessible method net/minecraft/block/BlockSetType register (Lnet/minecraft/bloc
 accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
 
 accessible class net/minecraft/registry/Registries$Initializer
+
+accessible method net/minecraft/world/gen/foliage/FoliagePlacerType register (Ljava/lang/String;Lcom/mojang/serialization/Codec;)Lnet/minecraft/world/gen/foliage/FoliagePlacerType;

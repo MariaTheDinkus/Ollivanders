@@ -32,6 +32,8 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 			translationBuilder.add(storage.getButton(), storage.getTranslationName() + " Button");
 			translationBuilder.add(storage.getSapling(), storage.getTranslationName() + " Sapling");
 			translationBuilder.add(storage.getLeaves(), storage.getTranslationName() + " Leaves");
+			translationBuilder.add(storage.getSign(), storage.getTranslationName() + " Sign");
+			translationBuilder.add(storage.getHangingSign(), storage.getTranslationName() + " Hanging Sign");
 		}
 		
 		translationBuilder.add(OllivandersItems.OAK_WAND, "Oak Wand");

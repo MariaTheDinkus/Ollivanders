@@ -1,10 +1,12 @@
 package to.tinypota.ollivanders.registry.builder;
 
 import net.minecraft.block.*;
+import net.minecraft.data.family.BlockFamily;
 import net.minecraft.item.TallBlockItem;
 
 public class WoodBlockStorage {
 	private final String TRANSLATION_NAME;
+	private final String NAME;
 	private final SaplingBlock SAPLING;
 	private final LeavesBlock LEAVES;
 	private final PillarBlock LOG;
@@ -21,9 +23,15 @@ public class WoodBlockStorage {
 	private final ButtonBlock BUTTON;
 	private final TrapdoorBlock TRAPDOOR;
 	private final PressurePlateBlock PRESSURE_PLATE;
+	private final SignBlock SIGN;
+	private final WallSignBlock WALL_SIGN;
+	private final HangingSignBlock HANGING_SIGN;
+	private final WallHangingSignBlock WALL_HANGING_SIGN;
+	private final BlockFamily FAMILY;
 	
-	public WoodBlockStorage(String translationName, SaplingBlock sapling, LeavesBlock leaves, PillarBlock log, PillarBlock strippedLog, PillarBlock wood, PillarBlock strippedWood, Block planks, StairsBlock stairs, SlabBlock slab, FenceBlock fence, FenceGateBlock fenceGate, DoorBlock door, TallBlockItem doorItem, ButtonBlock button, TrapdoorBlock trapdoor, PressurePlateBlock pressurePlate) {
+	public WoodBlockStorage(String translationName, String name, SaplingBlock sapling, LeavesBlock leaves, PillarBlock log, PillarBlock strippedLog, PillarBlock wood, PillarBlock strippedWood, Block planks, StairsBlock stairs, SlabBlock slab, FenceBlock fence, FenceGateBlock fenceGate, DoorBlock door, TallBlockItem doorItem, ButtonBlock button, TrapdoorBlock trapdoor, PressurePlateBlock pressurePlate, SignBlock sign, WallSignBlock wallSign, HangingSignBlock hangingSign, WallHangingSignBlock wallHangingSign, BlockFamily family) {
 		TRANSLATION_NAME = translationName;
+		NAME = name;
 		SAPLING = sapling;
 		LEAVES = leaves;
 		LOG = log;
@@ -40,10 +48,19 @@ public class WoodBlockStorage {
 		BUTTON = button;
 		TRAPDOOR = trapdoor;
 		PRESSURE_PLATE = pressurePlate;
+		SIGN = sign;
+		WALL_SIGN = wallSign;
+		HANGING_SIGN = hangingSign;
+		WALL_HANGING_SIGN = wallHangingSign;
+		FAMILY = family;
 	}
 	
 	public String getTranslationName() {
 		return TRANSLATION_NAME;
+	}
+	
+	public String getName() {
+		return NAME;
 	}
 	
 	public SaplingBlock getSapling() {
@@ -108,5 +125,25 @@ public class WoodBlockStorage {
 	
 	public PressurePlateBlock getPressurePlate() {
 		return PRESSURE_PLATE;
+	}
+	
+	public SignBlock getSign() {
+		return SIGN;
+	}
+	
+	public WallSignBlock getWallSign() {
+		return WALL_SIGN;
+	}
+	
+	public HangingSignBlock getHangingSign() {
+		return HANGING_SIGN;
+	}
+	
+	public WallHangingSignBlock getWallHangingSign() {
+		return WALL_HANGING_SIGN;
+	}
+	
+	public BlockFamily getFamily() {
+		return FAMILY;
 	}
 }

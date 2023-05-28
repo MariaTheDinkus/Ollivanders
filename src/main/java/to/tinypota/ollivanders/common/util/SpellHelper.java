@@ -6,6 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.api.wand.WandMatchLevel;
+import to.tinypota.ollivanders.common.item.WandItem;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
@@ -78,13 +79,16 @@ public class SpellHelper {
 	public static double getCastPercentage(ServerPlayerEntity player) {
 		var serverState = OllivandersServerState.getServerState(player.getServer());
 		var currentSpell = SpellHelper.getCurrentSpell(player);
-		var wandMatchLevel = WandHelper.getWandMatch(player.getMainHandStack(), player);
-		var powerLevel = serverState.getPowerLevel(player);
-		var skillLevel = serverState.getSkillLevel(player, currentSpell);
-		var castPercentage = 1 * wandMatchLevel.getDefaultCastPercentage() - (currentSpell.hasCustomCastPercents() ? currentSpell.getCustomCastPercents(powerLevel) : powerLevel.getCastPercentageSubtractor());
-		castPercentage += skillLevel / 100 / 10;
-		castPercentage = Math.max(0, Math.min(castPercentage, 1));
-		
-		return castPercentage;
+		if (!player.getMainHandStack().isEmpty() && player.getMainHandStack().getItem() instanceof WandItem) {
+			var wandMatchLevel = WandHelper.getWandMatch(player.getMainHandStack(), player);
+			var powerLevel = serverState.getPowerLevel(player);
+			var skillLevel = serverState.getSkillLevel(player, currentSpell);
+			var castPercentage = 1 * wandMatchLevel.getDefaultCastPercentage() - (currentSpell.hasCustomCastPercents() ? currentSpell.getCustomCastPercents(powerLevel) : powerLevel.getCastPercentageSubtractor());
+			castPercentage += skillLevel / 100 / 10;
+			castPercentage = Math.max(0, Math.min(castPercentage, 1));
+			
+			return castPercentage;
+		}
+		return -1;
 	}
 }

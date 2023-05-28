@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "minecraft:chain"
+    },
+    "s": {
+      "item": "ollivanders:stripped_laurel_log"
+    }
+  },
+  "pattern": [
+    "c c",
+    "sss",
+    "sss"
+  ],
+  "result": {
+    "count": 6,
+    "item": "ollivanders:laurel_hanging_sign"
+  },
+  "show_notification": true
+}

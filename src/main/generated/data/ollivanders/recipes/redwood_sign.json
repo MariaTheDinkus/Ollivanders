@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "ollivanders:redwood_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "ppp",
+    " s "
+  ],
+  "result": {
+    "count": 3,
+    "item": "ollivanders:redwood_sign"
+  },
+  "show_notification": true
+}

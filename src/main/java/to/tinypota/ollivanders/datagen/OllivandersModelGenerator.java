@@ -6,6 +6,7 @@ import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
 import net.minecraft.data.client.TexturedModel;
+import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
 import to.tinypota.ollivanders.registry.common.OllivandersItems;
 
@@ -20,10 +21,11 @@ public class OllivandersModelGenerator extends FabricModelProvider {
 			blockStateModelGenerator.registerLog(storage.getLog()).log(storage.getLog()).wood(storage.getWood());
 			blockStateModelGenerator.registerLog(storage.getStrippedLog()).log(storage.getStrippedLog()).wood(storage.getStrippedWood());
 			blockStateModelGenerator.registerTintableCross(storage.getSapling(), BlockStateModelGenerator.TintType.NOT_TINTED);
-			blockStateModelGenerator.registerCubeAllModelTexturePool(storage.getPlanks()).stairs(storage.getStairs()).slab(storage.getSlab()).fence(storage.getFence()).fenceGate(storage.getFenceGate()).button(storage.getButton()).pressurePlate(storage.getPressurePlate());
-			blockStateModelGenerator.registerDoor(storage.getDoor());
-			blockStateModelGenerator.registerTrapdoor(storage.getTrapdoor());
+			blockStateModelGenerator.registerCubeAllModelTexturePool(storage.getPlanks()).family(storage.getFamily());
+			//blockStateModelGenerator.registerDoor(storage.getDoor());
+			//blockStateModelGenerator.registerTrapdoor(storage.getTrapdoor());
 			blockStateModelGenerator.registerSingleton(storage.getLeaves(), TexturedModel.LEAVES);
+			blockStateModelGenerator.registerHangingSign(storage.getStrippedLog(), storage.getHangingSign(), storage.getWallHangingSign());
 		}
 	}
 	

@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "ollivanders:oak_wand",
+    "ollivanders:spruce_wand",
+    "ollivanders:birch_wand",
+    "ollivanders:jungle_wand",
+    "ollivanders:acacia_wand",
+    "ollivanders:dark_oak_wand",
+    "ollivanders:mangrove_wand",
+    "ollivanders:cherry_wand",
+    "ollivanders:laurel_wand",
+    "ollivanders:redwood_wand",
+    "ollivanders:crimson_wand",
+    "ollivanders:warped_wand",
+    "ollivanders:vine_wand"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:laurel_logs"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "ollivanders:laurel_planks"
+  }
+}

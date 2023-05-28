@@ -21,6 +21,9 @@
     "fabric-datagen": [
       "to.tinypota.ollivanders.datagen.OllivandersDatagen"
     ],
+    "terrablender": [
+      "to.tinypota.ollivanders.OllivandersTerraBlender"
+    ],
     "main": [
       "to.tinypota.ollivanders.Ollivanders"
     ],

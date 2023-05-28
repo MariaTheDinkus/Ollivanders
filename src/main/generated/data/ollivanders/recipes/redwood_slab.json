@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "ollivanders:redwood_planks"
+    }
+  },
+  "pattern": [
+    "ppp"
+  ],
+  "result": {
+    "count": 6,
+    "item": "ollivanders:redwood_slab"
+  },
+  "show_notification": true
+}
