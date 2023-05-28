@@ -83,8 +83,8 @@ public class OllivandersNetworking {
 							var castPercentage = SpellHelper.getCastPercentage(player);
 							Random rand = new Random();
 							double randomValue = rand.nextDouble();
-							cooldownManager.set(stack.getItem(), 15);
 							if (randomValue <= castPercentage) {
+								cooldownManager.set(stack.getItem(), 15);
 								player.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
 								serverState.addSkillLevel(player, currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
 								if (currentSpell.getType() == SpellType.SELF) {
@@ -116,7 +116,9 @@ public class OllivandersNetworking {
 									SpellHelper.emptyCurrentSpell(player);
 								}
 							} else {
+								cooldownManager.set(stack.getItem(), 30);
 								player.sendMessage(Text.literal("Your wand doesn't seem to obey you..."), true);
+								SpellHelper.emptyCurrentSpell(player);
 							}
 						}
 					}
