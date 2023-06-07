@@ -17,6 +17,11 @@ repositories {
 		name = 'TerraformersMC'
 		url = 'https://maven.terraformersmc.com/'
 	}
+	maven { url "https://maven.shedaniel.me" }
+	maven {
+		name = "CottonMC"
+		url = "https://server.bbkr.space/artifactory/libs-release"
+	}
 }
 
 dependencies {
@@ -28,13 +33,15 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation ("com.terraformersmc:Biolith:0.0.1-alpha.7") {
+	modImplementation ("com.terraformersmc:Biolith:${project.biolith_version}") {
 		exclude group: 'com.github.glitchfiend', module: 'TerraBlender-fabric'
 	}
 
-//	modRuntimeOnly files("$projectDir/mods/architectury-9.0.5-fabric.jar")
-//	modRuntimeOnly files("$projectDir/mods/cloth-config-11.0.98-fabric.jar")
-//	modRuntimeOnly files("$projectDir/mods/RoughlyEnoughItems-12.0.9999.jar")
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
+	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+
+	modImplementation include("io.github.cottonmc:LibGui:${project.libgui_version}")
 }
 
 base {
