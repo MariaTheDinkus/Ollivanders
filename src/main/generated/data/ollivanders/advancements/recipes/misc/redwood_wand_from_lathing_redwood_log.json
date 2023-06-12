@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_redwood_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "ollivanders:redwood_log"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:redwood_wand_from_lathing_redwood_log"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_redwood_log",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:redwood_wand_from_lathing_redwood_log"
+    ]
+  },
+  "sends_telemetry_event": false
+}

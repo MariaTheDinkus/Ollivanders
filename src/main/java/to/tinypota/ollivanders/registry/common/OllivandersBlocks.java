@@ -22,7 +22,7 @@ import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
 import to.tinypota.ollivanders.registry.builder.WoodBlockStorage;
 
 public class OllivandersBlocks {
-	public static final LatheBlock LATHE = register("lathe", new LatheBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS)), new Item.Settings());
+	public static final LatheBlock LATHE = register("lathe", new LatheBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).nonOpaque()), new Item.Settings());
 	
 	public static final WoodBlockStorage LAUREL_WOOD = WoodBlockRegistry.registerWood("Laurel", "laurel", new LaurelSaplingGenerator(), MapColor.BROWN, MapColor.BROWN);
 	public static final WoodBlockStorage REDWOOD = WoodBlockRegistry.registerWood("Redwood", "redwood", new RedwoodSaplingGenerator(), MapColor.DARK_RED, MapColor.DARK_RED);

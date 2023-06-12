@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -26,11 +25,11 @@ import java.util.List;
 
 public class WandItem extends Item {
 	private static final String KEY_PLAYER_UUID = "player_uuid";
-	private final Block woodPlanks;
+	private final Block[] craftBlocks;
 	
-	public WandItem(Block woodPlanks, Settings settings) {
+	public WandItem(Settings settings, Block... craftBlocks) {
 		super(settings);
-		this.woodPlanks = woodPlanks;
+		this.craftBlocks = craftBlocks;
 	}
 	
 	@Override
@@ -38,8 +37,8 @@ public class WandItem extends Item {
 		return super.getTranslationKey();
 	}
 	
-	public Block getWoodPlanks() {
-		return woodPlanks;
+	public Block[] getCraftBlocks() {
+		return craftBlocks;
 	}
 	
 	@Override

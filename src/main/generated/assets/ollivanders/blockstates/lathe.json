@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "ollivanders:block/lathe",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ollivanders:block/lathe"
+    },
+    "facing=south": {
+      "model": "ollivanders:block/lathe",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ollivanders:block/lathe",
+      "y": 270
+    }
+  }
+}

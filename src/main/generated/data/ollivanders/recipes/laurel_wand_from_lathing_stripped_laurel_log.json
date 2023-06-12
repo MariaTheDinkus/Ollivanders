@@ -1,0 +1,10 @@
+{
+  "type": "ollivanders:lathe",
+  "category": "misc",
+  "cookingtime": 150,
+  "experience": 0.15,
+  "ingredient": {
+    "item": "ollivanders:stripped_laurel_log"
+  },
+  "result": "ollivanders:laurel_wand"
+}

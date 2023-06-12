@@ -3,6 +3,7 @@ package to.tinypota.ollivanders.registry.common;
 import com.terraformersmc.biolith.api.biome.BiomePlacement;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -29,6 +30,10 @@ public class OllivandersFeatures {
 	public static final RandomCoreFeature UNICORN_TAIL_HAIR = register("unicorn_tail_hair", new RandomCoreFeature(OllivandersBlocks.UNICORN_TAIL_HAIR_BLOCK, DefaultFeatureConfig.CODEC));
 	
 	public static void init() {
+		// Only run below code when a fabric-api.datagen property is not set, so that the datagen does not fail.
+		if (FabricLoader.getInstance().isDevelopmentEnvironment() && System.getProperty("fabric-api.datagen") != null)
+			return;
+		
 		BiomePlacement.replaceOverworld(BiomeKeys.FOREST, RegistryKey.of(RegistryKeys.BIOME, Ollivanders.id("redwood_forest")), 0.35);
 		BiomePlacement.replaceOverworld(BiomeKeys.BIRCH_FOREST, RegistryKey.of(RegistryKeys.BIOME, Ollivanders.id("laurel_forest")), 0.35);
 		

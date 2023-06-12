@@ -36,5 +36,7 @@ public class Ollivanders implements ModInitializer {
 		OllivandersParticleTypes.init();
 		OllivandersFeatures.init();
 		OllivandersFoliagePlacerTypes.init();
+		OllivandersRecipeTypes.init();
+		OllivandersRecipeSerializers.init();
 	}
 }

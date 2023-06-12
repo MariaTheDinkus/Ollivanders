@@ -8,6 +8,7 @@ import net.minecraft.data.client.Models;
 import net.minecraft.data.client.TexturedModel;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
+import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 import to.tinypota.ollivanders.registry.common.OllivandersItems;
 
 public class OllivandersModelGenerator extends FabricModelProvider {
@@ -27,6 +28,8 @@ public class OllivandersModelGenerator extends FabricModelProvider {
 			blockStateModelGenerator.registerSingleton(storage.getLeaves(), TexturedModel.LEAVES);
 			blockStateModelGenerator.registerHangingSign(storage.getStrippedLog(), storage.getHangingSign(), storage.getWallHangingSign());
 		}
+		
+		blockStateModelGenerator.registerNorthDefaultHorizontalRotation(OllivandersBlocks.LATHE);
 	}
 	
 	@Override

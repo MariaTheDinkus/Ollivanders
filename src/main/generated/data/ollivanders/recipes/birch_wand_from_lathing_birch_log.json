@@ -1,0 +1,10 @@
+{
+  "type": "ollivanders:lathe",
+  "category": "misc",
+  "cookingtime": 150,
+  "experience": 0.15,
+  "ingredient": {
+    "item": "minecraft:birch_log"
+  },
+  "result": "ollivanders:birch_wand"
+}
