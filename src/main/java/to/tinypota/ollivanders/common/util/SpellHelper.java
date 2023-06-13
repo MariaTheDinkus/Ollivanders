@@ -54,7 +54,7 @@ public class SpellHelper {
 	public static Spell getSpellByName(String name) {
 		var matchedSpell = new AtomicReference<>(Spell.EMPTY);
 		OllivandersRegistries.SPELL.forEach(spell -> {
-			if (spell.getCastName().equals(name)) {
+			if (spell.getCastName().equals(name.toLowerCase())) {
 				matchedSpell.set(spell);
 			}
 		});
@@ -64,7 +64,7 @@ public class SpellHelper {
 	public static Spell getSpellFromMessage(String message) {
 		var matchedSpell = new AtomicReference<>(Spell.EMPTY);
 		OllivandersRegistries.SPELL.forEach(spell -> {
-			if (message.startsWith(spell.getCastName())) {
+			if (message.toLowerCase().startsWith(spell.getCastName())) {
 				matchedSpell.set(spell);
 			}
 		});

@@ -5,7 +5,5 @@ accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/Wo
 
 accessible class net/minecraft/registry/Registries$Initializer
 
-accessible method net/minecraft/world/gen/foliage/FoliagePlacerType register (Ljava/lang/String;Lcom/mojang/serialization/Codec;)Lnet/minecraft/world/gen/foliage/FoliagePlacerType;
-
 accessible method net/minecraft/data/server/recipe/CookingRecipeJsonBuilder <init> (Lnet/minecraft/recipe/book/RecipeCategory;Lnet/minecraft/recipe/book/CookingRecipeCategory;Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/recipe/Ingredient;FILnet/minecraft/recipe/RecipeSerializer;)V
 accessible method net/minecraft/data/server/recipe/CookingRecipeJsonBuilder getCookingRecipeCategory (Lnet/minecraft/recipe/RecipeSerializer;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/recipe/book/CookingRecipeCategory;

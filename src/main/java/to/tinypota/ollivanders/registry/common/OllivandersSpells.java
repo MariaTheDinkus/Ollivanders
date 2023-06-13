@@ -17,8 +17,8 @@ public class OllivandersSpells {
 	public static final Spell AVADA_KEDAVRA = register("avada_kedavra", new AvadaKedavraSpell("avada kedavra", new Spell.Settings().type(SpellType.PROJECTILE).customCastPercents()));
 	public static final Spell ACCIO = register("accio", new AccioSpell("accio", new Spell.Settings().type(SpellType.RAYCAST)));
 	public static final Spell EXPELLIARMUS = register("expelliarmus", new ExpelliarmusSpell("expelliarmus", new Spell.Settings().type(SpellType.PROJECTILE)));
-	public static final Spell EPISKEY = register("episkey", new IncendioSpell("episkey", new Spell.Settings().type(SpellType.PROJECTILE).customCastPercents()));
-	public static final Spell AGUAMENTI = register("aguamenti", new IncendioSpell("aguamenti", new Spell.Settings().type(SpellType.PROJECTILE).customCastPercents()));
+	public static final Spell EPISKEY = register("episkey", new EpiskeySpell("episkey", new Spell.Settings().type(SpellType.PROJECTILE).customCastPercents()));
+	public static final Spell AGUAMENTI = register("aguamenti", new AguamentiSpell("aguamenti", new Spell.Settings().type(SpellType.PROJECTILE).customCastPercents()));
 	
 	public static void init() {
 	

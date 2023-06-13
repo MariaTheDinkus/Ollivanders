@@ -33,8 +33,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation include("com.terraformersmc:Biolith:${project.biolith_version}") {
-		exclude group: 'com.github.glitchfiend', module: 'TerraBlender-fabric'
+	modImplementation("com.terraformersmc:biolith:${project.biolith_version}") {
+		exclude(group: "com.github.glitchfiend")
 	}
 
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"

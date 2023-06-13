@@ -4,7 +4,7 @@
   "package": "to.tinypota.ollivanders.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "common.MixinPlayerManager"
+    "common.FoliagePlacerTypeInvoker"
   ],
   "client": [
     "client.MinecraftClientMixin"
