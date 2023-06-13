@@ -26,6 +26,9 @@
     ],
     "client": [
       "to.tinypota.ollivanders.OllivandersClient"
+    ],
+    "rei_client": [
+      "to.tinypota.ollivanders.compat.OllivandersREI"
     ]
   },
   "mixins": [

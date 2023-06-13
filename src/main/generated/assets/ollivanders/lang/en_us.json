@@ -1,4 +1,5 @@
 {
+  "block.ollivanders.lathe": "Lathe",
   "block.ollivanders.laurel_button": "Laurel Button",
   "block.ollivanders.laurel_door": "Laurel Door",
   "block.ollivanders.laurel_fence": "Laurel Fence",
@@ -33,6 +34,7 @@
   "block.ollivanders.stripped_laurel_wood": "Laurel Stripped Wood",
   "block.ollivanders.stripped_redwood_log": "Redwood Stripped Log",
   "block.ollivanders.stripped_redwood_wood": "Redwood Stripped Wood",
+  "category.rei.lathe": "Lathe",
   "item.ollivanders.acacia_wand": "Acacia Wand",
   "item.ollivanders.birch_wand": "Birch Wand",
   "item.ollivanders.cherry_wand": "Cherry Wand",

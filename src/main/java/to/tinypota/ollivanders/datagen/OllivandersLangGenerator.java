@@ -3,6 +3,7 @@ package to.tinypota.ollivanders.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
+import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 import to.tinypota.ollivanders.registry.common.OllivandersItemGroups;
 import to.tinypota.ollivanders.registry.common.OllivandersItems;
 
@@ -15,6 +16,8 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 	public void generateTranslations(TranslationBuilder translationBuilder) {
 		translationBuilder.add(OllivandersItemGroups.OLLIVANDERS_KEY, "Ollivanders");
 		translationBuilder.add(OllivandersItemGroups.OLLIVANDERS_WANDS_KEY, "Ollivanders Wands");
+		
+		translationBuilder.add("category.rei.lathe", "Lathe");
 		
 		for (var storage : WoodBlockRegistry.WOOD_BLOCK_STORAGES) {
 			translationBuilder.add(storage.getLog(), storage.getTranslationName() + " Log");
@@ -35,6 +38,8 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 			translationBuilder.add(storage.getSign(), storage.getTranslationName() + " Sign");
 			translationBuilder.add(storage.getHangingSign(), storage.getTranslationName() + " Hanging Sign");
 		}
+		
+		translationBuilder.add(OllivandersBlocks.LATHE, "Lathe");
 		
 		translationBuilder.add(OllivandersItems.OAK_WAND, "Oak Wand");
 		translationBuilder.add(OllivandersItems.SPRUCE_WAND, "Spruce Wand");

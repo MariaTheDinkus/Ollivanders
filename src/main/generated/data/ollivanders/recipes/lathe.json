@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "l": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "pattern": [
+    "lil",
+    "l l",
+    "lil"
+  ],
+  "result": {
+    "item": "ollivanders:lathe"
+  },
+  "show_notification": true
+}

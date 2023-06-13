@@ -1,4 +1,4 @@
-// 1.20	2023-06-10T12:16:23.7994953	Ollivanders/Tags for minecraft:block
+// 1.20.1	2023-06-12T19:49:37.5818183	Ollivanders/Tags for minecraft:block
 460d5dd452610590dc53b5a6dcf9ba29f6657baa data\minecraft\tags\blocks\wooden_doors.json
 9695e8001fbf8c25172e4ba9b8703ce0895375ce data\minecraft\tags\blocks\wooden_slabs.json
 7515c8ba3a17a0f4ecaea3f78ca56b36eeba12c9 data\minecraft\tags\blocks\ceiling_hanging_signs.json
@@ -16,5 +16,5 @@ d11078fa944604e827ced3c299b50d96fb8bb6af data\minecraft\tags\blocks\wooden_trapd
 7e0f7dc8a9f1ed96c5e9d4a86fe0296bd8fb2f90 data\minecraft\tags\blocks\wooden_fences.json
 bd909cf07cc514dd4991d60eb6900aa7c49e59f8 data\minecraft\tags\blocks\planks.json
 c4d0fff19c549dd5b5f395458584ad753fcd447f data\minecraft\tags\blocks\overworld_natural_logs.json
-f82164ed50009f5e37045486a308cf69763e3003 data\minecraft\tags\blocks\wooden_buttons.json
 3f915ed27494d062479b9667bc72851a6a74a7ff data\c\tags\blocks\laurel_logs.json
+f82164ed50009f5e37045486a308cf69763e3003 data\minecraft\tags\blocks\wooden_buttons.json

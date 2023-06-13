@@ -10,10 +10,12 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.common.recipe.OllivandersCookingRecipeJsonBuilder;
 import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
+import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 import to.tinypota.ollivanders.registry.common.OllivandersItems;
 import to.tinypota.ollivanders.registry.common.OllivandersRecipeSerializers;
 
@@ -52,6 +54,8 @@ public class OllivandersRecipeGenerator extends FabricRecipeProvider {
 			var wand = entry.getObject();
 			offerLathe(exporter, List.of(wand.getCraftBlocks()), RecipeCategory.MISC, wand, 0.15F, 150, "");
 		}
+		
+		ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OllivandersBlocks.LATHE, 1).input('l', ItemTags.LOGS).input('i', Items.IRON_INGOT).pattern("lil").pattern("l l").pattern("lil").criterion("has_logs", VanillaRecipeProvider.conditionsFromTag(ItemTags.LOGS)).offerTo(exporter);
 	}
 	
 	public static void offerLathe(Consumer<RecipeJsonProvider> exporter, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {

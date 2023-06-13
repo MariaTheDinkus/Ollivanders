@@ -12,6 +12,7 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.registry.builder.WoodBlockRegistry;
+import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -43,5 +44,7 @@ public class OllivandersLootTableGenerator extends FabricBlockLootTableProvider 
 			addDrop(storage.getSapling());
 			addDrop(storage.getLeaves(), block -> leavesDrops(block, storage.getSapling(), SAPLING_DROP_CHANCE));
 		}
+		
+		addDrop(OllivandersBlocks.LATHE);
 	}
 }

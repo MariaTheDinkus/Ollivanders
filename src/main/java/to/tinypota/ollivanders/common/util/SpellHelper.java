@@ -3,6 +3,7 @@ package to.tinypota.ollivanders.common.util;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.Vec3d;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.api.wand.WandMatchLevel;
@@ -90,5 +91,18 @@ public class SpellHelper {
 			return castPercentage;
 		}
 		return -1;
+	}
+	
+	public static Vec3d getRotationVector(Vec3d startPos, Vec3d endPos) {
+		// Calculate the difference vector
+		Vec3d diff = endPos.subtract(startPos);
+		
+		// Calculate the length of the vector
+		double length = Math.sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+		
+		// Normalize the difference vector
+		Vec3d normalized = new Vec3d(diff.x / length, diff.y / length, diff.z / length);
+		
+		return normalized;
 	}
 }
