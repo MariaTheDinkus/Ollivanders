@@ -23,11 +23,11 @@ public class OllivandersFlooState {
 	}
 	
 	public void addFlooPosition(String name, BlockPos pos, Direction direction, Identifier dimension, boolean chosenRandomly) {
-		flooPositions.put(name, new FlooPosStorage(pos, direction, dimension, chosenRandomly));
+		flooPositions.put(name.toLowerCase(), new FlooPosStorage(pos, direction, dimension, chosenRandomly));
 	}
 	
 	public void removeFlooPosition(String name) {
-		flooPositions.remove(name);
+		flooPositions.remove(name.toLowerCase());
 	}
 	
 	public void removeFlooByPos(BlockPos pos) {
@@ -46,7 +46,7 @@ public class OllivandersFlooState {
 	
 	@Nullable
 	public FlooPosStorage getFlooByNameOrRandom(String name) {
-		var flooPosByName = getFlooPosByName(name);
+		var flooPosByName = getFlooPosByName(name.toLowerCase());
 		
 		if (flooPosByName != null) {
 			return flooPosByName;
@@ -61,8 +61,7 @@ public class OllivandersFlooState {
 	public FlooPosStorage getFlooPosByName(String name) {
 		var returnPos = new AtomicReference<FlooPosStorage>();
 		flooPositions.forEach((flooName, storage) -> {
-			
-			if (flooName.equals(name)) {
+			if (flooName.equalsIgnoreCase(name)) {
 				returnPos.set(storage);
 			}
 		});

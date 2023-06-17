@@ -1,0 +1,84 @@
+{
+    "multipart": [
+        {   "when": {"facing": "north", "half": "lower"},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_bottom" }
+            ]
+        },
+		{   "when": {"facing": "east", "half": "lower"},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_bottom", "y": 90 }
+            ]
+        },
+		{   "when": {"facing": "south", "half": "lower"},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_bottom", "y": 180 }
+            ]
+        },
+		{   "when": {"facing": "west", "half": "lower"},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_bottom", "y": 270 }
+            ]
+        },
+		{   "when": {"facing": "north", "half": "upper"},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_top" }
+            ]
+        },
+		{   "when": {"facing": "east", "half": "upper"},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_top", "y": 90 }
+            ]
+        },
+		{   "when": {"facing": "south", "half": "upper"},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_top", "y": 180 }
+            ]
+        },
+		{   "when": {"facing": "west", "half": "upper"},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_top", "y": 270 }
+            ]
+        },
+		{   "when": {"facing": "north", "half": "lower", "open": false},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_door_bottom" }
+            ]
+        },
+		{   "when": {"facing": "east", "half": "lower", "open": false},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_door_bottom", "y": 90 }
+            ]
+        },
+		{   "when": {"facing": "south", "half": "lower", "open": false},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_door_bottom", "y": 180 }
+            ]
+        },
+		{   "when": {"facing": "west", "half": "lower", "open": false},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_door_bottom", "y": 270 }
+            ]
+        },
+		{   "when": {"facing": "north", "half": "upper", "open": false},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_door_top" }
+            ]
+        },
+		{   "when": {"facing": "east", "half": "upper", "open": false},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_door_top", "y": 90 }
+            ]
+        },
+		{   "when": {"facing": "south", "half": "upper", "open": false},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_door_top", "y": 180 }
+            ]
+        },
+		{   "when": {"facing": "west", "half": "upper", "open": false},
+            "apply": [
+                { "model": "ollivanders:block/vanishing_cabinet_door_top", "y": 270 }
+            ]
+        }
+    ]
+}

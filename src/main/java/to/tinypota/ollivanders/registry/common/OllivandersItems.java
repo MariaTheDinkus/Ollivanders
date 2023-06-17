@@ -10,12 +10,17 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Rarity;
 import to.tinypota.ollivanders.Ollivanders;
+import to.tinypota.ollivanders.common.item.CabinetCoreItem;
+import to.tinypota.ollivanders.common.item.SplitCabinetCoreItem;
 import to.tinypota.ollivanders.common.item.WandItem;
 import to.tinypota.ollivanders.common.util.WandCraftHelper;
 import to.tinypota.ollivanders.common.util.WeightedRandomBag;
 
 public class OllivandersItems {
 	public static final WeightedRandomBag<WandItem> WANDS = new WeightedRandomBag<>();
+	
+	public static final Item CABINET_CORE = register("cabinet_core", new CabinetCoreItem(new Item.Settings().maxCount(1)));
+	public static final Item SPLIT_CABINET_CORE = register("split_cabinet_core", new SplitCabinetCoreItem(new Item.Settings().maxCount(2)), null);
 	
 	public static final WandItem OAK_WAND = register("oak_wand", new WandItem(new Item.Settings().maxCount(1).fireproof(), Blocks.OAK_LOG, Blocks.STRIPPED_OAK_LOG), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
 	public static final WandItem SPRUCE_WAND = register("spruce_wand", new WandItem(new Item.Settings().maxCount(1).fireproof(), Blocks.SPRUCE_LOG, Blocks.STRIPPED_SPRUCE_LOG), OllivandersItemGroups.OLLIVANDERS_WANDS_KEY);
@@ -59,9 +64,11 @@ public class OllivandersItems {
 	
 	public static <I extends Item> I register(String name, I item, RegistryKey<ItemGroup> group) {
 		I result = Registry.register(Registries.ITEM, Ollivanders.id(name), item);
-		OllivandersItemGroups.addToItemGroup(group, item);
-		if (item instanceof WandItem) {
-			OllivandersItemGroups.addWandsToItemGroup(item);
+		if (group != null) {
+			OllivandersItemGroups.addToItemGroup(group, item);
+			if (item instanceof WandItem) {
+				OllivandersItemGroups.addWandsToItemGroup(item);
+			}
 		}
 		return result;
 	}

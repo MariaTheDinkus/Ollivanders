@@ -12,12 +12,14 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	mavenCentral()
 	maven { url = 'https://maven.minecraftforge.net/' }
 	maven {
 		name = 'TerraformersMC'
 		url = 'https://maven.terraformersmc.com/'
 	}
 	maven { url "https://maven.shedaniel.me" }
+	maven { url 'https://jitpack.io' }
 	maven {
 		name = "CottonMC"
 		url = "https://server.bbkr.space/artifactory/libs-release"
@@ -42,6 +44,19 @@ dependencies {
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 
 	modImplementation include("io.github.cottonmc:LibGui:${project.libgui_version}")
+
+	modImplementation ('com.github.iPortalTeam.ImmersivePortalsMod:imm_ptl_core:v3.0.2-mc1.20'){
+		exclude(group: "net.fabricmc.fabric-api")
+		transitive(false)
+	}
+
+	modImplementation ('com.github.iPortalTeam.ImmersivePortalsMod:q_misc_util:v3.0.2-mc1.20'){
+		exclude(group: "net.fabricmc.fabric-api")
+		transitive(false)
+	}
+
+	api("com.github.LlamaLad7:MixinExtras:0.2.0-beta.8")
+	annotationProcessor("com.github.LlamaLad7:MixinExtras:0.2.0-beta.8")
 }
 
 base {

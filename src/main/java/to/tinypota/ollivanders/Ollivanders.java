@@ -38,5 +38,6 @@ public class Ollivanders implements ModInitializer {
 		OllivandersFoliagePlacerTypes.init();
 		OllivandersRecipeTypes.init();
 		OllivandersRecipeSerializers.init();
+		OllivandersScreenHandlers.init();
 	}
 }
