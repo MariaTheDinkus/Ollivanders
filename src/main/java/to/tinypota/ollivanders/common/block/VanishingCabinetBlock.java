@@ -68,25 +68,20 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 			
 			var open = state.get(OPEN);
 			Portal portal = Portal.entityType.create(world);
-			var originPos = new Vec3d(pos.getX(), pos.getY() + 1, pos.getZ());
-			var destPos = new Vec3d(pos.getX(), pos.getY() + 1, pos.getZ() - 10);
+			var originPos = new Vec3d(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			var axisW = new Vec3d(0, 0, 0);
 			if (facing == Direction.NORTH) {
 				axisW = new Vec3d(1, 0, 0);
-				originPos = originPos.add(0.5, 0, 0.5);
 			} else if (facing == Direction.EAST) {
 				axisW = new Vec3d(0, 0, 1);
-				originPos = originPos.add(0.5, 0, 0.5);
 			} else if (facing == Direction.SOUTH) {
 				axisW = new Vec3d(-1, 0, 0);
-				originPos = originPos.add(0.5, 0, 0.5);
 			} else if (facing == Direction.WEST) {
 				axisW = new Vec3d(0, 0, -1);
-				originPos = originPos.add(0.5, 0, 0.5);
 			}
 			portal.setOriginPos(originPos);
 			portal.setDestinationDimension(World.OVERWORLD);
-			portal.setDestination(destPos);
+			portal.setDestination(originPos);
 			portal.setOrientationAndSize(
 					axisW, // axisW
 					new Vec3d(0, 1, 0), // axisH
@@ -94,6 +89,7 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 					2 // height
 			);
 			portal.setIsVisible(false);
+			portal.setTeleportable(false);
 			portal.getWorld().spawnEntity(portal);
 		}
 		super.onPlaced(world, pos, state, placer, itemStack);
