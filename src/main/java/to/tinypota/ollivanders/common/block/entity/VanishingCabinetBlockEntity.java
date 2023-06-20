@@ -101,7 +101,7 @@ public class VanishingCabinetBlockEntity extends BlockEntity implements NamedScr
 									var storage = vanishingCabinetStorage.get();
 									var matchingCabinetVec = new Vec3d(matchingCabinetPos.getX() + 0.5, matchingCabinetPos.getY() + 1, matchingCabinetPos.getZ() + 0.5);
 									portal.setDestination(matchingCabinetVec);
-									portal.setDestinationDimension(RegistryKey.of(RegistryKeys.WORLD, storage.getDimension()));
+									portal.setDestinationDimension(RegistryKey.of(RegistryKeys.WORLD, matchingCabinet.getDimension()));
 									float rotation = 0;
 									if (storage.getDirection() == matchingCabinet.getDirection()) {
 										rotation = 180;
