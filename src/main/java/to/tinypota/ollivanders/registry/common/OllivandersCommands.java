@@ -73,7 +73,8 @@ public class OllivandersCommands {
 					.then(argument("player", EntityArgumentType.player())
 							.executes(context -> {
 								var player = EntityArgumentType.getPlayer(context, "player");
-								context.getSource().sendFeedback(() -> Text.literal("Their current preferred wand wood is " + OllivandersServerState.getSuitedWand(player)), false);
+								var playerState = OllivandersServerState.getPlayerState(context.getSource().getServer(), player);
+								context.getSource().sendFeedback(() -> Text.literal("Their current preferred wand wood is " + playerState.getSuitedWand()), false);
 								return 1;
 							})
 					)
@@ -85,6 +86,7 @@ public class OllivandersCommands {
 									.suggests(AVAILABLE_WANDS)
 									.executes(context -> {
 										var player = EntityArgumentType.getPlayer(context, "player");
+										var playerState = OllivandersServerState.getPlayerState(context.getSource().getServer(), player);
 										var wandId = IdentifierArgumentType.getIdentifier(context, "wand");
 										// Ensure the wand exists
 										var wand = (WandItem) Registries.ITEM.get(wandId);
@@ -92,7 +94,7 @@ public class OllivandersCommands {
 											context.getSource().sendFeedback(() -> Text.translatable("command.ollivanders.setwand.fail", wandId), false);
 											return 0;
 										}
-										OllivandersServerState.setSuitedWand(player, wandId.toString());
+										playerState.setSuitedWand(wandId.toString());
 										context.getSource().sendFeedback(() -> Text.translatable("command.ollivanders.setwand.success", player.getDisplayName(), Text.translatable(wand.getTranslationKey())), true);
 										return 1;
 									})
@@ -104,7 +106,8 @@ public class OllivandersCommands {
 					.then(argument("player", EntityArgumentType.player())
 							.executes(context -> {
 								var player = EntityArgumentType.getPlayer(context, "player");
-								context.getSource().sendFeedback(() -> Text.literal("Their current preferred core is " + OllivandersServerState.getSuitedCore(player)), false);
+								var playerState = OllivandersServerState.getPlayerState(context.getSource().getServer(), player);
+								context.getSource().sendFeedback(() -> Text.literal("Their current preferred core is " + playerState.getSuitedCore()), false);
 								return 1;
 							})
 					)
@@ -116,6 +119,7 @@ public class OllivandersCommands {
 									.suggests(AVAILABLE_CORES)
 									.executes(context -> {
 										var player = EntityArgumentType.getPlayer(context, "player");
+										var playerState = OllivandersServerState.getPlayerState(context.getSource().getServer(), player);
 										var coreId = IdentifierArgumentType.getIdentifier(context, "core");
 										// Ensure the core exists
 										var core = OllivandersRegistries.CORE.get(coreId);
@@ -123,7 +127,7 @@ public class OllivandersCommands {
 											context.getSource().sendFeedback(() -> Text.translatable("command.ollivanders.setcore.fail", coreId), false);
 											return 0;
 										}
-										OllivandersServerState.setSuitedCore(player, coreId.toString());
+										playerState.setSuitedCore(coreId.toString());
 										context.getSource().sendFeedback(() -> Text.translatable("command.ollivanders.setcore.success", player.getDisplayName(), Text.translatable(core.getTranslationKey())), true);
 										return 1;
 									})

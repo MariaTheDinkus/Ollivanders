@@ -39,15 +39,15 @@ public class OllivandersNetworking {
 		
 		ServerPlayNetworking.registerGlobalReceiver(DECREASE_POWER_LEVEL, (server, player, handler, buf, responseSender) -> {
 			server.execute(() -> {
-				var serverState = OllivandersServerState.getServerState(server);
-				serverState.decreasePowerLevel(player);
+				var playerState = OllivandersServerState.getPlayerState(server, player);
+				playerState.decreasePowerLevel();
 			});
 		});
 		
 		ServerPlayNetworking.registerGlobalReceiver(INCREASE_POWER_LEVEL, (server, player, handler, buf, responseSender) -> {
 			server.execute(() -> {
-				var serverState = OllivandersServerState.getServerState(server);
-				serverState.increasePowerLevel(player);
+				var playerState = OllivandersServerState.getPlayerState(server, player);
+				playerState.increasePowerLevel();
 			});
 		});
 		
@@ -58,11 +58,12 @@ public class OllivandersNetworking {
 			var chosenRandomly = buf.readBoolean();
 			server.execute(() -> {
 				var serverState = OllivandersServerState.getServerState(server);
+				var flooState = serverState.getFlooState();
 				var world = player.getWorld();
 				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 					Ollivanders.LOGGER.info("Adding fire to floo network under name: " + name + ". The position is " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "." + " The facing direction is: " + Direction.byId(direction).getName());
 				}
-				serverState.addFlooPosition(name, pos, Direction.byId(direction), world.getRegistryKey().getValue(), chosenRandomly);
+				flooState.addFlooPosition(name, pos, Direction.byId(direction), world.getRegistryKey().getValue(), chosenRandomly);
 			});
 		});
 		
@@ -78,15 +79,16 @@ public class OllivandersNetworking {
 						var currentSpell = SpellHelper.getCurrentSpell(player);
 						if (WandHelper.hasCore(stack) && !currentSpell.isEmpty()) {
 							var serverState = OllivandersServerState.getServerState(server);
+							var playerState = serverState.getPlayerState(player);
 							var wandMatchLevel = WandHelper.getWandMatch(stack, player);
-							var powerLevel = serverState.getPowerLevel(player);
+							var powerLevel = playerState.getPowerLevel();
 							var castPercentage = SpellHelper.getCastPercentage(player);
 							Random rand = new Random();
 							double randomValue = rand.nextDouble();
 							if (randomValue <= castPercentage) {
 								cooldownManager.set(stack.getItem(), 15);
 								player.sendMessage(Text.literal("You just casted the spell " + currentSpell.getCastName() + "!"), true);
-								serverState.addSkillLevel(player, currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
+								playerState.addSkillLevel(currentSpell, 1 * wandMatchLevel.getExtraSkillGainPercentage());
 								if (currentSpell.getType() == SpellType.SELF) {
 									currentSpell.onSelfCast(powerLevel, player);
 									player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));

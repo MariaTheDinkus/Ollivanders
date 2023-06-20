@@ -46,5 +46,6 @@ public class OllivandersLootTableGenerator extends FabricBlockLootTableProvider 
 		}
 		
 		addDrop(OllivandersBlocks.LATHE);
+		addDrop(OllivandersBlocks.VANISHING_CABINET);
 	}
 }

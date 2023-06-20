@@ -100,14 +100,17 @@ public class WandHelper {
 	}
 	
 	public static boolean isSuitableWand(PlayerEntity entity, ItemStack stack) {
-		var suitedWandId = OllivandersServerState.getSuitedWand(entity);
+		var playerState = OllivandersServerState.getPlayerState(entity.getServer(), entity);
+		var suitedWandId = playerState.getSuitedWand();
 		
 		return suitedWandId.equals(Registries.ITEM.getId(stack.getItem()).toString());
 	}
 	
 	public static boolean hasSuitableCore(PlayerEntity entity, ItemStack stack) {
+		var playerState = OllivandersServerState.getPlayerState(entity.getServer(), entity);
+		
 		if (hasCore(stack)) {
-			var suitedCoreId = OllivandersServerState.getSuitedCore(entity);
+			var suitedCoreId = playerState.getSuitedCore();
 			var suitedCore = OllivandersRegistries.CORE.get(new Identifier(suitedCoreId));
 			var core = getCore(stack);
 			

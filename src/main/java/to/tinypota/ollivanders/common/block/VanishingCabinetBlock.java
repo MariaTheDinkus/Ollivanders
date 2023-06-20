@@ -1,5 +1,6 @@
 package to.tinypota.ollivanders.common.block;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -9,8 +10,10 @@ import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
@@ -36,6 +39,8 @@ import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.q_misc_util.my_util.DQuaternion;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.block.entity.VanishingCabinetBlockEntity;
+import to.tinypota.ollivanders.common.item.SplitCabinetCoreItem;
+import to.tinypota.ollivanders.common.storage.OllivandersServerState;
 import to.tinypota.ollivanders.common.util.ShapeHelper;
 
 public class VanishingCabinetBlock extends BlockWithEntity {
@@ -51,9 +56,16 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
 		if (!world.isClient() && state.get(HALF) == DoubleBlockHalf.LOWER) {
+			var serverState = OllivandersServerState.getServerState(world.getServer());
+			var vanishingCabinetState = serverState.getVanishingCabinetState();
+			var facing = state.get(FACING);
 			world.setBlockState(pos.up(), state.with(HALF, DoubleBlockHalf.UPPER), 3);
 			
-			var facing = state.get(FACING);
+			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+				Ollivanders.LOGGER.info("Adding cabinet at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
+			}
+			vanishingCabinetState.setVanishingCabinet(pos, facing.getOpposite(), world.getRegistryKey().getValue());
+			
 			var open = state.get(OPEN);
 			Portal portal = Portal.entityType.create(world);
 			var originPos = new Vec3d(pos.getX(), pos.getY() + 1, pos.getZ());
@@ -64,13 +76,13 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 				originPos = originPos.add(0.5, 0, 0.5);
 			} else if (facing == Direction.EAST) {
 				axisW = new Vec3d(0, 0, 1);
-				originPos = originPos.add(1, 0, 0.5);
+				originPos = originPos.add(0.5, 0, 0.5);
 			} else if (facing == Direction.SOUTH) {
 				axisW = new Vec3d(-1, 0, 0);
-				originPos = originPos.add(0.5, 0, 1);
+				originPos = originPos.add(0.5, 0, 0.5);
 			} else if (facing == Direction.WEST) {
 				axisW = new Vec3d(0, 0, -1);
-				originPos = originPos.add(0, 0, 0.5);
+				originPos = originPos.add(0.5, 0, 0.5);
 			}
 			portal.setOriginPos(originPos);
 			portal.setDestinationDimension(World.OVERWORLD);
@@ -85,6 +97,30 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 			portal.getWorld().spawnEntity(portal);
 		}
 		super.onPlaced(world, pos, state, placer, itemStack);
+	}
+	
+	@Override
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		if (!world.isClient()) {
+			var serverState = OllivandersServerState.getServerState(world.getServer());
+			var vanishingCabinetState = serverState.getVanishingCabinetState();
+			
+			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+				Ollivanders.LOGGER.info("Removing cabinet at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
+			}
+			vanishingCabinetState.removeVanishingCabinet(pos);
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof SidedInventory) {
+				SidedInventory inventory = (SidedInventory) blockEntity;
+				
+				for (int i = 0; i < inventory.size(); i++) {
+					ItemStack stack = inventory.getStack(i);
+					dropStack(world, pos, stack);
+					inventory.removeStack(i);
+				}
+			}
+		}
+		super.onBreak(world, pos, state, player);
 	}
 	
 	@Override
@@ -130,7 +166,13 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 	
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return VoxelShapes.fullCube();
+		var left = VoxelShapes.cuboid(0, 0, 0, 1F / 16F, 1, 1);
+		var right = VoxelShapes.cuboid(15F / 16F, 0, 0, 1, 1, 1);
+		var half = state.get(HALF) == DoubleBlockHalf.LOWER ? VoxelShapes.cuboid(0, 0, 0, 1, 1F / 16F, 1) : VoxelShapes.cuboid(0, 15F / 16F, 0, 1, 1, 1);
+		var back = VoxelShapes.cuboid(0, 0, 0, 1 , 1, 1F / 16F);
+		var front = VoxelShapes.cuboid(0, 0, 15F / 16F, 1, 1, 1);
+		var union = VoxelShapes.union(left, right, back, half, front);
+		return ShapeHelper.rotateShapeTowards(state.get(FACING), union);
 	}
 	
 	@Override
@@ -158,6 +200,20 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 	
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+		var stack = player.getStackInHand(hand);
+		if (!stack.isEmpty() && stack.getItem() instanceof SplitCabinetCoreItem) {
+			var blockEntity = (VanishingCabinetBlockEntity) world.getBlockEntity(pos);
+			if (blockEntity.isEmpty()) {
+				if (!world.isClient) {
+					blockEntity.setStack(0, stack.copyWithCount(1));
+					stack.decrement(1);
+				}
+				return ActionResult.SUCCESS;
+			} else {
+				return ActionResult.PASS;
+			}
+		}
+		
 		if (player.isSneaking()){
 			if (state.get(HALF) == DoubleBlockHalf.UPPER) {
 				player.openHandledScreen(world.getBlockState(pos.down()).createScreenHandlerFactory(world, pos.down()));
@@ -168,9 +224,6 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 			}
 		}
 		
-		if (hit.getSide() != state.get(FACING).getOpposite())
-			return ActionResult.PASS;
-		
 		BlockPos otherPos;
 		if (state.get(HALF) == DoubleBlockHalf.LOWER) {
 			otherPos = pos.offset(Direction.UP);
@@ -179,6 +232,7 @@ public class VanishingCabinetBlock extends BlockWithEntity {
 		}
 		world.setBlockState(pos, state.with(OPEN, !state.get(OPEN)));
 		world.setBlockState(otherPos, world.getBlockState(otherPos).with(OPEN, !state.get(OPEN)));
+		world.playSound(player, pos, state.get(OPEN) ? BlockSetType.OAK.doorOpen() : BlockSetType.OAK.doorClose(), SoundCategory.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.1F + 0.9F);
 		return ActionResult.SUCCESS;
 	}
 	

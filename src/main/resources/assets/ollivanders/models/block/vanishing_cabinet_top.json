@@ -1,7 +1,9 @@
 {
 	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
 	"textures": {
-		"0": "block/spruce_log"
+		"0": "block/spruce_log",
+		"particle": "block/spruce_log"
 	},
 	"elements": [
 		{

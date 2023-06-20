@@ -20,11 +20,11 @@ public class FlooPosStorage {
 		this.chosenRandomly = chosenRandomly;
 	}
 	
-	public static NbtCompound writeToNbt(FlooPosStorage storage, NbtCompound nbt) {
-		nbt.put("pos", NbtHelper.fromBlockPos(storage.getPos()));
-		nbt.putInt("direction", storage.getDirection().getId());
-		nbt.putString("dimension", storage.getDimension().toString());
-		nbt.putBoolean("chosenRandomly", storage.isChosenRandomly());
+	public NbtCompound writeToNbt(NbtCompound nbt) {
+		nbt.put("pos", NbtHelper.fromBlockPos(getPos()));
+		nbt.putInt("direction", getDirection().getId());
+		nbt.putString("dimension", getDimension().toString());
+		nbt.putBoolean("chosenRandomly", isChosenRandomly());
 		
 		return nbt;
 	}
@@ -33,10 +33,7 @@ public class FlooPosStorage {
 		var blockPos = NbtHelper.toBlockPos(nbt.getCompound("pos"));
 		var direction = Direction.byId(nbt.getInt("direction")) != null ? Direction.byId(nbt.getInt("direction")) : Direction.NORTH;
 		var dimensionString = nbt.getString("dimension");
-		var dimension = DimensionTypes.OVERWORLD_ID;
-		if (dimensionString != null && !dimensionString.equals("minecraft:")) {
-			dimension = new Identifier(nbt.getString("dimension"));
-		}
+		var dimension = dimensionString.isEmpty() ? DimensionTypes.OVERWORLD_ID : new Identifier(dimensionString);
 		var chosenRandomly = nbt.getBoolean("chosenRandomly");
 		
 		return new FlooPosStorage(blockPos, direction, dimension, chosenRandomly);

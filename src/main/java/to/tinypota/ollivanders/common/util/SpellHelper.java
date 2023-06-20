@@ -19,19 +19,23 @@ public class SpellHelper {
 	private static final ArrayList<String> SPELL_NAMES = new ArrayList<>();
 	
 	public static Spell getCurrentSpell(PlayerEntity player) {
-		return SpellHelper.getSpellByName(OllivandersServerState.getCurrentSpell(player));
+		var playerState = OllivandersServerState.getPlayerState(player.getServer(), player);
+		return SpellHelper.getSpellByName(playerState.getCurrentSpell());
 	}
 	
 	public static void setCurrentSpell(PlayerEntity player, Spell spell) {
-		OllivandersServerState.setCurrentSpell(player, spell.getCastName());
+		var playerState = OllivandersServerState.getPlayerState(player.getServer(), player);
+		playerState.setCurrentSpell(spell.getCastName());
 	}
 	
 	public static void setCurrentSpell(PlayerEntity player, String name) {
-		OllivandersServerState.setCurrentSpell(player, name);
+		var playerState = OllivandersServerState.getPlayerState(player.getServer(), player);
+		playerState.setCurrentSpell(name);
 	}
 	
 	public static void emptyCurrentSpell(PlayerEntity player) {
-		OllivandersServerState.setCurrentSpell(player, Spell.EMPTY.getCastName());
+		var playerState = OllivandersServerState.getPlayerState(player.getServer(), player);
+		playerState.setCurrentSpell(Spell.EMPTY.getCastName());
 	}
 	
 	public static void addSpellName(String name) {
@@ -79,11 +83,12 @@ public class SpellHelper {
 	
 	public static double getCastPercentage(ServerPlayerEntity player) {
 		var serverState = OllivandersServerState.getServerState(player.getServer());
+		var playerState = serverState.getPlayerState(player);
 		var currentSpell = SpellHelper.getCurrentSpell(player);
 		if (!player.getMainHandStack().isEmpty() && player.getMainHandStack().getItem() instanceof WandItem && WandHelper.hasCore(player.getMainHandStack())) {
 			var wandMatchLevel = WandHelper.getWandMatch(player.getMainHandStack(), player);
-			var powerLevel = serverState.getPowerLevel(player);
-			var skillLevel = serverState.getSkillLevel(player, currentSpell);
+			var powerLevel = playerState.getPowerLevel();
+			var skillLevel = playerState.getSkillLevel(currentSpell);
 			var castPercentage = 1 * wandMatchLevel.getDefaultCastPercentage() - (currentSpell.hasCustomCastPercents() ? currentSpell.getCustomCastPercents(powerLevel) : powerLevel.getCastPercentageSubtractor());
 			castPercentage += skillLevel / 100 / 10;
 			castPercentage = Math.max(0, Math.min(castPercentage, 1));

@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -108,18 +109,19 @@ public class WandItem extends Item {
 	
 	@Override
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-		if (!world.isClient() && entity instanceof PlayerEntity && selected && world.getTime() % 10 == 0) {
-			var player = (PlayerEntity) entity;
-			var serverState = OllivandersServerState.getServerState(player.getServer());
+		if (!world.isClient() && entity instanceof ServerPlayerEntity && selected && world.getTime() % 10 == 0) {
+			var player = (ServerPlayerEntity) entity;
+			var serverState = OllivandersServerState.getServerState(world.getServer());
+			var playerState = serverState.getPlayerState(player);
 			var spell = SpellHelper.getCurrentSpell(player);
 			if (spell != Spell.EMPTY) {
 				var wandMatchLevel = WandHelper.getWandMatch(stack, player);
-				var powerLevel = spell.getAvailablePowerLevel(wandMatchLevel, serverState.getSkillLevel(player, spell));
-				serverState.setCurrentSpellPowerLevel(player, powerLevel);
+				var powerLevel = spell.getAvailablePowerLevel(wandMatchLevel, playerState.getSkillLevel(spell));
+				playerState.setCurrentSpellPowerLevel(powerLevel);
 			} else {
-				serverState.setCurrentSpellPowerLevel(player, SpellPowerLevel.MAXIMUM);
+				playerState.setCurrentSpellPowerLevel(SpellPowerLevel.MAXIMUM);
 			}
-			serverState.syncPowerLevels((PlayerEntity) entity);
+			serverState.syncPowerLevels(player);
 		}
 		super.inventoryTick(stack, world, entity, slot, selected);
 	}

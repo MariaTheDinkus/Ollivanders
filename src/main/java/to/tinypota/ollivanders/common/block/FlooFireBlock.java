@@ -59,17 +59,14 @@ public class FlooFireBlock extends BlockWithEntity {
 		var stack = player.getStackInHand(hand);
 		if (!world.isClient() && hand == Hand.MAIN_HAND && player.getStackInHand(hand).isEmpty()) {
 			var serverState = OllivandersServerState.getServerState(world.getServer());
+			var flooState = serverState.getFlooState();
 			
-			if (serverState.getFlooNameByPos(pos) != null) {
-				player.sendMessage(Text.literal("This floo fire is called: " + serverState.getFlooNameByPos(pos)), true);
+			if (flooState.getFlooNameByPos(pos).isPresent()) {
+				player.sendMessage(Text.literal("This floo fire is called: " + flooState.getFlooNameByPos(pos).get()), true);
 			}
 			
 			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-				serverState.getFlooState().getFlooPositions().entrySet().forEach(entry -> {
-					var name = entry.getKey();
-					var storage = entry.getValue();
-					Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + storage.getPos().getX() + ", " + storage.getPos().getY() + ", " + storage.getPos().getZ() + "." + " The facing direction is: " + storage.getDirection().getName());
-				});
+				serverState.getFlooState().getFlooPositions().forEach((name, storage) -> Ollivanders.LOGGER.info("Found floo fireplace called: " + name + ". The position is " + storage.getPos().getX() + ", " + storage.getPos().getY() + ", " + storage.getPos().getZ() + "." + " The facing direction is: " + storage.getDirection().getName()));
 			}
 		}
 		
@@ -174,10 +171,11 @@ public class FlooFireBlock extends BlockWithEntity {
 		if (direction == Direction.DOWN && !canPlaceAt(state, world, pos)) {
 			if (!world.isClient()) {
 				var serverState = OllivandersServerState.getServerState(world.getServer());
+				var flooState = serverState.getFlooState();
 				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 					Ollivanders.LOGGER.info("Removing fire from floo network at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
 				}
-				serverState.removeFlooByPos(pos);
+				flooState.removeFlooByPos(pos);
 			}
 			return Blocks.AIR.getDefaultState();
 		}
@@ -212,10 +210,12 @@ public class FlooFireBlock extends BlockWithEntity {
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		if (!world.isClient()) {
 			var serverState = OllivandersServerState.getServerState(world.getServer());
+			var flooState = serverState.getFlooState();
+			
 			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 				Ollivanders.LOGGER.info("Removing fire from floo network at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
 			}
-			serverState.removeFlooByPos(pos);
+			flooState.removeFlooByPos(pos);
 		}
 		super.onBreak(world, pos, state, player);
 	}

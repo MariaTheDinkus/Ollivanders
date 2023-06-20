@@ -40,6 +40,7 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 		}
 		
 		translationBuilder.add(OllivandersBlocks.LATHE, "Lathe");
+		translationBuilder.add(OllivandersBlocks.VANISHING_CABINET, "Vanishing Cabinet");
 		
 		translationBuilder.add(OllivandersItems.OAK_WAND, "Oak Wand");
 		translationBuilder.add(OllivandersItems.SPRUCE_WAND, "Spruce Wand");
@@ -54,6 +55,9 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 		translationBuilder.add(OllivandersItems.VINE_WAND, "Vine Wand");
 		translationBuilder.add(OllivandersItems.CRIMSON_WAND, "Crimson Wand");
 		translationBuilder.add(OllivandersItems.WARPED_WAND, "Warped Wand");
+		
+		translationBuilder.add(OllivandersItems.CABINET_CORE, "Cabinet Core");
+		translationBuilder.add(OllivandersItems.SPLIT_CABINET_CORE, "Split Cabinet Core");
 		
 		translationBuilder.add(OllivandersItems.DRAGON_HEARTSTRING, "Dragon Heartstring");
 		translationBuilder.add(OllivandersItems.PHOENIX_FEATHER, "Phoenix Feather");

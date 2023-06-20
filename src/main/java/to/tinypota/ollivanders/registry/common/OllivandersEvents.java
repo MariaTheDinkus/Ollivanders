@@ -48,8 +48,10 @@ public class OllivandersEvents {
 			var world = sender.getWorld();
 			var pos = sender.getBlockPos();
 			var serverState = OllivandersServerState.getServerState(sender.getServer());
+			var playerState = serverState.getPlayerState(sender);
+			var flooState = serverState.getFlooState();
 
-			if (sender != null && !sender.getStackInHand(Hand.MAIN_HAND).isEmpty() && sender.getStackInHand(Hand.MAIN_HAND).getItem() instanceof WandItem) {
+			if (!sender.getStackInHand(Hand.MAIN_HAND).isEmpty() && sender.getStackInHand(Hand.MAIN_HAND).getItem() instanceof WandItem) {
 				var wandMatchLevel = WandHelper.getWandMatch(stack, sender);
 				if (SpellHelper.containsSpellName(stringMessage)) {
 					var verified = message.hasSignature() && !message.isExpiredOnServer(Instant.now());
@@ -64,11 +66,11 @@ public class OllivandersEvents {
 					var spell = SpellHelper.getSpellFromMessage(stringMessage);
 					if (spell != Spell.EMPTY) {
 						SpellHelper.setCurrentSpell(sender, spell);
-						var powerLevel = spell.getAvailablePowerLevel(wandMatchLevel, serverState.getSkillLevel(sender, spell));
+						var powerLevel = spell.getAvailablePowerLevel(wandMatchLevel, playerState.getSkillLevel(spell));
 						var castPercentage = SpellHelper.getCastPercentage(spell, wandMatchLevel, powerLevel);
-						var curPowerLevel = serverState.getPowerLevel(sender);
+						var curPowerLevel = playerState.getPowerLevel();
 						var curCastPercentage = SpellHelper.getCastPercentage(spell, wandMatchLevel, curPowerLevel);
-						serverState.setCurrentSpellPowerLevel(sender, powerLevel);
+						playerState.setCurrentSpellPowerLevel(powerLevel);
 					}
 					return false;
 				}
@@ -85,7 +87,7 @@ public class OllivandersEvents {
 				
 				if (world.getBlockState(pos).getBlock() instanceof FlooFireBlock) {
 					if (state.get(FlooFireBlock.ACTIVATION) == FlooActivation.ACTIVE) {
-						var storage = serverState.getFlooByNameOrRandom(stringMessage);
+						var storage = flooState.getFlooByNameOrRandom(stringMessage);
 						var telKey = RegistryKey.of(RegistryKeys.WORLD, storage.getDimension());
 						var telWorld = server.getWorld(telKey);
 						

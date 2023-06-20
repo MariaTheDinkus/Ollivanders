@@ -1,13 +1,14 @@
 package to.tinypota.ollivanders.common.storage;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
 
 import java.util.HashMap;
 
-public class OllivandersPlayerState {
+public class OllivandersPlayerState extends State {
 	private String suitedWand = "";
 	private String suitedCore = "";
 	private String currentSpell = "empty";
@@ -15,9 +16,14 @@ public class OllivandersPlayerState {
 	private HashMap<Spell, Double> skillLevels = new HashMap<>();
 	private SpellPowerLevel powerLevel = SpellPowerLevel.NORMAL;
 	
+	public OllivandersPlayerState(OllivandersServerState serverState) {
+		super(serverState);
+	}
+	
 	/*
 	 * Writes this OllivandersPlayerState to NBT.
 	 */
+	@Override
 	public NbtCompound writeToNbt(NbtCompound nbt) {
 		nbt.putString("suitedWand", suitedWand);
 		nbt.putString("suitedCore", suitedCore);
@@ -31,6 +37,23 @@ public class OllivandersPlayerState {
 		return nbt;
 	}
 	
+	@Override
+	public void fromNbt(OllivandersServerState serverState, NbtCompound nbt) {
+		suitedWand = nbt.getString("suitedWand");
+		suitedCore = nbt.getString("suitedCore");
+		currentSpell = nbt.getString("currentSpell");
+		currentSpellPowerLevel = SpellPowerLevel.byId(nbt.getInt("currentSpellPowerLevel"));
+		var skillLevels = nbt.getCompound("skillLevels");
+		getSkillLevels().clear();
+		for (var spellId : skillLevels.getKeys()) {
+			var identifier = new Identifier(spellId);
+			var spell = OllivandersRegistries.SPELL.get(identifier);
+			double skillLevel = skillLevels.getDouble(spellId);
+			getSkillLevels().put(spell, skillLevel);
+		}
+		powerLevel = SpellPowerLevel.byId(nbt.getInt("powerLevel"));
+	}
+	
 	public SpellPowerLevel getCurrentSpellPowerLevel() {
 		return currentSpellPowerLevel;
 	}
@@ -40,6 +63,7 @@ public class OllivandersPlayerState {
 		if (powerLevel.getNumerical() > currentSpellPowerLevel.getNumerical()) {
 			powerLevel = currentSpellPowerLevel;
 		}
+		markDirty();
 	}
 	
 	public SpellPowerLevel getPowerLevel() {
@@ -48,6 +72,7 @@ public class OllivandersPlayerState {
 	
 	public void setPowerLevel(SpellPowerLevel powerLevel) {
 		this.powerLevel = powerLevel;
+		markDirty();
 	}
 	
 	/**
@@ -67,6 +92,7 @@ public class OllivandersPlayerState {
 	public boolean increasePowerLevel() {
 		if (powerLevel.getNumerical() < currentSpellPowerLevel.getNumerical()) {
 			powerLevel = SpellPowerLevel.values()[powerLevel.ordinal() + 1];
+			markDirty();
 			return true;
 		}
 		return false;
@@ -85,6 +111,7 @@ public class OllivandersPlayerState {
 	public void decreasePowerLevel() {
 		if (powerLevel.getNumerical() > 1) {
 			powerLevel = SpellPowerLevel.values()[powerLevel.ordinal() - 1];
+			markDirty();
 		}
 	}
 	
@@ -94,11 +121,13 @@ public class OllivandersPlayerState {
 	
 	public void setSkillLevels(HashMap<Spell, Double> skillLevels) {
 		this.skillLevels = skillLevels;
+		markDirty();
 	}
 	
 	public void addSkillLevel(Spell spell, double amount) {
 		var currentLevel = skillLevels.getOrDefault(spell, 0.0);
 		skillLevels.put(spell, currentLevel + amount);
+		markDirty();
 	}
 	
 	public void subtractSkillLevel(Spell spell, double amount) {
@@ -108,6 +137,7 @@ public class OllivandersPlayerState {
 			newLevel = 0;
 		}
 		skillLevels.put(spell, newLevel);
+		markDirty();
 	}
 	
 	public double getSkillLevel(Spell spell) {
@@ -120,21 +150,24 @@ public class OllivandersPlayerState {
 	
 	public void setSuitedWand(String suitedWand) {
 		this.suitedWand = suitedWand;
+		markDirty();
 	}
 	
-	String getSuitedCore() {
+	public String getSuitedCore() {
 		return suitedCore;
 	}
 	
-	void setSuitedCore(String suitedCore) {
+	public void setSuitedCore(String suitedCore) {
 		this.suitedCore = suitedCore;
+		markDirty();
 	}
 	
-	String getCurrentSpell() {
+	public String getCurrentSpell() {
 		return currentSpell;
 	}
 	
-	void setCurrentSpell(String currentSpell) {
+	public void setCurrentSpell(String currentSpell) {
 		this.currentSpell = currentSpell;
+		markDirty();
 	}
 }

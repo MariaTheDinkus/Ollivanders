@@ -61,18 +61,18 @@ public class AliquamFlooSpell extends Spell {
 			
 			if (state.getBlock() == OllivandersBlocks.FLOO_FIRE) {
 				var serverState = OllivandersServerState.getServerState(playerEntity.getServer());
+				var flooState = serverState.getFlooState();
 				var buf = PacketByteBufs.create();
-				var name = serverState.getFlooNameByPos(pos);
-				buf.writeString(name != null ? name : "");
+				var name = flooState.getFlooNameByPos(pos);
+				buf.writeString(name.orElse(""));
 				buf.writeBlockPos(pos);
-				var storage = serverState.getFlooPosByName(name);
-				buf.writeInt(storage != null ? storage.getDirection().getId() : playerEntity.getHorizontalFacing().getOpposite().getId());
-				buf.writeBoolean(storage == null || storage.isChosenRandomly());
-				Ollivanders.LOGGER.info(String.valueOf(storage == null));
+				var storage = flooState.getFlooPosByName(name.orElse(""));
+				buf.writeInt((storage.isPresent() ? storage.get().getDirection() : playerEntity.getHorizontalFacing().getOpposite()).getId());
+				buf.writeBoolean(storage.isEmpty() || storage.get().isChosenRandomly());
 				if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 					Ollivanders.LOGGER.info("Removing fire from floo network at position " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ".");
 				}
-				serverState.removeFlooByPos(pos);
+				flooState.removeFlooByPos(pos);
 				ServerPlayNetworking.send((ServerPlayerEntity) playerEntity, OllivandersNetworking.OPEN_FLOO_FIRE_NAME_SCREEN, buf);
 				return ActionResult.SUCCESS;
 			}

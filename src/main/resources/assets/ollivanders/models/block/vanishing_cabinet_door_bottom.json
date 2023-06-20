@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
 	"textures": {
 		"0": "block/spruce_door_bottom",
 		"particle": "block/spruce_door_bottom"
@@ -9,6 +10,7 @@
 			"from": [1, 1, 14],
 			"to": [15, 16, 15],
 			"faces": {
+				"north": {"uv": [15, 0, 1, 15], "texture": "#0"},
 				"south": {"uv": [1, 0, 15, 15], "texture": "#0"}
 			}
 		}

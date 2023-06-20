@@ -105,7 +105,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		
 		if (!world.isClient()) {
 			if (getOwner() != null) {
-				var powerLevel = OllivandersServerState.getServerState(world.getServer()).getPowerLevel((PlayerEntity) getOwner());
+				var powerLevel = OllivandersServerState.getPlayerState(world.getServer(), (PlayerEntity) getOwner()).getPowerLevel();
 				var result = spell.onHitBlock(powerLevel, world, blockHitResult, (PlayerEntity) getOwner(), this);
 				if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 					discard();
@@ -122,7 +122,7 @@ public class SpellProjectileEntity extends PersistentProjectileEntity {
 		
 		if (!world.isClient()) {
 			if (getOwner() != null) {
-				var powerLevel = OllivandersServerState.getServerState(world.getServer()).getPowerLevel((PlayerEntity) getOwner());
+				var powerLevel = OllivandersServerState.getPlayerState(world.getServer(), (PlayerEntity) getOwner()).getPowerLevel();
 				var result = spell.onHitEntity(powerLevel, world, entityHitResult, (PlayerEntity) getOwner(), this);
 				if (result == ActionResult.SUCCESS || result == ActionResult.FAIL) {
 					discard();

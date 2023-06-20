@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "d": {
+      "item": "minecraft:spruce_door"
+    },
+    "f": {
+      "item": "ollivanders:floo_powder"
+    },
+    "l": {
+      "item": "minecraft:spruce_log"
+    }
+  },
+  "pattern": [
+    " f ",
+    "ldl"
+  ],
+  "result": {
+    "item": "ollivanders:vanishing_cabinet"
+  },
+  "show_notification": true
+}

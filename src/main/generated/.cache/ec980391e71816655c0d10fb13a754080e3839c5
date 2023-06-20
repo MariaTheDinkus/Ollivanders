@@ -1,4 +1,4 @@
-// 1.20.1	2023-06-12T19:49:37.5878204	Ollivanders/Block Loot Tables
+// 1.20.1	2023-06-19T22:00:57.1172772	Ollivanders/Block Loot Tables
 1dbbeb5eb8aa0ba833876964815f2c975c58c302 data\ollivanders\loot_tables\blocks\stripped_laurel_log.json
 8ae55cb719766ea81f76ef4daae754ba9cc258d8 data\ollivanders\loot_tables\blocks\redwood_stairs.json
 a215cb299ee9855dc3e38c273b08e8ba0acdca8d data\ollivanders\loot_tables\blocks\laurel_fence_gate.json
@@ -29,6 +29,7 @@ f0b296ad093805e1627abf8c17b4bcdd28f45ad3 data\ollivanders\loot_tables\blocks\lau
 4a5dae00007142b6fbcaaed211197033c6b3f64c data\ollivanders\loot_tables\blocks\redwood_wood.json
 01f81b11eaa64f6b56a43f8e5bffbdb5181378c1 data\ollivanders\loot_tables\blocks\redwood_fence.json
 0eb7c8964929be131576ee716e0c72813568e52c data\ollivanders\loot_tables\blocks\redwood_log.json
+ed25bd51d471860bd13aca28576d322618253017 data\ollivanders\loot_tables\blocks\vanishing_cabinet.json
 64175f9c0be83d4c5dd1f5c98145597ee6b17865 data\ollivanders\loot_tables\blocks\laurel_trapdoor.json
 4e92aa33352f7b498a53a2cec514d5dc2e930ba6 data\ollivanders\loot_tables\blocks\laurel_slab.json
 d93cb9a152463ffdbb117b597934f8a51bc508e9 data\ollivanders\loot_tables\blocks\laurel_leaves.json

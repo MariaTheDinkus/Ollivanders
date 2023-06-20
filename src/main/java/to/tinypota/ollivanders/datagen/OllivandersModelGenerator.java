@@ -23,8 +23,6 @@ public class OllivandersModelGenerator extends FabricModelProvider {
 			blockStateModelGenerator.registerLog(storage.getStrippedLog()).log(storage.getStrippedLog()).wood(storage.getStrippedWood());
 			blockStateModelGenerator.registerTintableCross(storage.getSapling(), BlockStateModelGenerator.TintType.NOT_TINTED);
 			blockStateModelGenerator.registerCubeAllModelTexturePool(storage.getPlanks()).family(storage.getFamily());
-			//blockStateModelGenerator.registerDoor(storage.getDoor());
-			//blockStateModelGenerator.registerTrapdoor(storage.getTrapdoor());
 			blockStateModelGenerator.registerSingleton(storage.getLeaves(), TexturedModel.LEAVES);
 			blockStateModelGenerator.registerHangingSign(storage.getStrippedLog(), storage.getHangingSign(), storage.getWallHangingSign());
 		}
@@ -34,6 +32,9 @@ public class OllivandersModelGenerator extends FabricModelProvider {
 	
 	@Override
 	public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+		itemModelGenerator.register(OllivandersItems.CABINET_CORE, Models.GENERATED);
+		itemModelGenerator.register(OllivandersItems.SPLIT_CABINET_CORE, Models.GENERATED);
+		
 		itemModelGenerator.register(OllivandersItems.DRAGON_HEARTSTRING, Models.GENERATED);
 		itemModelGenerator.register(OllivandersItems.PHOENIX_FEATHER, Models.GENERATED);
 		itemModelGenerator.register(OllivandersItems.THESTRAL_TAIL_HAIR, Models.GENERATED);
