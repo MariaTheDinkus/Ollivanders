@@ -42,10 +42,12 @@ public class OllivandersLootTableGenerator extends FabricBlockLootTableProvider 
 			addDrop(storage.getHangingSign());
 			addDrop(storage.getWallHangingSign(), block -> drops(storage.getHangingSign()));
 			addDrop(storage.getSapling());
-			addDrop(storage.getLeaves(), block -> leavesDrops(block, storage.getSapling(), SAPLING_DROP_CHANCE));
+			addDrop(storage.getLeaves(), block -> leavesDrops(block, storage.getSapling(), SAPLING_DROP_CHANCE));;
 		}
 		
 		addDrop(OllivandersBlocks.LATHE);
+		addDrop(OllivandersBlocks.MORTAR_AND_PESTLE);
 		addDrop(OllivandersBlocks.VANISHING_CABINET);
+		addDrop(OllivandersBlocks.FLOO_FLOWER);
 	}
 }

@@ -18,6 +18,7 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 		translationBuilder.add(OllivandersItemGroups.OLLIVANDERS_WANDS_KEY, "Ollivanders Wands");
 		
 		translationBuilder.add("category.rei.lathe", "Lathe");
+		translationBuilder.add("category.rei.mortar_and_pestle", "Mortar and Pestle");
 		
 		for (var storage : WoodBlockRegistry.WOOD_BLOCK_STORAGES) {
 			translationBuilder.add(storage.getLog(), storage.getTranslationName() + " Log");
@@ -65,5 +66,8 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 		translationBuilder.add(OllivandersItems.THESTRAL_TAIL_HAIR, "Thestral Tail Hair");
 		translationBuilder.add(OllivandersItems.UNICORN_TAIL_HAIR, "Unicorn Tail Hair");
 		translationBuilder.add(OllivandersItems.FLOO_POWDER, "Floo Powder");
+		translationBuilder.add(OllivandersItems.FLOO_EXTRACT, "Floo Extract");
+		translationBuilder.add(OllivandersItems.ENDER_PEARL_SHARDS, "Ender Pearl Shards");
+		translationBuilder.add(OllivandersBlocks.FLOO_FLOWER, "Floo Flower");
 	}
 }

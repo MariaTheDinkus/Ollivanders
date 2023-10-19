@@ -28,6 +28,7 @@ public class OllivandersModelGenerator extends FabricModelProvider {
 		}
 		
 		blockStateModelGenerator.registerNorthDefaultHorizontalRotation(OllivandersBlocks.LATHE);
+		blockStateModelGenerator.registerTintableCross(OllivandersBlocks.FLOO_FLOWER, BlockStateModelGenerator.TintType.NOT_TINTED);
 	}
 	
 	@Override
@@ -40,6 +41,8 @@ public class OllivandersModelGenerator extends FabricModelProvider {
 		itemModelGenerator.register(OllivandersItems.THESTRAL_TAIL_HAIR, Models.GENERATED);
 		itemModelGenerator.register(OllivandersItems.UNICORN_TAIL_HAIR, Models.GENERATED);
 		itemModelGenerator.register(OllivandersItems.FLOO_POWDER, Models.GENERATED);
+		itemModelGenerator.register(OllivandersItems.FLOO_EXTRACT, Models.GENERATED);
+		itemModelGenerator.register(OllivandersItems.ENDER_PEARL_SHARDS, Models.GENERATED);
 		
 		itemModelGenerator.register(OllivandersItems.OAK_WAND, Models.HANDHELD_ROD);
 		itemModelGenerator.register(OllivandersItems.SPRUCE_WAND, Models.HANDHELD_ROD);

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_floo_flower": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "ollivanders:floo_flower"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:floo_extract_from_crushing_floo_flower"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_floo_flower"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:floo_extract_from_crushing_floo_flower"
+    ]
+  },
+  "sends_telemetry_event": false
+}

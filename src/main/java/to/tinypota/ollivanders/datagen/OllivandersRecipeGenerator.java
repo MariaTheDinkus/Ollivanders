@@ -56,9 +56,18 @@ public class OllivandersRecipeGenerator extends FabricRecipeProvider {
 			offerLathe(exporter, List.of(wand.getCraftBlocks()), RecipeCategory.MISC, wand, 0.15F, 150, "");
 		}
 		
+		offerMortarAndPestle(exporter, OllivandersBlocks.FLOO_FLOWER, RecipeCategory.MISC, OllivandersItems.FLOO_EXTRACT, 0.15F, 200, "");
+		offerMortarAndPestle(exporter, Items.ENDER_PEARL, RecipeCategory.MISC, OllivandersItems.ENDER_PEARL_SHARDS, 0.15F, 200, "");
+		
+		ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, OllivandersItems.FLOO_POWDER, 8).input(OllivandersItems.FLOO_EXTRACT).input(OllivandersItems.ENDER_PEARL_SHARDS).criterion("has_ender_pearls", VanillaRecipeProvider.conditionsFromItem(Items.ENDER_PEARL)).offerTo(exporter);
+		
 		ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OllivandersBlocks.LATHE, 1).input('l', ItemTags.LOGS).input('i', Items.IRON_INGOT).pattern("lil").pattern("l l").pattern("lil").criterion("has_logs", VanillaRecipeProvider.conditionsFromTag(ItemTags.LOGS)).offerTo(exporter);
 		ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, OllivandersBlocks.VANISHING_CABINET, 1).input('l', Blocks.SPRUCE_LOG).input('d', Blocks.SPRUCE_DOOR).input('f', OllivandersItems.FLOO_POWDER).pattern(" f ").pattern("ldl").criterion("has_logs", VanillaRecipeProvider.conditionsFromTag(ItemTags.LOGS)).offerTo(exporter);
 		ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, OllivandersItems.CABINET_CORE, 1).input(Items.ENDER_PEARL).input(OllivandersItems.FLOO_POWDER, 4).criterion("has_ender_pearls", VanillaRecipeProvider.conditionsFromItem(Items.ENDER_PEARL)).offerTo(exporter);
+	}
+	
+	public static void offerLathe(RecipeExporter exporter, ItemConvertible input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {
+		offerMultipleLatheOptions(exporter, OllivandersRecipeSerializers.LATHE, List.of(input), category, output, experience, cookingTime, group, "_from_lathing");
 	}
 	
 	public static void offerLathe(RecipeExporter exporter, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {
@@ -68,6 +77,20 @@ public class OllivandersRecipeGenerator extends FabricRecipeProvider {
 	public static void offerMultipleLatheOptions(RecipeExporter exporter, RecipeSerializer<? extends AbstractCookingRecipe> serializer, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group, String method) {
 		for (ItemConvertible itemConvertible : inputs) {
 			OllivandersCookingRecipeJsonBuilder.createLathe(Ingredient.ofItems(itemConvertible), category, output, experience, cookingTime).group(group).criterion(RecipeProvider.hasItem(itemConvertible), RecipeProvider.conditionsFromItem(itemConvertible)).offerTo(exporter, RecipeProvider.getItemPath(output) + method + "_" + RecipeProvider.getItemPath(itemConvertible));
+		}
+	}
+	
+	public static void offerMortarAndPestle(RecipeExporter exporter, ItemConvertible input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {
+		offerMultipleMortarAndPestleOptions(exporter, OllivandersRecipeSerializers.MORTAR_AND_PESTLE, List.of(input), category, output, experience, cookingTime, group, "_from_crushing");
+	}
+	
+	public static void offerMortarAndPestle(RecipeExporter exporter, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {
+		offerMultipleMortarAndPestleOptions(exporter, OllivandersRecipeSerializers.MORTAR_AND_PESTLE, inputs, category, output, experience, cookingTime, group, "_from_crushing");
+	}
+	
+	public static void offerMultipleMortarAndPestleOptions(RecipeExporter exporter, RecipeSerializer<? extends AbstractCookingRecipe> serializer, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group, String method) {
+		for (ItemConvertible itemConvertible : inputs) {
+			OllivandersCookingRecipeJsonBuilder.createMortarAndPestle(Ingredient.ofItems(itemConvertible), category, output, experience, cookingTime).group(group).criterion(RecipeProvider.hasItem(itemConvertible), RecipeProvider.conditionsFromItem(itemConvertible)).offerTo(exporter, RecipeProvider.getItemPath(output) + method + "_" + RecipeProvider.getItemPath(itemConvertible));
 		}
 	}
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ollivanders:floo_extract"
+    },
+    {
+      "item": "ollivanders:ender_pearl_shards"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "item": "ollivanders:floo_powder"
+  }
+}

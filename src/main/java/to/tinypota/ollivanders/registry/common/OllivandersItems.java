@@ -40,6 +40,8 @@ public class OllivandersItems {
 	public static final Item PHOENIX_FEATHER = register("phoenix_feather", new Item(new Item.Settings().rarity(Rarity.RARE)));
 	public static final Item THESTRAL_TAIL_HAIR = register("thestral_tail_hair", new Item(new Item.Settings().rarity(Rarity.RARE)));
 	public static final Item UNICORN_TAIL_HAIR = register("unicorn_tail_hair", new Item(new Item.Settings().rarity(Rarity.RARE)));
+	public static final Item FLOO_EXTRACT = register("floo_extract", new Item(new Item.Settings().rarity(Rarity.UNCOMMON)));
+	public static final Item ENDER_PEARL_SHARDS = register("ender_pearl_shards", new Item(new Item.Settings().rarity(Rarity.UNCOMMON)));
 	public static final Item FLOO_POWDER = register("floo_powder", new Item(new Item.Settings().rarity(Rarity.UNCOMMON)));
 	
 	public static void init() {

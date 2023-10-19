@@ -3,8 +3,10 @@ package to.tinypota.ollivanders.registry.common;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.TallBlockItem;
@@ -26,6 +28,7 @@ public class OllivandersBlocks {
 	
 	public static final WoodBlockStorage LAUREL_WOOD = WoodBlockRegistry.registerWood("Laurel", "laurel", new LaurelSaplingGenerator(), MapColor.BROWN, MapColor.BROWN);
 	public static final WoodBlockStorage REDWOOD = WoodBlockRegistry.registerWood("Redwood", "redwood", new RedwoodSaplingGenerator(), MapColor.DARK_RED, MapColor.DARK_RED);
+	public static final FlowerBlock FLOO_FLOWER = register("floo_flower", new FlowerBlock(StatusEffects.NAUSEA, 10, FabricBlockSettings.copy(Blocks.POPPY).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).luminance(value -> 7)), new Item.Settings());
 	public static final FlooFireBlock FLOO_FIRE = register("floo_fire", new FlooFireBlock(FabricBlockSettings.create().mapColor(MapColor.EMERALD_GREEN).noCollision().strength(0.2f).luminance(state -> state.get(Properties.LIT) ? 15 : 0).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.BLOCK)));
 	public static final ChildFlooFireBlock CHILD_FLOO_FIRE = register("child_floo_fire", new ChildFlooFireBlock(FabricBlockSettings.create().mapColor(MapColor.EMERALD_GREEN).noCollision().strength(0.2f).luminance(state -> state.get(Properties.LIT) ? 15 : 0).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.BLOCK)));
 	

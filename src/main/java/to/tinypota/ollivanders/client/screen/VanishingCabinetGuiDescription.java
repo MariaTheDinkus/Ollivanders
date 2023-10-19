@@ -21,7 +21,7 @@ public class VanishingCabinetGuiDescription extends SyncedGuiDescription {
         root.setInsets(Insets.ROOT_PANEL);
 
         WItemSlot itemSlot = WItemSlot.of(blockInventory, 0);
-        itemSlot.setFilter(stack -> stack.getItem() instanceof SplitCabinetCoreItem);
+        itemSlot.setInputFilter(stack -> stack.getItem() instanceof SplitCabinetCoreItem);
         root.add(itemSlot, 4, 1);
 
         root.add(this.createPlayerInventoryPanel(), 0, 3);

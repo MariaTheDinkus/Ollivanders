@@ -45,6 +45,17 @@ public class MortarAndPestleBlockEntityRenderer implements BlockEntityRenderer<M
 		
 		matrices.push();
 		
+		if (!stack.isEmpty()) {
+			//TODO: Fancy pile rendering
+			matrices.push();
+			matrices.translate(0.5, 0, 0.5);
+			matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+			matrices.scale(0.5F, 0.5F, 0.5F);
+			matrices.translate(0, 0, -0.125);
+			itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, null, 0);
+			matrices.pop();
+		}
+		
 		matrices.translate(0.5, 0, 0.5);
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotation((float) Math.toRadians(deltaProgress) * 20));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(10));

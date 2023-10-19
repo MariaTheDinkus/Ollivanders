@@ -26,6 +26,7 @@ import to.tinypota.ollivanders.registry.common.OllivandersRecipeTypes;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+//TODO: Make implement inventory
 public class LatheBlockEntity extends BlockEntity {
 	private ItemStack stack = ItemStack.EMPTY;
 	private int progress = 0;
@@ -62,7 +63,7 @@ public class LatheBlockEntity extends BlockEntity {
 			return true;
 		});
 		if (hasPlayer.get() && !stack.isEmpty() && match.isPresent()) {
-			if (progress < match.get().value().getCookingTime()) {
+			if (progress < match.get().value().getCookingTime() - 1) {
 				prevProgress = progress;
 				progress++;
 			} else {

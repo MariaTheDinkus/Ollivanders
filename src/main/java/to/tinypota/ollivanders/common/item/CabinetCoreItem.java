@@ -27,14 +27,14 @@ public class CabinetCoreItem extends Item {
 	
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		var stack = user.getStackInHand(hand);
-		if (!world.isClient()) {
-			if (!user.isCreative()) {
-				user.setStackInHand(hand, ItemStack.EMPTY);
-			}
-			user.getInventory().offerOrDrop(new ItemStack(OllivandersItems.SPLIT_CABINET_CORE, 2));
-			return TypedActionResult.success(user.getStackInHand(hand));
-		}
+//		var stack = user.getStackInHand(hand);
+//		if (!world.isClient()) {
+//			if (!user.isCreative()) {
+//				user.setStackInHand(hand, ItemStack.EMPTY);
+//			}
+//			user.getInventory().offerOrDrop(new ItemStack(OllivandersItems.SPLIT_CABINET_CORE, 2));
+//			return TypedActionResult.success(user.getStackInHand(hand));
+//		}
 		return TypedActionResult.pass(user.getStackInHand(hand));
 	}
 }

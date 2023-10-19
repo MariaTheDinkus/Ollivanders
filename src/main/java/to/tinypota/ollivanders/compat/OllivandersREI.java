@@ -14,18 +14,22 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmeltingRecipe;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.recipe.LatheRecipe;
+import to.tinypota.ollivanders.common.recipe.MortarAndPestleRecipe;
 import to.tinypota.ollivanders.registry.common.OllivandersBlocks;
 import to.tinypota.ollivanders.registry.common.OllivandersRecipeTypes;
 
 public class OllivandersREI implements REIClientPlugin {
 	CategoryIdentifier<DefaultSmeltingDisplay> LATHE = CategoryIdentifier.of(Ollivanders.ID, "plugins/lathe");
+	CategoryIdentifier<DefaultSmeltingDisplay> MORTAR_AND_PESTLE = CategoryIdentifier.of(Ollivanders.ID, "plugins/mortar_and_pestle");
 	
 	@Override
 	public void registerCategories(CategoryRegistry registry) {
 		if (FabricLoader.getInstance().isDevelopmentEnvironment())
 			Ollivanders.LOGGER.info("REGISTERING REI STUFF");
 		registry.add(new DefaultCookingCategory(LATHE, EntryStacks.of(OllivandersBlocks.LATHE), "category.rei.lathe"));
+		registry.add(new DefaultCookingCategory(MORTAR_AND_PESTLE, EntryStacks.of(OllivandersBlocks.MORTAR_AND_PESTLE), "category.rei.mortar_and_pestle"));
 		registry.addWorkstations(LATHE, EntryStacks.of(OllivandersBlocks.LATHE));
+		registry.addWorkstations(MORTAR_AND_PESTLE, EntryStacks.of(OllivandersBlocks.MORTAR_AND_PESTLE));
 	}
 	
 	@Override
@@ -34,6 +38,13 @@ public class OllivandersREI implements REIClientPlugin {
 			@Override
 			public CategoryIdentifier<?> getCategoryIdentifier() {
 				return LATHE;
+			}
+		});
+		
+		registry.registerRecipeFiller(MortarAndPestleRecipe.class, OllivandersRecipeTypes.MORTAR_AND_PESTLE, latheRecipe -> new DefaultCookingDisplay(latheRecipe) {
+			@Override
+			public CategoryIdentifier<?> getCategoryIdentifier() {
+				return MORTAR_AND_PESTLE;
 			}
 		});
 	}

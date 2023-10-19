@@ -1,4 +1,5 @@
 {
+  "block.ollivanders.floo_flower": "Floo Flower",
   "block.ollivanders.lathe": "Lathe",
   "block.ollivanders.laurel_button": "Laurel Button",
   "block.ollivanders.laurel_door": "Laurel Door",
@@ -37,6 +38,7 @@
   "block.ollivanders.stripped_redwood_wood": "Redwood Stripped Wood",
   "block.ollivanders.vanishing_cabinet": "Vanishing Cabinet",
   "category.rei.lathe": "Lathe",
+  "category.rei.mortar_and_pestle": "Mortar and Pestle",
   "item.ollivanders.acacia_wand": "Acacia Wand",
   "item.ollivanders.birch_wand": "Birch Wand",
   "item.ollivanders.cabinet_core": "Cabinet Core",
@@ -44,6 +46,8 @@
   "item.ollivanders.crimson_wand": "Crimson Wand",
   "item.ollivanders.dark_oak_wand": "Dark Oak Wand",
   "item.ollivanders.dragon_heartstring": "Dragon Heartstring",
+  "item.ollivanders.ender_pearl_shards": "Ender Pearl Shards",
+  "item.ollivanders.floo_extract": "Floo Extract",
   "item.ollivanders.floo_powder": "Floo Powder",
   "item.ollivanders.jungle_wand": "Jungle Wand",
   "item.ollivanders.laurel_wand": "Laurel Wand",

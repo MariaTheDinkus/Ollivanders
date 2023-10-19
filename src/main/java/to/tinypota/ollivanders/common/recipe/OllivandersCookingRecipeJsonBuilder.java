@@ -17,4 +17,8 @@ public class OllivandersCookingRecipeJsonBuilder extends CookingRecipeJsonBuilde
 	public static CookingRecipeJsonBuilder createLathe(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
 		return new CookingRecipeJsonBuilder(category, CookingRecipeCategory.MISC, output, input, experience, cookingTime, OllivandersRecipeSerializers.LATHE);
 	}
+	
+	public static CookingRecipeJsonBuilder createMortarAndPestle(Ingredient input, RecipeCategory category, ItemConvertible output, float experience, int cookingTime) {
+		return new CookingRecipeJsonBuilder(category, CookingRecipeCategory.MISC, output, input, experience, cookingTime, OllivandersRecipeSerializers.MORTAR_AND_PESTLE);
+	}
 }

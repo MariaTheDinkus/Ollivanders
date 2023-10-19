@@ -19,6 +19,7 @@ public class OllivandersSpells {
 	public static final Spell EXPELLIARMUS = register("expelliarmus", new ExpelliarmusSpell("expelliarmus", new Spell.Settings().type(SpellType.PROJECTILE)));
 	public static final Spell EPISKEY = register("episkey", new EpiskeySpell("episkey", new Spell.Settings().type(SpellType.PROJECTILE).customCastPercents()));
 	public static final Spell AGUAMENTI = register("aguamenti", new AguamentiSpell("aguamenti", new Spell.Settings().type(SpellType.PROJECTILE).customCastPercents()));
+	public static final Spell DIFFINDO = register("diffindo", new DiffindoSpell("diffindo", new Spell.Settings().type(SpellType.PROJECTILE).customCastPercents()));
 	
 	public static void init() {
 	

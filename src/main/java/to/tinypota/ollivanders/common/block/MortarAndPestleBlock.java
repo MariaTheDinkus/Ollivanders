@@ -24,7 +24,6 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import to.tinypota.ollivanders.common.block.entity.LatheBlockEntity;
 import to.tinypota.ollivanders.common.block.entity.MortarAndPestleBlockEntity;
 import to.tinypota.ollivanders.registry.common.OllivandersRecipeTypes;
 
@@ -46,7 +45,36 @@ public class MortarAndPestleBlock extends BlockWithEntity {
 	
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		
+		if (world.getBlockEntity(pos) instanceof MortarAndPestleBlockEntity) {
+			var blockEntity = (MortarAndPestleBlockEntity) world.getBlockEntity(pos);
+			var heldStack = player.getStackInHand(hand);
+			var inventory = new SimpleInventory(heldStack);
+			var matchGetter = RecipeManager.createCachedMatchGetter(OllivandersRecipeTypes.MORTAR_AND_PESTLE);
+			var match = matchGetter.getFirstMatch(inventory, world);
+			if (blockEntity.getStack().isEmpty() && !heldStack.isEmpty() && match.isPresent()) {
+				var heldStackItem = heldStack.getItem();
+				if (!world.isClient()) {
+					blockEntity.setStack(heldStack.copy());
+					player.setStackInHand(hand, ItemStack.EMPTY);
+//					if (heldStack.getCount() > 1) {
+//						blockEntity.setStack(heldStack.copyWithCount(1));
+//						heldStack.decrement(1);
+//					} else {
+//						blockEntity.setStack(heldStack.copyWithCount(1));
+//						player.setStackInHand(hand, ItemStack.EMPTY);
+//					}
+				}
+				return ActionResult.SUCCESS;
+			} else if (!blockEntity.getStack().isEmpty()) {
+				if (!world.isClient()) {
+					var itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, blockEntity.getStack().copy(), 0, 0, 0);
+					world.spawnEntity(itemEntity);
+					blockEntity.setStack(ItemStack.EMPTY);
+				}
+				
+				return ActionResult.SUCCESS;
+			}
+		}
 		return ActionResult.PASS;
 	}
 	
