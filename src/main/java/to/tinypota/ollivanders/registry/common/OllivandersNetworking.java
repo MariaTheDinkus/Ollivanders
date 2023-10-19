@@ -39,15 +39,19 @@ public class OllivandersNetworking {
 		
 		ServerPlayNetworking.registerGlobalReceiver(DECREASE_POWER_LEVEL, (server, player, handler, buf, responseSender) -> {
 			server.execute(() -> {
-				var playerState = OllivandersServerState.getPlayerState(server, player);
+				var serverState = OllivandersServerState.getServerState(server);
+				var playerState = serverState.getPlayerState(player);
 				playerState.decreasePowerLevel();
+				serverState.syncPowerLevels(player);
 			});
 		});
 		
 		ServerPlayNetworking.registerGlobalReceiver(INCREASE_POWER_LEVEL, (server, player, handler, buf, responseSender) -> {
 			server.execute(() -> {
-				var playerState = OllivandersServerState.getPlayerState(server, player);
+				var serverState = OllivandersServerState.getServerState(server);
+				var playerState = serverState.getPlayerState(player);
 				playerState.increasePowerLevel();
+				serverState.syncPowerLevels(player);
 			});
 		});
 		
@@ -121,6 +125,7 @@ public class OllivandersNetworking {
 								cooldownManager.set(stack.getItem(), 30);
 								player.sendMessage(Text.literal("Your wand doesn't seem to obey you..."), true);
 								SpellHelper.emptyCurrentSpell(player);
+								serverState.syncPowerLevels(player);
 							}
 						}
 					}

@@ -24,18 +24,24 @@ public class SpellHelper {
 	}
 	
 	public static void setCurrentSpell(PlayerEntity player, Spell spell) {
-		var playerState = OllivandersServerState.getPlayerState(player.getServer(), player);
+		var serverState = OllivandersServerState.getServerState(player.getServer());
+		var playerState = serverState.getPlayerState(player);
 		playerState.setCurrentSpell(spell.getCastName());
+		serverState.syncPowerLevels((ServerPlayerEntity) player);
 	}
 	
 	public static void setCurrentSpell(PlayerEntity player, String name) {
-		var playerState = OllivandersServerState.getPlayerState(player.getServer(), player);
+		var serverState = OllivandersServerState.getServerState(player.getServer());
+		var playerState = serverState.getPlayerState(player);
 		playerState.setCurrentSpell(name);
+		serverState.syncPowerLevels((ServerPlayerEntity) player);
 	}
 	
 	public static void emptyCurrentSpell(PlayerEntity player) {
-		var playerState = OllivandersServerState.getPlayerState(player.getServer(), player);
+		var serverState = OllivandersServerState.getServerState(player.getServer());
+		var playerState = serverState.getPlayerState(player);
 		playerState.setCurrentSpell(Spell.EMPTY.getCastName());
+		serverState.syncPowerLevels((ServerPlayerEntity) player);
 	}
 	
 	public static void addSpellName(String name) {

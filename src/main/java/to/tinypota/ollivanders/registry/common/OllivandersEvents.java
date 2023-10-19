@@ -71,6 +71,7 @@ public class OllivandersEvents {
 						var curPowerLevel = playerState.getPowerLevel();
 						var curCastPercentage = SpellHelper.getCastPercentage(spell, wandMatchLevel, curPowerLevel);
 						playerState.setCurrentSpellPowerLevel(powerLevel);
+						serverState.syncPowerLevels(sender);
 					}
 					return false;
 				}

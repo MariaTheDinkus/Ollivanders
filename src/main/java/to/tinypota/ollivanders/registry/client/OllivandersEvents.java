@@ -1,5 +1,6 @@
 package to.tinypota.ollivanders.registry.client;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -51,7 +52,7 @@ public class OllivandersEvents {
 		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
 			var client = MinecraftClient.getInstance();
 			
-			if (client.player != null) {
+			if (client.player != null && !client.player.isSneaking()) {
 				if (currentSpellPowerLevel != null && powerLevel != null) {
 					var stack = client.player.getStackInHand(Hand.MAIN_HAND);
 					if (!stack.isEmpty() && stack.getItem() instanceof WandItem) {
@@ -77,17 +78,22 @@ public class OllivandersEvents {
 							castV += castTextureHeight;
 						}
 						
+						drawContext.getMatrices().push();
+						
 						DecimalFormat formatter = new DecimalFormat("#0.00%");
 						var text = formatter.format(castPercentage);
 						var originalRGB = RenderSystem.getShaderColor().clone();
 						var rgb = getRGBFromPercentage(castPercentage);
+						drawContext.setShaderColor(originalRGB[0], originalRGB[1], originalRGB[2], 0.5F);
 						drawContext.drawTexture(Ollivanders.id("textures/gui/power_bar.png"), x, y, u + (textureWidth * (4 - currentSpellPowerLevel.getId())), v + (textureHeight * powerLevel.getId()), textureWidth, textureHeight);
-						drawContext.setShaderColor(rgb[0], rgb[1], rgb[2], 1);
+						drawContext.setShaderColor(rgb[0], rgb[1], rgb[2], 0.5F);
 						drawContext.drawTexture(Ollivanders.id("textures/gui/power_bar.png"), castX, castY, castU, castV, castTextureWidth, castTextureHeight);
 						drawContext.setShaderColor(originalRGB[0], originalRGB[1], originalRGB[2], 1);
 						if (FabricLoader.getInstance().isDevelopmentEnvironment() && client.options.advancedItemTooltips) {
 							drawContext.drawText(client.textRenderer, Text.literal(text), (scaledWidth - client.textRenderer.getWidth(text)) / 2, y + 45, 0xFFFFFF, true);
 						}
+						
+						drawContext.getMatrices().pop();
 					}
 				}
 			}

@@ -117,11 +117,15 @@ public class WandItem extends Item {
 			if (spell != Spell.EMPTY) {
 				var wandMatchLevel = WandHelper.getWandMatch(stack, player);
 				var powerLevel = spell.getAvailablePowerLevel(wandMatchLevel, playerState.getSkillLevel(spell));
-				playerState.setCurrentSpellPowerLevel(powerLevel);
-			} else {
+				if (playerState.getCurrentSpellPowerLevel() != powerLevel) {
+					playerState.setCurrentSpellPowerLevel(powerLevel);
+					serverState.syncPowerLevels(player);
+				}
+			} else if (playerState.getCurrentSpellPowerLevel() != SpellPowerLevel.MAXIMUM) {
 				playerState.setCurrentSpellPowerLevel(SpellPowerLevel.MAXIMUM);
+				serverState.syncPowerLevels(player);
 			}
-			serverState.syncPowerLevels(player);
+//			serverState.syncPowerLevels(player);
 		}
 		super.inventoryTick(stack, world, entity, slot, selected);
 	}
