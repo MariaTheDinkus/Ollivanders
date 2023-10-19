@@ -29,7 +29,7 @@ public class OllivandersRecipeGenerator extends FabricRecipeProvider {
 	}
 	
 	@Override
-	public void generate(Consumer<RecipeJsonProvider> exporter) {
+	public void generate(RecipeExporter exporter) {
 		for (var storage : WoodBlockRegistry.WOOD_BLOCK_STORAGES) {
 			var logTag = TagKey.of(RegistryKeys.ITEM, new Identifier("c", storage.getName() + "_logs"));
 			var hasLog = "has_" + storage.getName() + "_log";
@@ -61,11 +61,11 @@ public class OllivandersRecipeGenerator extends FabricRecipeProvider {
 		ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, OllivandersItems.CABINET_CORE, 1).input(Items.ENDER_PEARL).input(OllivandersItems.FLOO_POWDER, 4).criterion("has_ender_pearls", VanillaRecipeProvider.conditionsFromItem(Items.ENDER_PEARL)).offerTo(exporter);
 	}
 	
-	public static void offerLathe(Consumer<RecipeJsonProvider> exporter, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {
+	public static void offerLathe(RecipeExporter exporter, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group) {
 		offerMultipleLatheOptions(exporter, OllivandersRecipeSerializers.LATHE, inputs, category, output, experience, cookingTime, group, "_from_lathing");
 	}
 	
-	public static void offerMultipleLatheOptions(Consumer<RecipeJsonProvider> exporter, RecipeSerializer<? extends AbstractCookingRecipe> serializer, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group, String method) {
+	public static void offerMultipleLatheOptions(RecipeExporter exporter, RecipeSerializer<? extends AbstractCookingRecipe> serializer, List<ItemConvertible> inputs, RecipeCategory category, ItemConvertible output, float experience, int cookingTime, String group, String method) {
 		for (ItemConvertible itemConvertible : inputs) {
 			OllivandersCookingRecipeJsonBuilder.createLathe(Ingredient.ofItems(itemConvertible), category, output, experience, cookingTime).group(group).criterion(RecipeProvider.hasItem(itemConvertible), RecipeProvider.conditionsFromItem(itemConvertible)).offerTo(exporter, RecipeProvider.getItemPath(output) + method + "_" + RecipeProvider.getItemPath(itemConvertible));
 		}

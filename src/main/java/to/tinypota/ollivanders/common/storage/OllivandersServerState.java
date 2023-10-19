@@ -4,13 +4,18 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.PersistentState;
 import to.tinypota.ollivanders.Ollivanders;
 import to.tinypota.ollivanders.common.spell.Spell;
 import to.tinypota.ollivanders.common.util.SpellHelper;
+import to.tinypota.ollivanders.common.util.WandHelper;
+import to.tinypota.ollivanders.registry.common.OllivandersCores;
+import to.tinypota.ollivanders.registry.common.OllivandersItems;
 import to.tinypota.ollivanders.registry.common.OllivandersNetworking;
+import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -69,18 +74,39 @@ public class OllivandersServerState extends PersistentState {
 		ServerPlayNetworking.send(player, OllivandersNetworking.SYNC_POWER_LEVELS, buf);
 	}
 	
+	private static Type<OllivandersServerState> type = new Type<>(
+			OllivandersServerState::new, // If there's no 'StateSaverAndLoader' yet create one
+			OllivandersServerState::readNbt, // If there is a 'StateSaverAndLoader' NBT, parse it with 'createFromNbt'
+			null // Supposed to be an 'DataFixTypes' enum, but we can just pass null
+	);
+	
 	public static OllivandersServerState getServerState(MinecraftServer server) {
 		var persistentStateManager = server.getOverworld().getPersistentStateManager();
-		return persistentStateManager.getOrCreate(OllivandersServerState::readNbt, OllivandersServerState::new, Ollivanders.ID);
+		
+		OllivandersServerState state = persistentStateManager.getOrCreate(type, Ollivanders.ID);
+		
+		state.markDirty();
+		
+		return state;
 	}
 	
 	public static OllivandersPlayerState getPlayerState(MinecraftServer server, PlayerEntity player) {
 		var serverState = getServerState(server);
-		return serverState.players.computeIfAbsent(player.getUuid(), uuid -> new OllivandersPlayerState(serverState));
+		return serverState.players.computeIfAbsent(player.getUuid(), uuid -> {
+			var state = new OllivandersPlayerState(serverState);
+			state.setSuitedCore(OllivandersRegistries.CORE.getId(OllivandersCores.CORES.getRandom(player)).toString());
+			state.setSuitedWand(Registries.ITEM.getId(OllivandersItems.WANDS.getRandom(player)).toString());
+			return state;
+		});
 	}
 	
 	public OllivandersPlayerState getPlayerState(PlayerEntity player) {
-		return players.computeIfAbsent(player.getUuid(), uuid -> new OllivandersPlayerState(this));
+		return players.computeIfAbsent(player.getUuid(), uuid -> {
+			var state = new OllivandersPlayerState(this);
+			state.setSuitedCore(OllivandersRegistries.CORE.getId(OllivandersCores.CORES.getRandom(player)).toString());
+			state.setSuitedWand(Registries.ITEM.getId(OllivandersItems.WANDS.getRandom(player)).toString());
+			return state;
+		});
 	}
 	
 	public OllivandersFlooState getFlooState() {

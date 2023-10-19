@@ -45,18 +45,22 @@ dependencies {
 
 	modImplementation include("io.github.cottonmc:LibGui:${project.libgui_version}")
 
-	modImplementation ('com.github.iPortalTeam.ImmersivePortalsMod:imm_ptl_core:v3.0.2-mc1.20'){
+	modImplementation ('com.github.iPortalTeam.ImmersivePortalsMod:imm_ptl_core:v4.0.2-mc1.20.2'){
 		exclude(group: "net.fabricmc.fabric-api")
 		transitive(false)
 	}
 
-	modImplementation ('com.github.iPortalTeam.ImmersivePortalsMod:q_misc_util:v3.0.2-mc1.20'){
+	modImplementation ('com.github.iPortalTeam.ImmersivePortalsMod:q_misc_util:v4.0.2-mc1.20.2'){
 		exclude(group: "net.fabricmc.fabric-api")
 		transitive(false)
 	}
 
-	api("com.github.LlamaLad7:MixinExtras:0.2.0-beta.8")
-	annotationProcessor("com.github.LlamaLad7:MixinExtras:0.2.0-beta.8")
+	modImplementation ("com.github.iPortalTeam.ImmersivePortalsMod:build:v4.0.2-mc1.20.2")
+
+	api("com.github.LlamaLad7:MixinExtras:0.2.0")
+	annotationProcessor("com.github.LlamaLad7:MixinExtras:0.2.0")
+
+	modImplementation "com.ptsmods:devlogin:3.4.1" // For Fabric and Quilt
 }
 
 base {

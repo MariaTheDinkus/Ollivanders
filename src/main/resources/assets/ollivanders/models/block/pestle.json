@@ -1,0 +1,43 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "block/coal_block",
+		"particle": "block/stone"
+	},
+	"elements": [
+		{
+			"from": [6, 1, 8],
+			"to": [8, 4, 10],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 1, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 3], "texture": "#1"},
+				"east": {"uv": [0, 0, 2, 3], "texture": "#1"},
+				"south": {"uv": [0, 0, 2, 3], "texture": "#1"},
+				"west": {"uv": [0, 0, 2, 3], "texture": "#1"},
+				"up": {"uv": [0, 0, 2, 2], "texture": "#1"},
+				"down": {"uv": [0, 0, 2, 2], "texture": "#1"}
+			}
+		},
+		{
+			"from": [6.25, 4, 8.25],
+			"to": [7.75, 7, 9.75],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1.5, 3], "texture": "#1"},
+				"east": {"uv": [0, 0, 1.5, 3], "texture": "#1"},
+				"south": {"uv": [0, 0, 1.5, 3], "texture": "#1"},
+				"west": {"uv": [0, 0, 1.5, 3], "texture": "#1"},
+				"up": {"uv": [0, 0, 1.5, 1.5], "texture": "#1"},
+				"down": {"uv": [0, 0, 1.5, 1.5], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "pestle",
+			"origin": [8, 1, 8],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

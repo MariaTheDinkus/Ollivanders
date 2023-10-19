@@ -11,8 +11,8 @@ import to.tinypota.ollivanders.registry.common.OllivandersRecipeSerializers;
 import to.tinypota.ollivanders.registry.common.OllivandersRecipeTypes;
 
 public class LatheRecipe extends AbstractCookingRecipe {
-	public LatheRecipe(Identifier id, String group, CookingRecipeCategory category, Ingredient input, ItemStack output, float experience, int cookTime) {
-		super(OllivandersRecipeTypes.LATHE, id, group, category, input, output, experience, cookTime);
+	public LatheRecipe(String group, CookingRecipeCategory category, Ingredient input, ItemStack output, float experience, int cookTime) {
+		super(OllivandersRecipeTypes.LATHE, group, category, input, output, experience, cookTime);
 	}
 	
 	@Override

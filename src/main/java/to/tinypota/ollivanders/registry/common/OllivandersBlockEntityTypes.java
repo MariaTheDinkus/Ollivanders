@@ -14,6 +14,7 @@ public class OllivandersBlockEntityTypes {
 	public static final BlockEntityType<FlooFireBlockEntity> FLOO_FIRE = register("floo_fire", FabricBlockEntityTypeBuilder.create(FlooFireBlockEntity::new, OllivandersBlocks.FLOO_FIRE).build());
 	public static final BlockEntityType<CoreBlockEntity> CORE = register("core", FabricBlockEntityTypeBuilder.create(CoreBlockEntity::new, OllivandersBlocks.PHOENIX_FEATHER_BLOCK, OllivandersBlocks.THESTRAL_TAIL_HAIR_BLOCK, OllivandersBlocks.UNICORN_TAIL_HAIR_BLOCK).build());
 	public static final BlockEntityType<LatheBlockEntity> LATHE = register("lathe", FabricBlockEntityTypeBuilder.create(LatheBlockEntity::new, OllivandersBlocks.LATHE).build());
+	public static final BlockEntityType<MortarAndPestleBlockEntity> MORTAR_AND_PESTLE = register("mortar_and_pestle", FabricBlockEntityTypeBuilder.create(MortarAndPestleBlockEntity::new, OllivandersBlocks.MORTAR_AND_PESTLE).build());
 	public static final BlockEntityType<VanishingCabinetBlockEntity> VANISHING_CABINET = register("vanishing_cabinet", FabricBlockEntityTypeBuilder.create(VanishingCabinetBlockEntity::new, OllivandersBlocks.VANISHING_CABINET).build());
 	public static BlockEntityType<SignBlockEntity> SIGN;
 	public static BlockEntityType<OllivandersHangingSignBlockEntity> HANGING_SIGN;

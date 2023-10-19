@@ -40,6 +40,7 @@ public class OllivandersLangGenerator extends FabricLanguageProvider {
 		}
 		
 		translationBuilder.add(OllivandersBlocks.LATHE, "Lathe");
+		translationBuilder.add(OllivandersBlocks.MORTAR_AND_PESTLE, "Mortar and Pestle");
 		translationBuilder.add(OllivandersBlocks.VANISHING_CABINET, "Vanishing Cabinet");
 		
 		translationBuilder.add(OllivandersItems.OAK_WAND, "Oak Wand");

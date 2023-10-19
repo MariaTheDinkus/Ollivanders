@@ -1,9 +1,11 @@
 package to.tinypota.ollivanders.common.storage;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import to.tinypota.ollivanders.api.spell.SpellPowerLevel;
 import to.tinypota.ollivanders.common.spell.Spell;
+import to.tinypota.ollivanders.registry.common.OllivandersItems;
 import to.tinypota.ollivanders.registry.common.OllivandersRegistries;
 
 import java.util.HashMap;

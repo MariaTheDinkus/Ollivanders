@@ -21,6 +21,7 @@ import to.tinypota.ollivanders.registry.builder.WoodBlockStorage;
 
 public class OllivandersBlocks {
 	public static final LatheBlock LATHE = register("lathe", new LatheBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).nonOpaque()), new Item.Settings());
+	public static final MortarAndPestleBlock MORTAR_AND_PESTLE = register("mortar_and_pestle", new MortarAndPestleBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).notSolid().nonOpaque()), new Item.Settings());
 	public static final VanishingCabinetBlock VANISHING_CABINET = registerTallBlock("vanishing_cabinet", new VanishingCabinetBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).nonOpaque()), new Item.Settings());
 	
 	public static final WoodBlockStorage LAUREL_WOOD = WoodBlockRegistry.registerWood("Laurel", "laurel", new LaurelSaplingGenerator(), MapColor.BROWN, MapColor.BROWN);

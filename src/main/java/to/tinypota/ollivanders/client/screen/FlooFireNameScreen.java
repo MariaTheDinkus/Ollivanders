@@ -166,7 +166,7 @@ public class FlooFireNameScreen extends Screen {
 	
 	@Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		renderBackground(context);
+		renderInGameBackground(context);
 		textField.render(context, mouseX, mouseY, delta);
 		submitButton.render(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
